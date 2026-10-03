@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(./manifest.config.ts)",
+      "Edit(./vite.config.ts)",
+      "Edit(./package.json)",
+      "Edit(./index.html)",
+      "Edit(./blocked.html)",
+      "Edit(./src/background/**)",
+      "Edit(./src/blocked/**)",
+      "Edit(./src/platform/**)",
+      "Edit(./src/dev/**)",
+      "Edit(./src/app/main.tsx)",
+      "Edit(./src/app/App.tsx)",
+      "Edit(./src/app/routes.tsx)",
+      "Edit(./src/app/store.ts)",
+      "Edit(./src/app/components/**)",
+      "Edit(./src/app/motion.ts)",
+      "Edit(./tailwind.config.*)",
+      "Edit(./src/index.css)",
+      "Edit(./public/assets/**)",
+      "Edit(./src/app/pages/Onboarding.tsx)",
+      "Edit(./src/app/pages/Home.tsx)",
+      "Edit(./src/app/pages/AdventureSetup.tsx)",
+      "Edit(./src/app/pages/AdventureActive.tsx)",
+      "Edit(./src/app/pages/AdventureResult.tsx)",
+      "Edit(./src/app/pages/Settings.tsx)",
+      "Edit(./src/app/pages/Dev.tsx)",
+      "Edit(./src/app/pages/Dojo.tsx)",
+      "Edit(./src/app/pages/Lockdex.tsx)",
+      "Edit(./src/app/pages/Gallery.tsx)"
+    ]
+  }
+}

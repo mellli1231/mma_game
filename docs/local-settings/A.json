@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(./src/types.ts)",
+      "Edit(./src/data/**)",
+      "Edit(./src/engine/**)",
+      "Edit(./tests/**)",
+      "Edit(./src/app/components/**)",
+      "Edit(./src/app/motion.ts)",
+      "Edit(./tailwind.config.*)",
+      "Edit(./src/index.css)",
+      "Edit(./public/assets/**)",
+      "Edit(./src/app/pages/GymMap.tsx)",
+      "Edit(./src/app/pages/Battle.tsx)",
+      "Edit(./src/app/pages/Defeat.tsx)",
+      "Edit(./src/app/pages/Lockbox.tsx)",
+      "Edit(./src/app/pages/Dojo.tsx)",
+      "Edit(./src/app/pages/Lockdex.tsx)",
+      "Edit(./src/app/pages/Gallery.tsx)"
+    ]
+  }
+}
