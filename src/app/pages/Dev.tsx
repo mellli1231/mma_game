@@ -1,11 +1,11 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FIXTURES, SESSION_FIXTURES, SESSION_FIXTURE_SITES } from '@/dev/fixtures'
 import { DEFAULT_STATE } from '@/platform/defaultState'
 import type { FixtureId } from '@/types'
 import { platform } from '@/platform/platform'
 import { useGameState } from '@/app/store'
 
-// TODO: hide this page's contents unless settings.demoMode is on, once Settings exists.
 export default function Dev() {
   const state = useGameState()
   const [error, setError] = useState<string | null>(null)
@@ -25,14 +25,37 @@ export default function Dev() {
     setLoaded(id)
   }
 
+  async function finishNow() {
+    await platform.updateState(s =>
+      s.activeSession ? { ...s, activeSession: { ...s.activeSession, endsAt: Date.now() } } : s,
+    )
+    await platform.checkSession()
+  }
+
   return (
     <div className="p-4 space-y-2">
       <h1>Dev</h1>
       {(Object.keys(FIXTURES) as FixtureId[]).map(id => (
         <div key={id}><button onClick={() => load(id)}>{id}</button></div>
       ))}
-      <div><button onClick={() => platform.updateState(s => ({ ...s, fp: s.fp + 1000, lifetimeFp: s.lifetimeFp + 1000 }))}>+1000 FP</button></div>
-      <div><button onClick={() => platform.updateState(() => structuredClone(DEFAULT_STATE))}>Reset all</button></div>
+      {/* SET-02: the dev panel is only for Demo Mode. Fixtures above stay open so a fresh save can load one. */}
+      {state?.settings.demoMode ? (
+        <>
+          <div><button onClick={() => platform.updateState(s => ({ ...s, fp: s.fp + 1000, lifetimeFp: s.lifetimeFp + 1000 }))}>+1000 FP</button></div>
+          {state.activeSession && (
+            <div>
+              {/* DEV-ONLY exception to "the background is the only writer of activeSession": it only
+                  moves endsAt to now. The FP award itself still happens in the background via checkSession. */}
+              <button onClick={finishNow}>Finish Adventure now</button>
+            </div>
+          )}
+          <div><button onClick={() => platform.updateState(() => structuredClone(DEFAULT_STATE))}>Reset all</button></div>
+        </>
+      ) : (
+        <p>
+          Turn on Demo Mode in <Link to="/settings" className="text-primary underline">Settings</Link> to use the dev panel.
+        </p>
+      )}
       {loaded && <p className="text-green-600">Loaded fixture: {loaded}</p>}
       {state ? (
         <ul>
