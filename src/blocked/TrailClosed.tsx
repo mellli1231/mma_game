@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import SceneBackground from '@/app/SceneBackground'
 import { Modal } from '@/app/components/Modal'
 import { isDomainInSession, isValidHostname } from '@/background/domains'
 import { SITES } from '@/data/sites'
@@ -16,13 +17,16 @@ function formatRemaining(ms: number): string {
   return `${m}:${String(s).padStart(2, '0')}`
 }
 
-const primaryBtn = 'min-h-tap rounded-card bg-primary px-6 py-3 font-display text-white'
+const primaryBtn = 'focu-btn focu-btn--primary'
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 p-6 text-center">
-      {children}
-    </main>
+    <>
+      <SceneBackground tone="dim" />
+      <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center p-6 text-center">
+        <div className="focu-card flex w-full flex-col items-center gap-4 p-8">{children}</div>
+      </main>
+    </>
   )
 }
 
@@ -56,7 +60,7 @@ export default function TrailClosed() {
     return (
       <Shell>
         <div className="text-6xl" aria-hidden>🪧</div>
-        <h1 className="font-display text-3xl">Your Adventure is over. You’re free to go!</h1>
+        <h1 className="focu-title !text-3xl">Your Adventure is over. You’re free to go!</h1>
         {safeHost ? (
           <button type="button" className={primaryBtn} onClick={() => location.assign(`https://${safeHost}`)}>
             Continue to {safeHost}
@@ -81,15 +85,15 @@ export default function TrailClosed() {
   return (
     <Shell>
       <div className="text-7xl" aria-hidden>🪧</div>
-      <h1 className="font-display text-4xl">Trail Closed!</h1>
-      <p className="text-muted">{siteName} is blocked while you’re on an Adventure.</p>
+      <h1 className="focu-title">Trail Closed!</h1>
+      <p className="text-soft">{siteName} is blocked while you’re on an Adventure.</p>
       <p className="font-display text-xl">
         {formatRemaining(session.endsAt - now)} left · {session.projectedFp} FP on the line
       </p>
       <button type="button" className={primaryBtn} onClick={() => location.assign('index.html#/adventure')}>
         Back to my Adventure
       </button>
-      <button type="button" className="mt-16 min-h-tap text-sm text-muted underline" onClick={() => setConfirming(true)}>
+      <button type="button" className="focu-link-danger mt-10 min-h-tap" onClick={() => setConfirming(true)}>
         Visit site anyway
       </button>
       <Modal
@@ -101,7 +105,7 @@ export default function TrailClosed() {
             <button type="button" className={primaryBtn} onClick={() => setConfirming(false)}>
               Stay locked in
             </button>
-            <button type="button" className="min-h-tap rounded-card px-4 py-3 text-danger" onClick={leave}>
+            <button type="button" className="focu-link-danger min-h-tap px-2" onClick={leave}>
               Leave the trail
             </button>
           </>

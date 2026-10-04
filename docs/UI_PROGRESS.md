@@ -10,7 +10,7 @@
 - [x] 5b AdventureSetup, AdventureActive, AdventureResult
 - [x] 5c GymMap, Battle, Defeat, Lockbox
 - [x] 5d Dojo, Lockdex, Settings
-- [ ] 5e Dev, Gallery, TrailClosed
+- [x] 5e Dev, Gallery, TrailClosed
 - [ ] 6 Sweep
 - [ ] 7 Wrap-up
 
