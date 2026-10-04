@@ -2,9 +2,11 @@ import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useGameState } from './store'
+import { useEffect, useState } from 'react'
 import { ease } from './motion'
 import { sessionRedirect } from './sessionRoutes'
 import AppShell from './AppShell'
+import SceneBackground from './SceneBackground'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import AdventureSetup from './pages/AdventureSetup'
@@ -39,10 +41,37 @@ function OnboardingGuard({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+// Routes that show the full painting. Everything else uses the dimmed scene.
+const FULL_SCENE_ROUTES = ['/', '/onboarding']
+const TIMER_TICK_MS = 1000
+
+function SceneLayer() {
+  const { pathname } = useLocation()
+  const state = useGameState()
+  const [now, setNow] = useState(() => Date.now())
+  const session = state?.activeSession ?? null
+  const onTimer = pathname === '/adventure'
+  useEffect(() => {
+    if (!onTimer) return
+    const id = window.setInterval(() => setNow(Date.now()), TIMER_TICK_MS)
+    return () => window.clearInterval(id)
+  }, [onTimer])
+
+  let progress: number | undefined
+  if (onTimer && session) {
+    const total = session.endsAt - session.startedAt
+    progress = total > 0 ? Math.min(1, Math.max(0, 1 - (session.endsAt - now) / total)) : 1
+  }
+  const completed = pathname === '/adventure/result' && state?.sessionHistory.at(-1)?.status === 'completed'
+  const full = FULL_SCENE_ROUTES.includes(pathname) || completed
+  return <SceneBackground tone={full ? 'full' : 'dim'} progress={progress} />
+}
+
 export default function AppRoutes() {
   return (
     <HashRouter>
       <OnboardingGuard>
+        <SceneLayer />
         <AppShell />
         <AnimatedRoutes />
       </OnboardingGuard>

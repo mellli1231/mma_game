@@ -10,6 +10,7 @@ These replace any conflicting line in CLAUDE.md and docs/TEAM.md:
 - Still forbidden: logic, component props (docs/CONTRACTS.md), routes and guards, `src/types.ts`, `src/data/**`, `src/engine/**`, `src/background/**`, `src/platform/**`, `src/dev/**`, `tests/**`, `package.json`, `package-lock.json`, `vite.config.ts`, `SPEC.md`.
 - No new dependencies. Do not run `npm install`.
 - Never push, merge, rebase or force anything. Commits stay local on branch `a/ui-skin`.
+- Make every file change with the Edit and Write tools, including docs/UI_PROGRESS.md and docs/TEAM.md. Never use sed, cat, echo, printf, tee, python or heredocs to write files. Shell is only for: npm run, git add, git commit, git status, git diff, git log, git branch, git checkout --, grep, ls, find, head, tail, wc.
 - Commit with explicit paths: `git add <paths>` then `git commit -m "[A] ui: <step>"`.
 
 ## Loop rules

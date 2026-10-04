@@ -37,6 +37,13 @@ const BREAKDOWN = {
   projectedFp: 300,
 }
 
+const SWATCHES: Array<[string, string]> = [
+  ['cream', '#FFF8EC'], ['paper', '#FFFDF6'], ['ink', '#1F2033'], ['muted', '#4A4D68'], ['soft', '#3A3D58'],
+  ['focu', '#5B4BDB'], ['sunshine', '#FFD66B'], ['sunshine-deep', '#FFC94D'], ['lavender', '#C9BFF7'],
+  ['fire', '#FFA477'], ['water', '#8FCBF5'], ['grass', '#8ED6A4'], ['blush', '#FFC1D0'], ['mint-pale', '#E4F4DC'],
+  ['peach-pale', '#FFD2BF'], ['trail', '#F2DEA8'], ['danger', '#B42318'], ['disabled', '#ECEAF3'], ['points', '#FFF8E1'],
+]
+
 const CREATURE_REWARD = { kind: 'creature' as const, creatureId: 'embrit' }
 
 function Showcase({ title, children }: { title: string; children: ReactNode }) {
@@ -59,7 +66,7 @@ export default function Gallery() {
   return (
     <main className="mx-auto max-w-6xl space-y-8 p-4 pb-16 sm:p-8">
       <header>
-        <p className="text-sm font-bold uppercase tracking-widest text-primary">Locklings UI kit</p>
+        <p className="text-sm font-bold uppercase tracking-widest text-primary">Focu UI kit</p>
         <h1 className="mt-1 text-4xl">Component Gallery</h1>
         <p className="mt-2 max-w-2xl text-muted">Browse every Lockling and component. Choose a creature state to preview its motion throughout the gallery.</p>
       </header>
@@ -102,6 +109,44 @@ export default function Gallery() {
           <div className="text-center"><CreatureSprite defId={selectedCreature} uid="gallery-large" size={128} state={spriteState} showParticles /><span className="text-xs text-muted">96 px default → 128 px</span></div>
           <div className="text-center"><CreatureSprite defId={selectedCreature} uid="gallery-left" size={96} state={spriteState} facing="left" /><span className="block text-xs text-muted">Facing left</span></div>
           <div className="text-center"><CreatureSprite defId={selectedCreature} uid="gallery-no-shadow" size={96} state={spriteState} showShadow={false} /><span className="block text-xs text-muted">Shadow hidden</span></div>
+        </div>
+      </section>
+
+      <section className="focu-card p-6" aria-labelledby="skin-title">
+        <h2 id="skin-title" className="focu-title mb-4 !text-3xl">Focu skin</h2>
+        <ul className="mb-6 flex flex-wrap gap-3">
+          {SWATCHES.map(([name, hex]) => (
+            <li key={name} className="text-center text-xs font-bold">
+              <span className="block h-12 w-16 border-[2.5px] border-ink" style={{ background: hex, borderRadius: 12 }} />
+              {name}
+              <span className="block font-normal text-muted">{hex}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="flex flex-wrap items-center gap-4">
+          <button type="button" className="focu-btn focu-btn--primary">Primary</button>
+          <button type="button" className="focu-btn focu-btn--confirm">Confirm</button>
+          <button type="button" className="focu-btn focu-btn--secondary">Secondary</button>
+          <button type="button" className="focu-btn focu-btn--danger">Danger</button>
+          <button type="button" className="focu-btn" disabled>Disabled</button>
+          <button type="button" className="focu-link-danger">Visit site anyway</button>
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <span className="focu-tag">Section tag</span>
+          <button type="button" className="focu-chip" aria-pressed="false">Chip</button>
+          <button type="button" className="focu-chip" aria-pressed="true">Selected chip</button>
+          <span className="focu-badge focu-badge--fire">Fire</span>
+          <span className="focu-badge focu-badge--water">Water</span>
+          <span className="focu-badge focu-badge--grass">Grass</span>
+          <span className="focu-rarity focu-rarity--common">Common</span>
+          <span className="focu-rarity focu-rarity--rare">Rare</span>
+          <span className="focu-rarity focu-rarity--epic">Epic</span>
+          <span className="focu-sticker">Super effective!</span>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <div className="focu-home-card focu-home-card--adventure"><span className="focu-home-card__title">Adventure</span><span className="focu-home-card__sub">Focus to earn FP</span></div>
+          <div className="focu-home-card focu-home-card--battle"><span className="focu-home-card__title">Battle</span><span className="focu-home-card__sub">Challenge a gym</span></div>
+          <div className="focu-home-card focu-home-card--training"><span className="focu-home-card__title">Training</span><span className="focu-home-card__sub">Learn new moves</span></div>
         </div>
       </section>
 
