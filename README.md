@@ -44,7 +44,7 @@ FP = floor(minutes x tier rate x multiplier)
 
 ## Try it
 
-You need a Chromium based browser (Chrome, Edge, Brave) and Node.js.
+You need a Chrome based browser and Node.js.
 
 ```bash
 npm install
@@ -100,6 +100,3 @@ npm run verify      # typecheck, tests and build: the gate before every commit
 - `src/app` is the React interface. The visual style is described in `docs/DESIGN.md`.
 - `SPEC.md` is the full product specification, and `docs/` has the team notes and interface contracts.
 
-## Credits
-
-Sound effect sources and licenses are listed in `public/assets/sfx/CREDITS.txt` (still to be filled in).
