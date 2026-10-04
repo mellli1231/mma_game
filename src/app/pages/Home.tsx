@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CreatureSprite, ElementBadge, FpBadge, LockOverlay, TimerRing } from '@/app/components'
+import BrandLockup from '@/app/BrandLockup'
 import { useGameState } from '@/app/store'
 import { CREATURES } from '@/data/creatures'
 import { GYMS } from '@/data/gyms'
@@ -23,7 +24,7 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-4">
       <header className="flex items-center justify-between gap-3">
-        <span className="font-display text-2xl text-primary">Locklings</span>
+        <BrandLockup size="sm" />
         <div className="flex items-center gap-3">
           {state.settings.demoMode && (
             <span className="rounded-pill bg-primary px-3 py-1 text-xs font-display text-white">{DEMO_BADGE}</span>
