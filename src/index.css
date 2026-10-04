@@ -148,7 +148,7 @@
     user-select: none;
   }
 
-  .creature-sprite__fx {
+  .creature-sprite__particles {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -156,15 +156,57 @@
     pointer-events: none;
   }
 
-  .creature-sprite__fx i {
+  .creature-sprite__particles i {
     position: absolute;
     font-style: normal;
-    animation: sprite-sparkle 1.8s ease-in-out infinite;
+    opacity: 0;
+    font-size: calc(var(--sprite-size) * 0.14);
+    animation: particle-fire var(--particle-duration) ease-in-out var(--particle-delay) infinite;
   }
 
-  .creature-sprite__fx i:nth-child(1) { top: 8%; right: 13%; }
-  .creature-sprite__fx i:nth-child(2) { top: 34%; left: 4%; animation-delay: -0.6s; }
-  .creature-sprite__fx i:nth-child(3) { top: 54%; right: 2%; animation-delay: -1.2s; }
+  .creature-sprite__particles--water i { animation-name: particle-water; }
+  .creature-sprite__particles--grass i { animation-name: particle-grass; }
+
+  .creature-sprite__state-fx {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .creature-sprite__label,
+  .creature-sprite__zzz {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--color-primary);
+    font: 700 calc(var(--sprite-size) * 0.2) / 1 Fredoka, sans-serif;
+    font-style: normal;
+    animation: sprite-float-label 400ms ease-out both;
+  }
+
+  .creature-sprite__state-fx--heal .creature-sprite__label { color: var(--color-hp-high); animation-duration: 700ms; }
+  .creature-sprite__state-fx--zonedOut .creature-sprite__zzz { animation-duration: 800ms; }
+  .creature-sprite__state-fx--sleepy .creature-sprite__zzz { animation: sprite-zzz 2s ease-in-out infinite; }
+
+  .creature-sprite__heal-star,
+  .creature-sprite__celebrate-star {
+    position: absolute;
+    color: var(--color-fp-gold);
+    font-style: normal;
+    animation: sprite-float-label 700ms ease-out both;
+  }
+
+  .creature-sprite__heal-star:nth-of-type(2) { left: 8%; top: 28%; }
+  .creature-sprite__heal-star:nth-of-type(3) { left: 72%; top: 13%; animation-delay: 70ms; }
+  .creature-sprite__heal-star:nth-of-type(4) { left: 4%; top: 58%; animation-delay: 140ms; }
+  .creature-sprite__heal-star:nth-of-type(5) { right: 5%; top: 53%; animation-delay: 210ms; }
+  .creature-sprite__heal-star:nth-of-type(6) { left: 45%; top: 2%; animation-delay: 280ms; }
+  .creature-sprite__celebrate-star:nth-child(1) { left: 8%; top: 25%; }
+  .creature-sprite__celebrate-star:nth-child(2) { left: 74%; top: 12%; animation-delay: 100ms; }
+  .creature-sprite__celebrate-star:nth-child(3) { left: 0; top: 56%; animation-delay: 200ms; }
+  .creature-sprite__celebrate-star:nth-child(4) { right: 0; top: 48%; animation-delay: 300ms; }
+  .creature-sprite__celebrate-star:nth-child(5) { left: 44%; top: 0; animation-delay: 400ms; }
 
   .lockdex-silhouette .creature-sprite__body {
     border: 0;
@@ -184,13 +226,26 @@
 
   .creature-sprite--hop .creature-sprite__motion,
   .creature-sprite--selected .creature-sprite__motion {
-    animation: sprite-hop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
-      sprite-idle 2.8s ease-in-out 600ms var(--sprite-delay) infinite;
+    animation: sprite-hop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .creature-sprite--selected .creature-sprite__motion {
+    animation-delay: calc(600ms + var(--sprite-delay));
   }
 
   .creature-sprite--sentOut .creature-sprite__motion {
     animation: sprite-sent-out 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
+  .creature-sprite--attack .creature-sprite__motion { animation: sprite-attack 600ms ease-out both; }
+  .creature-sprite--hit .creature-sprite__motion { animation: sprite-hit 350ms ease-out both; }
+  .creature-sprite--hit .creature-sprite__body { animation: sprite-hit-flash 350ms ease-out both; }
+  .creature-sprite--miss .creature-sprite__motion { animation: sprite-miss 400ms ease-out both; }
+  .creature-sprite--heal .creature-sprite__motion { animation: sprite-heal 700ms ease-out both; }
+  .creature-sprite--heal .creature-sprite__body { animation: sprite-heal-glow 700ms ease-in-out both; }
+  .creature-sprite--zonedOut .creature-sprite__motion { animation: sprite-zoned-out 800ms ease-in-out both; }
+  .creature-sprite--celebrate .creature-sprite__motion { animation: sprite-celebrate 1.2s ease-in-out both; }
+  .creature-sprite--sleepy .creature-sprite__motion { animation: sprite-sleepy 4s ease-in-out infinite; }
 
   .creature-sprite--selected .creature-sprite__body {
     box-shadow: 0 0 0 5px rgb(91 75 219 / 16%), 0 7px 18px color-mix(in srgb, var(--sprite-element) 22%, transparent);
@@ -207,6 +262,92 @@
     content: '';
     animation: sprite-glow 1.8s ease-in-out 600ms infinite;
   }
+}
+
+.timer-ring__track { stroke: var(--color-ring-track); stroke-width: 8; }
+.timer-ring__progress {
+  stroke: var(--color-primary);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 250ms linear;
+}
+
+.creature-sprite__particles i:nth-child(1) { left: 12%; top: 9%; }
+.creature-sprite__particles i:nth-child(2) { left: 36%; top: 20%; }
+.creature-sprite__particles i:nth-child(3) { left: 71%; top: 12%; }
+.creature-sprite__particles i:nth-child(4) { left: 86%; top: 39%; }
+.creature-sprite__particles i:nth-child(5) { left: 67%; top: 72%; }
+.creature-sprite__particles i:nth-child(6) { left: 26%; top: 77%; }
+.creature-sprite__particles i:nth-child(7) { left: 4%; top: 49%; }
+
+@keyframes particle-fire {
+  0% { opacity: 0; transform: translateY(6px) scale(0.7); }
+  12% { opacity: 0.48; }
+  55% { opacity: 0.35; transform: translateY(-13px) scale(1); }
+  100% { opacity: 0; transform: translateY(-25px) scale(0.6); }
+}
+@keyframes particle-water {
+  0% { opacity: 0; transform: translateY(12px) translateX(0) scale(0.7); }
+  15% { opacity: 0.42; }
+  60% { transform: translateY(-8px) translateX(5px) scale(1); }
+  100% { opacity: 0; transform: translateY(-24px) translateX(-3px) scale(0.8); }
+}
+@keyframes particle-grass {
+  0% { opacity: 0; transform: translateY(-8px) rotate(-20deg); }
+  15% { opacity: 0.4; }
+  100% { opacity: 0; transform: translateY(22px) rotate(35deg); }
+}
+@keyframes sprite-attack {
+  0% { transform: translateX(0) scale(1); }
+  20% { transform: translateX(-8px) scale(0.94, 1.06); }
+  50% { transform: translateX(32px) scale(1.14, 0.9); }
+  78% { transform: translateX(-3px) scale(0.97, 1.03); }
+  100% { transform: translateX(0) scale(1); }
+}
+@keyframes sprite-hit {
+  0%, 100% { transform: translateX(0) scale(1); }
+  16%, 48%, 80% { transform: translateX(-6px) scale(1.04, 0.96); }
+  32%, 64% { transform: translateX(6px) scale(0.97, 1.03); }
+}
+@keyframes sprite-hit-flash {
+  0%, 23% { filter: brightness(1.8); }
+  100% { filter: brightness(1); }
+}
+@keyframes sprite-miss {
+  0%, 100% { transform: translate(0, 0); }
+  40% { transform: translateX(16px) translateY(-4px); }
+  72% { transform: translateX(8px) translateY(-2px); }
+}
+@keyframes sprite-heal {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+}
+@keyframes sprite-heal-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  40%, 70% { filter: drop-shadow(0 0 12px rgb(63 191 127 / 70%)); }
+}
+@keyframes sprite-zoned-out {
+  0% { opacity: 1; filter: grayscale(0); transform: translateY(0) rotate(0); }
+  100% { opacity: 0.4; filter: grayscale(1); transform: translateY(10px) rotate(-2deg); }
+}
+@keyframes sprite-celebrate {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  18%, 56% { transform: translateY(0) scale(1.1, 0.9); }
+  38% { transform: translateY(-20px) scale(0.94, 1.08); }
+  77% { transform: translateY(-22px) rotate(6deg) scale(0.94, 1.08); }
+}
+@keyframes sprite-sleepy {
+  0%, 100% { transform: translateY(2px) rotate(2deg) scale(1); }
+  50% { transform: translateY(-2px) rotate(2deg) scale(1.03, 0.98); }
+}
+@keyframes sprite-float-label {
+  0% { opacity: 0; transform: translateY(8px) scale(0.9); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-20px) scale(1); }
+}
+@keyframes sprite-zzz {
+  0%, 100% { opacity: 0.55; transform: translateY(3px) rotate(-5deg); }
+  50% { opacity: 1; transform: translateY(-4px) rotate(5deg); }
 }
 
 @keyframes sprite-idle {
@@ -252,10 +393,19 @@
     transition-duration: 200ms !important;
   }
 
+  .creature-sprite__particles {
+    display: none !important;
+  }
+
   .creature-sprite__motion,
-  .creature-sprite__shadow,
-  .creature-sprite__fx i,
+  .creature-sprite__body,
+  .creature-sprite__state-fx,
   .creature-sprite--selected::after {
+    animation-duration: 200ms !important;
+    animation-delay: 0ms !important;
+  }
+
+  .creature-sprite__shadow {
     animation: none !important;
   }
 }
