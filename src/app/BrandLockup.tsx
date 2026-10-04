@@ -15,7 +15,7 @@ export default function BrandLockup({ size }: { size: 'sm' | 'lg' }) {
       />
       <div>
         {/* The large lockup is the page title on the welcome step; Home has its own h1. */}
-        {size === 'lg' ? <h1 className={nameClass}>Locklings</h1> : <span className={`block ${nameClass}`}>Locklings</span>}
+        {size === 'lg' ? <h1 className={nameClass}>Focu</h1> : <span className={`block ${nameClass}`}>Focu</span>}
         <p className="text-sm text-muted">Lock in. Level up.</p>
       </div>
     </div>

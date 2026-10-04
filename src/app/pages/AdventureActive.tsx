@@ -49,7 +49,7 @@ export default function AdventureActive() {
   // RUN-03: tab title shows the time left.
   useEffect(() => {
     if (endsAt === null) return
-    document.title = `${formatRemaining(remaining)} · Locklings`
+    document.title = `${formatRemaining(remaining)} · Focu`
   }, [endsAt, remaining])
   useEffect(() => {
     const original = document.title
