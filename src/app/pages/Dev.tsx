@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FIXTURES, SESSION_FIXTURES, SESSION_FIXTURE_SITES } from '@/dev/fixtures'
-import { DEFAULT_STATE, type FixtureId } from '@/dev/stubTypes'
+import { DEFAULT_STATE } from '@/platform/defaultState'
+import type { FixtureId } from '@/types'
 import { platform } from '@/platform/platform'
 import { useGameState } from '@/app/store'
 

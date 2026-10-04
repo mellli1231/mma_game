@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { create } from 'zustand'
-import type { GameState } from '@/dev/stubTypes'
+import type { GameState } from '@/types'
 import { platform } from '@/platform/platform'
 
 interface Store { state: GameState | null }
