@@ -23,8 +23,9 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-4">
-      <header className="flex items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
+      <header className="flex flex-col items-end gap-3">
+        <BrandLockup size="sm" />
+        <div className="flex flex-wrap items-center justify-end gap-3">
           {state.settings.demoMode && (
             <span className="focu-badge bg-lavender text-sm">{DEMO_BADGE}</span>
           )}
@@ -34,7 +35,6 @@ export default function Home() {
             ⚙️
           </Link>
         </div>
-        <BrandLockup size="sm" />
       </header>
 
       <section className="focu-card p-6 text-center">
