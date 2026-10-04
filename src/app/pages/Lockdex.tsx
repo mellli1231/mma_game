@@ -44,10 +44,13 @@ export default function Lockdex() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-8 p-4 pb-16 sm:p-8">
-      <header>
-        <p className="text-sm font-bold uppercase tracking-widest text-primary">Collection & team</p>
-        <h1 className="text-4xl">Lockdex & Squad</h1>
-        <p className="mt-1 text-muted">Build your team, put your lead first, and meet all nine Locklings.</p>
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-widest text-primary">Collection & team</p>
+          <h1 className="text-4xl">Lockdex & Squad</h1>
+          <p className="mt-1 text-muted">Build your team, put your lead first, and meet all nine Locklings.</p>
+        </div>
+        <Link to="/" className="inline-flex min-h-tap items-center rounded-pill border border-ring-track bg-surface px-4 font-bold text-primary hover:bg-ring-track">Home</Link>
       </header>
 
       <section className="rounded-card bg-surface p-5 shadow-card" aria-labelledby="squad-title">
