@@ -42,7 +42,20 @@ export const FIXTURES: Record<FixtureId, () => GameState> = {
   }),
   activeSession: () => base(['embrit'], ['embrit'], 300, 1, false),
   activeSessionAlmostDone: () => base(['embrit'], ['embrit'], 300, 1, true),
+  // Alias of mid. Keep in sync with SPEC 15.1. If mid changes, the demo save changes.
   demoSave: mid,
+}
+
+/** One plain-English line per fixture, shown next to its button on the Dev page. */
+export const DESCRIPTIONS: Record<FixtureId, string> = {
+  fresh: 'Brand-new player: no creatures, 0 FP, onboarding not done',
+  mid: 'Embrit and Tidepup, 900 FP, Gym 1, Demo Mode on',
+  rich: 'All 9 creatures, 5000 FP, Gym 3, one spare move scroll',
+  battleReady: 'Squad of Embrit, Tidepup and Mossling, 600 FP, Gym 1',
+  pendingReward: 'Just beat Gym 1: 3 Lockboxes waiting',
+  activeSession: 'Starts a REAL 25 minute Adventure blocking Instagram, TikTok and X',
+  activeSessionAlmostDone: 'Starts a 1 minute Demo Mode Adventure that ends in about a second',
+  demoSave: 'Same as mid. This is the pre-pitch save',
 }
 
 /** The two fixtures that also start a real session after the state is loaded. */
