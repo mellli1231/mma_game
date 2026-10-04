@@ -39,10 +39,10 @@ export default function Home() {
 
       <section className="focu-card p-6 text-center">
         <h1 className="font-display text-3xl">Welcome back, {state.trainerName}!</h1>
-        <div className="mt-4 flex justify-center gap-6">
+        <div className="mt-4 flex flex-wrap justify-center gap-6">
           {squad.map(c => (
             <div key={c.uid} className="flex flex-col items-center gap-1">
-              <CreatureSprite defId={c.defId} uid={c.uid} size={96} />
+              <CreatureSprite defId={c.defId} uid={c.uid} size={160} />
               <ElementBadge element={CREATURES[c.defId].element} size="sm" />
             </div>
           ))}
