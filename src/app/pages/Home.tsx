@@ -24,20 +24,20 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-4">
       <header className="flex items-center justify-between gap-3">
-        <BrandLockup size="sm" />
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {state.settings.demoMode && (
-            <span className="rounded-pill bg-primary px-3 py-1 text-xs font-display text-white">{DEMO_BADGE}</span>
+            <span className="focu-badge bg-lavender text-sm">{DEMO_BADGE}</span>
           )}
-          <span className="text-muted">{state.trainerName}</span>
+          <span className="focu-pill">{state.trainerName}</span>
           <FpBadge amount={state.fp} />
-          <Link to="/settings" aria-label="Settings" className="flex min-h-tap min-w-tap items-center justify-center">
+          <Link to="/settings" aria-label="Settings" className="focu-round-btn">
             ⚙️
           </Link>
         </div>
+        <BrandLockup size="sm" />
       </header>
 
-      <section className="rounded-card bg-surface p-6 text-center shadow-card">
+      <section className="focu-card p-6 text-center">
         <h1 className="font-display text-3xl">Welcome back, {state.trainerName}!</h1>
         <div className="mt-4 flex justify-center gap-6">
           {squad.map(c => (
@@ -52,7 +52,7 @@ export default function Home() {
       {state.pendingReward && (
         <Link
           to="/lockbox"
-          className="block min-h-tap rounded-card bg-fp-gold p-3 text-center font-display shadow-card"
+          className="focu-btn focu-btn--primary flex w-full"
         >
           Unclaimed Lockbox!
         </Link>
@@ -60,39 +60,41 @@ export default function Home() {
 
       {session ? (
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-4 rounded-card bg-primary p-4 text-white shadow-card">
+          <div className="focu-card flex items-center justify-between gap-4 bg-lavender p-4 text-ink">
             <div>
-              <div className="font-display text-xl">Adventure in progress</div>
-              <Link to="/adventure" className="flex min-h-tap items-center underline">View Adventure</Link>
+              <div className="font-display text-xl font-bold">Adventure in progress</div>
+              <Link to="/adventure" className="flex min-h-tap items-center font-bold text-primary underline">View Adventure</Link>
             </div>
-            <div className="rounded-full bg-surface">
+            <div className="rounded-full bg-paper">
               <TimerRing startedAt={session.startedAt} endsAt={session.endsAt} size={96} />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <LockOverlay locked reason={LOCKED_TOOLTIP}>
-              <div className="min-h-tap rounded-card bg-fire p-5 text-white shadow-card" title={LOCKED_TOOLTIP}>
-                <div className="font-display text-xl">Let’s Battle!</div>
-                <div className="text-sm opacity-90">{nextGym}</div>
+              <div className="focu-home-card focu-home-card--battle" title={LOCKED_TOOLTIP}>
+                <span className="focu-home-card__icon" aria-hidden="true">⚔️</span>
+                <span className="focu-home-card__title">Let’s Battle!</span>
+                <span className="focu-home-card__sub">{nextGym}</span>
               </div>
             </LockOverlay>
             <LockOverlay locked reason={LOCKED_TOOLTIP}>
-              <div className="min-h-tap rounded-card bg-grass p-5 text-white shadow-card" title={LOCKED_TOOLTIP}>
-                <div className="font-display text-xl">Training Centre</div>
-                <div className="text-sm opacity-90">Teach new moves with FP</div>
+              <div className="focu-home-card focu-home-card--training" title={LOCKED_TOOLTIP}>
+                <span className="focu-home-card__icon" aria-hidden="true">🥋</span>
+                <span className="focu-home-card__title">Training Centre</span>
+                <span className="focu-home-card__sub">Teach new moves with FP</span>
               </div>
             </LockOverlay>
           </div>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-3">
-          <ActionCard to="/adventure/setup" title="Go on an Adventure!" subtitle="Block distractions, earn FP" className="bg-primary" />
-          <ActionCard to="/gyms" title="Let’s Battle!" subtitle={nextGym} className="bg-fire" />
-          <ActionCard to="/dojo" title="Training Centre" subtitle="Teach new moves with FP" className="bg-grass" />
+          <ActionCard to="/adventure/setup" title="Go on an Adventure!" subtitle="Block distractions, earn FP" icon="🧭" className="focu-home-card--adventure" />
+          <ActionCard to="/gyms" title="Let’s Battle!" subtitle={nextGym} icon="⚔️" className="focu-home-card--battle" />
+          <ActionCard to="/dojo" title="Training Centre" subtitle="Teach new moves with FP" icon="🥋" className="focu-home-card--training" />
         </div>
       )}
 
-      <Link to="/lockdex" className="block text-center text-primary underline">Lockdex &amp; Squad</Link>
+      <Link to="/lockdex" className="focu-pill mx-auto flex w-fit text-primary underline">Lockdex &amp; Squad</Link>
 
       <dl className="grid grid-cols-3 gap-2 text-center text-sm">
         <Stat label="Focus minutes" value={stats.totalFocusMin} />
@@ -103,22 +105,20 @@ export default function Home() {
   )
 }
 
-function ActionCard(props: { to: string; title: string; subtitle: string; className: string }) {
+function ActionCard(props: { to: string; title: string; subtitle: string; icon: string; className: string }) {
   return (
-    <Link
-      to={props.to}
-      className={`min-h-tap rounded-card p-5 text-ink shadow-card transition-transform duration-micro ease-airy hover:-translate-y-0.5 motion-reduce:transition-none ${props.className}`}
-    >
-      <div className="font-display text-xl">{props.title}</div>
-      <div className="text-sm opacity-90">{props.subtitle}</div>
+    <Link to={props.to} className={`focu-home-card ${props.className}`}>
+      <span className="focu-home-card__icon" aria-hidden="true">{props.icon}</span>
+      <span className="focu-home-card__title">{props.title}</span>
+      <span className="focu-home-card__sub">{props.subtitle}</span>
     </Link>
   )
 }
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-card bg-surface p-3 shadow-card">
-      <dd className="font-display text-xl">{value}</dd>
+    <div className="focu-card p-3">
+      <dd className="font-display text-xl font-bold tabular-nums">{value}</dd>
       <dt className="text-muted">{label}</dt>
     </div>
   )

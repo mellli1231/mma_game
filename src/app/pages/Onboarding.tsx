@@ -37,11 +37,11 @@ export default function Onboarding() {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
         <BrandLockup size="lg" />
-        <div className="flex gap-4 text-5xl" aria-hidden="true">
+        <div className="focu-card flex gap-4 px-6 py-3 text-5xl" aria-hidden="true">
           {STARTER_IDS.map(id => <span key={id}>{CREATURES[id].emoji}</span>)}
         </div>
         <button
-          className="min-h-tap rounded-pill bg-primary px-8 font-display text-white"
+          className="focu-btn focu-btn--primary"
           onClick={() => setStep('name')}
         >
           Start
@@ -53,7 +53,8 @@ export default function Onboarding() {
   if (step === 'name') {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
-        <h1 className="font-display text-3xl">What should we call you?</h1>
+        <div className="focu-card flex w-full flex-col items-center gap-6 p-8">
+        <h1 className="focu-title !text-3xl">What should we call you?</h1>
         <input
           value={name}
           maxLength={TRAINER_NAME_MAX}
@@ -61,21 +62,22 @@ export default function Onboarding() {
           aria-label="Trainer name"
           onChange={e => setName(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && setStep('companion')}
-          className="min-h-tap w-full rounded-card border border-muted/40 bg-surface px-4 text-center"
+          className="focu-input w-full text-center"
         />
         <button
-          className="min-h-tap rounded-pill bg-primary px-8 font-display text-white"
+          className="focu-btn focu-btn--primary"
           onClick={() => setStep('companion')}
         >
           Next
         </button>
+        </div>
       </main>
     )
   }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-6 p-6">
-      <h1 className="font-display text-3xl">Pick your companion</h1>
+      <h1 className="focu-title focu-panel px-6 py-1">Pick your companion</h1>
       <div className="grid w-full gap-4 sm:grid-cols-3">
         {STARTER_IDS.map(id => {
           const def = CREATURES[id]
@@ -86,8 +88,8 @@ export default function Onboarding() {
               type="button"
               aria-pressed={selected}
               onClick={() => setStarter(id)}
-              className={`flex flex-col items-center gap-2 rounded-card bg-surface p-4 text-center shadow-card transition-transform duration-short ease-airy motion-reduce:transition-none ${
-                selected ? '-translate-y-1 border-[3px] border-primary' : 'border-[3px] border-transparent'
+              className={`focu-card flex flex-col items-center gap-2 p-4 text-center transition-transform duration-short ease-airy motion-reduce:transition-none ${
+                selected ? 'creature-card--selected -translate-y-1' : ''
               }`}
             >
               <CreatureSprite defId={id} size={96} state={selected ? 'hop' : 'idle'} />
@@ -104,7 +106,7 @@ export default function Onboarding() {
       <button
         disabled={!starter || saving}
         onClick={confirm}
-        className="min-h-tap rounded-pill bg-primary px-8 font-display text-white disabled:opacity-40"
+        className="focu-btn focu-btn--primary"
       >
         {starter ? `Choose ${CREATURES[starter].name}!` : 'Choose a companion'}
       </button>

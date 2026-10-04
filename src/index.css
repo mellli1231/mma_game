@@ -297,7 +297,21 @@
     background: var(--color-trail);
     content: '';
   }
-  .focu-home-card__icon { position: absolute; top: 50%; left: 20px; width: 48px; height: 48px; transform: translateY(-50%); }
+  .focu-home-card__icon {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--color-ink);
+    border-radius: 50%;
+    background: #fff;
+    font-size: 24px;
+    line-height: 1;
+    transform: translateY(-50%);
+  }
   .focu-home-card__title { display: block; font: 700 24px Fredoka, ui-rounded, sans-serif; }
   .focu-home-card__sub { display: block; font: 700 15px Nunito, ui-sans-serif, sans-serif; }
   .focu-home-card--adventure { background: var(--color-sunshine); transform: rotate(-1deg); }
