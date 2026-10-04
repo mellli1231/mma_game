@@ -74,7 +74,10 @@ export default function Dojo() {
           <h1 className="text-4xl">The Dojo</h1>
           <p className="mt-1 text-muted">Teach your Locklings new moves with FocuPoints or a Move Scroll.</p>
         </div>
-        <FpBadge amount={state.fp} />
+        <div className="flex items-center gap-3">
+          <FpBadge amount={state.fp} />
+          <Link to="/" className="inline-flex min-h-tap items-center rounded-pill border border-ring-track bg-surface px-4 font-bold text-primary hover:bg-ring-track">Home</Link>
+        </div>
       </header>
 
       {adventureLocked ? (

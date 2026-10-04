@@ -1,4 +1,4 @@
-import type { AnimationEvent, CSSProperties } from 'react'
+import { useState, type AnimationEvent, type CSSProperties } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import type { SpriteState } from '@/types'
 import { CREATURES } from '@/data/creatures'
@@ -28,6 +28,20 @@ function hashUid(uid: string): number {
   return Math.abs(hash) % 1000
 }
 
+function CreatureArt({ defId, emoji }: { defId: string; emoji: string }) {
+  const [available, setAvailable] = useState(true)
+  if (!available) return <span className="creature-sprite__emoji" aria-hidden="true">{emoji}</span>
+  return (
+    <img
+      className="creature-sprite__art"
+      src={`/assets/creatures/${defId}.png`}
+      alt=""
+      draggable={false}
+      onError={() => setAvailable(false)}
+    />
+  )
+}
+
 export function CreatureSprite({
   defId,
   uid,
@@ -46,6 +60,8 @@ export function CreatureSprite({
     '--sprite-size': `${size}px`,
     '--sprite-element': ELEMENT_COLOR[creature?.element ?? 'grass'],
     '--sprite-delay': `${seed}ms`,
+    // Tidepup's visible pixels reach the edge of its 512px canvas; the other art has transparent padding.
+    '--sprite-art-scale': defId === 'tidepup' ? '0.93' : '1',
   } as CSSProperties
 
   function handleAnimationEnd(event: AnimationEvent<HTMLSpanElement>) {
@@ -72,7 +88,7 @@ export function CreatureSprite({
       <span className={`creature-sprite__facing creature-sprite__facing--${facing}`}>
         <span className="creature-sprite__motion" onAnimationEnd={handleAnimationEnd}>
           <span className="creature-sprite__body" aria-hidden="true">
-            {creature?.emoji ?? '✨'}
+            <CreatureArt key={defId} defId={defId} emoji={creature?.emoji ?? '✨'} />
           </span>
         </span>
       </span>
