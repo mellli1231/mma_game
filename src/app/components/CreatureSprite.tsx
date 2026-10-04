@@ -38,19 +38,21 @@ export function CreatureSprite({
   onAnimationEnd,
 }: CreatureSpriteProps) {
   const creature = CREATURES[defId]
+  const seed = uid ? hashUid(uid) : hashUid(defId)
+  const particleGlyph = creature?.element === 'water' ? '◦' : creature?.element === 'grass' ? '🍃' : '✦'
   const style = {
     '--sprite-size': `${size}px`,
     '--sprite-element': ELEMENT_COLOR[creature?.element ?? 'grass'],
-    '--sprite-delay': `${uid ? hashUid(uid) : 0}ms`,
+    '--sprite-delay': `${seed}ms`,
   } as CSSProperties
 
   function handleAnimationEnd(event: AnimationEvent<HTMLSpanElement>) {
-    const completedAnimation = state === 'hop' || state === 'selected'
-      ? 'sprite-hop'
-      : state === 'sentOut'
-        ? 'sprite-sent-out'
-        : undefined
-    if (completedAnimation && event.animationName === completedAnimation) onAnimationEnd?.()
+    const expected: Partial<Record<SpriteState, string>> = {
+      hop: 'sprite-hop', selected: 'sprite-hop', sentOut: 'sprite-sent-out',
+      attack: 'sprite-attack', hit: 'sprite-hit', miss: 'sprite-miss',
+      heal: 'sprite-heal', zonedOut: 'sprite-zoned-out', celebrate: 'sprite-celebrate',
+    }
+    if (expected[state] === event.animationName) onAnimationEnd?.()
   }
 
   return (
@@ -71,10 +73,24 @@ export function CreatureSprite({
         </span>
       </span>
       {showParticles ? (
-        <span className="creature-sprite__fx" aria-hidden="true">
-          <i>✦</i><i>·</i><i>✧</i>
+        <span className={`creature-sprite__particles creature-sprite__particles--${creature?.element ?? 'grass'}`} aria-hidden="true">
+          {Array.from({ length: 7 }, (_, index) => {
+            const delay = -((seed + index * 317) % 8000)
+            const duration = creature?.element === 'fire'
+              ? 4000 + ((seed + index * 173) % 2001)
+              : creature?.element === 'water'
+                ? 5000 + ((seed + index * 173) % 2001)
+                : 6000 + ((seed + index * 173) % 2001)
+            return <i key={index} style={{ '--particle-index': index, '--particle-delay': `${delay}ms`, '--particle-duration': `${duration}ms` } as CSSProperties}>{particleGlyph}</i>
+          })}
         </span>
       ) : null}
+      <span className={`creature-sprite__state-fx creature-sprite__state-fx--${state}`} aria-hidden="true">
+        {state === 'miss' ? <i className="creature-sprite__label">MISS</i> : null}
+        {state === 'heal' ? <><i className="creature-sprite__label">+25</i>{Array.from({ length: 5 }, (_, index) => <i className="creature-sprite__heal-star" key={index}>✦</i>)}</> : null}
+        {state === 'zonedOut' || state === 'sleepy' ? <i className="creature-sprite__zzz">zzz</i> : null}
+        {state === 'celebrate' ? Array.from({ length: 5 }, (_, index) => <i className="creature-sprite__celebrate-star" key={index}>✦</i>) : null}
+      </span>
     </div>
   )
 }
