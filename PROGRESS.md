@@ -18,4 +18,7 @@ Entry format: `- [hour] Task card | what was built | requirement IDs | left to d
 
 ## Person C (Design and Collection)
 
+- [hour 1] Task C1 | Tailwind tokens (SPEC 10.2 colours plus ring-track), bundled Fredoka/Nunito in index.css, motion.ts (ease/spring/dur/stagger), stubs of every CONTRACTS component exported from components/index.ts | 10.1, 10.2, 10.8.2 | Real CreatureSprite and Gallery are C2 | Stubs use local stubTypes.ts until B's types.ts is on main. Duration tokens stored in seconds for Framer Motion.
+- [hour 1] Task C1 follow-up | Component stubs now import ElementType, SpriteState, MoveDef, FpBreakdown, LockboxContent from src/types.ts; removed src/app/components/stubTypes.ts | CONTRACTS component props | C2 | Switched as soon as B's types.ts landed.
+
 ## Sync log (merge captain only)

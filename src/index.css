@@ -1,3 +1,65 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import '@fontsource/fredoka/600.css';
+@import '@fontsource/nunito/400.css';
+@import '@fontsource/nunito/700.css';
+@import 'tailwindcss';
+
+@layer base {
+  :root {
+    --color-primary: #5b4bdb;
+    --color-ink: #1f2033;
+    --color-muted: #6b6f8a;
+    --color-bg: #fff8ec;
+    --color-surface: #ffffff;
+    --color-fire: #ff7a45;
+    --color-water: #3ba3ff;
+    --color-grass: #3fbf7f;
+    --color-fp-gold: #f5b700;
+    --color-danger: #e5484d;
+    --color-hp-high: #3fbf7f;
+    --color-hp-mid: #f5b700;
+    --color-hp-low: #e5484d;
+    --color-ring-track: #ede9ff;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: Nunito, ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: Fredoka, ui-rounded, sans-serif;
+    font-weight: 600;
+  }
+
+  button,
+  a,
+  [role='button'] {
+    min-height: 44px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 200ms !important;
+  }
+}
