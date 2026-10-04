@@ -339,11 +339,11 @@ export default function Battle() {
         <CreaturePanel
           label="Your active Lockling"
           creature={player}
-          facing="left"
+          facing="right"
           event={page.currentEvent}
           celebrating={activeBattle.phase === 'victory'}
         />
-        <CreaturePanel label="Opponent" creature={enemy} facing="right" event={page.currentEvent} />
+        <CreaturePanel label="Opponent" creature={enemy} facing="left" event={page.currentEvent} />
       </section>
 
       <section className="min-h-24 rounded-2xl bg-slate-100 p-4" aria-live="polite" aria-label="Battle log">
