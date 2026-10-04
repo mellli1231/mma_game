@@ -11,6 +11,7 @@ Entry format: `- [hour] Task card | what was built | requirement IDs | left to d
 ## Person B (Engine and Battle)
 
 - [h0] B1 | Created the frozen game type model and the initial engine data catalog: `src/types.ts`, `src/data/config.ts`, `src/data/moves.ts`, `src/data/creatures.ts`, `src/data/gyms.ts`, and `src/data/sites.ts`; added `tests/engine-data.test.ts` to lock the move, creature, gym, and category counts and confirm default moves match each creature's element | M1 | Continue with `points.ts`, `typeChart.ts`, and the first battle tests | Decisions: B is implementing the fixed catalog directly from SPEC Sections 7 and 8, with no UI assumptions and no magic-number leakage into components.
+- [h4] B2-B4 | Implemented FP tier/calculation, elemental modifiers, seeded RNG, onboarding, training, and squad engine functions with focused tests; aligned `GameState` and `FocusSession` types with SPEC 9.7 for the engine functions | ADV-06, ONB-04, DOJO-02 to DOJO-08, DEX-02 to DEX-03 | Continue with battle and AI engine, then rewards; A still needs to reconcile its temporary `src/dev/stubTypes.ts` model with `src/types.ts` before the app can consume these engine functions | Decisions: onboarding uses a deterministic starter UID and `obtainedAt: 0` to keep the engine function deterministic; all FP purchases, scroll consumption, and squad edits return immutable state.
 
 ## Person C (Design and Collection)
 
