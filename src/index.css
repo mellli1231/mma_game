@@ -166,6 +166,13 @@
   .creature-sprite__fx i:nth-child(2) { top: 34%; left: 4%; animation-delay: -0.6s; }
   .creature-sprite__fx i:nth-child(3) { top: 54%; right: 2%; animation-delay: -1.2s; }
 
+  .lockdex-silhouette .creature-sprite__body {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    filter: brightness(0) opacity(0.42);
+  }
+
   .creature-sprite--idle .creature-sprite__motion {
     animation: sprite-idle 2.8s ease-in-out var(--sprite-delay) infinite;
   }
