@@ -485,6 +485,11 @@
     transform-origin: center;
   }
 
+  .hp-bar {
+    border: 2.5px solid var(--color-ink);
+    background: #fff;
+  }
+
   .hp-bar__ghost,
   .hp-bar__front {
     position: absolute;
@@ -493,13 +498,46 @@
   }
 
   .hp-bar__ghost {
-    background: color-mix(in srgb, var(--color-hp-high) 38%, white);
+    background: var(--color-peach-pale);
     transition: width 500ms ease-out;
   }
 
   .hp-bar__front {
     z-index: 1;
+    background:
+      repeating-linear-gradient(135deg, rgb(255 255 255 / 45%) 0 6px, transparent 6px 12px),
+      var(--color-grass);
+    border-right: 2.5px solid var(--color-ink);
     transition: width 500ms ease-out;
+  }
+  .hp-bar__front--mid {
+    background:
+      repeating-linear-gradient(135deg, rgb(255 255 255 / 45%) 0 6px, transparent 6px 12px),
+      var(--color-sunshine);
+  }
+  .hp-bar__front--low {
+    background:
+      repeating-linear-gradient(135deg, rgb(255 255 255 / 45%) 0 6px, transparent 6px 12px),
+      var(--color-fire);
+  }
+
+  .move-button {
+    border: 2.5px solid var(--color-ink);
+    border-radius: 18px 8px 18px 8px / 8px 18px 8px 18px;
+    box-shadow: 3px 4px 0 rgb(31 32 51 / 28%);
+  }
+  .move-button:disabled {
+    background: var(--color-disabled);
+    border-style: dashed;
+    border-color: #7c7a99;
+    box-shadow: none;
+    color: var(--color-muted);
+    cursor: not-allowed;
+  }
+
+  .creature-card--selected {
+    border-color: var(--color-focu);
+    transform: translateY(-3px);
   }
 
   .move-button__effectiveness {

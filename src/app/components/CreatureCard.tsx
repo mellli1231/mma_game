@@ -19,13 +19,13 @@ export function CreatureCard({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-card bg-surface p-3 text-left shadow-card min-h-tap ${
-        selected ? 'ring-2 ring-primary' : ''
+      className={`focu-card min-h-tap p-4 text-left ${
+        selected ? 'creature-card--selected' : ''
       } ${dimmed ? 'opacity-50' : ''}`}
     >
-      <div className="font-display">{defId}</div>
+      <div className="font-display font-semibold">{defId}</div>
       {moveCount != null ? <div className="text-sm text-muted">{moveCount}/4 moves</div> : null}
-      {badge ? <div className="text-xs text-primary">{badge}</div> : null}
+      {badge ? <div className="text-xs font-bold text-primary">{badge}</div> : null}
     </button>
   )
 }
