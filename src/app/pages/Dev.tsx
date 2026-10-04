@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CREATURES } from '@/data/creatures'
 import { FIXTURES, SESSION_FIXTURES, SESSION_FIXTURE_SITES } from '@/dev/fixtures'
 import { DEFAULT_STATE } from '@/platform/defaultState'
 import type { FixtureId } from '@/types'
@@ -25,6 +26,12 @@ export default function Dev() {
     setLoaded(id)
   }
 
+  // The confirmation is built from the live state, so it shows what actually loaded.
+  const demoSummary = state && loaded === 'demoSave'
+    ? `Demo save loaded: ${state.creatures.map(c => CREATURES[c.defId]?.name ?? c.defId).join(' + ')}, ` +
+      `${state.fp} FP, Gym ${state.currentGymLevel}, Demo Mode ${state.settings.demoMode ? 'on' : 'off'}`
+    : null
+
   async function finishNow() {
     await platform.updateState(s =>
       s.activeSession ? { ...s, activeSession: { ...s.activeSession, endsAt: Date.now() } } : s,
@@ -35,6 +42,9 @@ export default function Dev() {
   return (
     <div className="p-4 space-y-2">
       <h1>Dev</h1>
+      {/* SET-02: stays visible with Demo Mode off, because loading it is how a fresh save gets Demo Mode on. */}
+      <div><button onClick={() => load('demoSave')}>Load demo save</button></div>
+      {demoSummary && <p className="text-green-600">{demoSummary}</p>}
       {(Object.keys(FIXTURES) as FixtureId[]).map(id => (
         <div key={id}><button onClick={() => load(id)}>{id}</button></div>
       ))}

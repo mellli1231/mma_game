@@ -42,6 +42,7 @@ export const FIXTURES: Record<FixtureId, () => GameState> = {
   }),
   activeSession: () => base(['embrit'], ['embrit'], 300, 1, false),
   activeSessionAlmostDone: () => base(['embrit'], ['embrit'], 300, 1, true),
+  // Alias of mid. Keep in sync with SPEC 15.1. If mid changes, the demo save changes.
   demoSave: mid,
 }
 
