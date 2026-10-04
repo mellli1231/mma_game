@@ -16,7 +16,7 @@ export function FloatingNumber({ value, kind, onDone }: FloatingNumberProps) {
   const reduceMotion = useReducedMotion()
   return (
     <motion.span
-      className={`pointer-events-none inline-block font-display text-xl ${KIND_CLASS[kind]}`}
+      className={`focu-float pointer-events-none inline-block rounded-pill bg-paper px-3 font-display text-xl font-bold tabular-nums ${KIND_CLASS[kind]}`}
       initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 0, scale: 0.9 }}
       animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: -24, scale: 1 }}
       transition={{ duration: reduceMotion ? 0.2 : 0.7, ease: [0.22, 1, 0.36, 1] }}

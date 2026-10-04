@@ -2,10 +2,10 @@ import { defineManifest } from '@crxjs/vite-plugin'
 
 export default defineManifest({
   manifest_version: 3,
-  name: 'Locklings',
+  name: 'Focu',
   version: '0.1.0',
   description: 'Lock in. Level up. Turn focus time into power for your creatures.',
-  action: { default_title: 'Open Locklings' },
+  action: { default_title: 'Open Focu' },
   background: { service_worker: 'src/background/index.ts', type: 'module' },
   permissions: ['storage', 'alarms', 'declarativeNetRequest', 'notifications', 'tabs'],
   host_permissions: ['<all_urls>'],

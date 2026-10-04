@@ -14,25 +14,27 @@ export default function Defeat() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col items-center justify-center gap-5 p-6 text-center">
-      <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Battle complete</p>
-      <h1 className="text-4xl font-black">Your Squad zoned out...</h1>
-      <p className="max-w-lg text-lg text-slate-600">
-        {battle?.gymName
-          ? `${battle.gymName} held its ground. Your next Adventure can help you prepare for another try.`
-          : 'The Distraction Gym held its ground. Your next Adventure can help you prepare for another try.'}
-      </p>
-      {practice && <p className="text-sm text-slate-500">Practice battles do not change Gym progress.</p>}
+      <div className="focu-card flex flex-col items-center gap-4 p-8">
+        <p className="text-sm font-extrabold uppercase tracking-widest text-muted">Battle complete</p>
+        <h1 className="focu-title">Your Squad zoned out...</h1>
+        <p className="max-w-lg text-lg text-soft">
+          {battle?.gymName
+            ? `${battle.gymName} held its ground. Your next Adventure can help you prepare for another try.`
+            : 'The Distraction Gym held its ground. Your next Adventure can help you prepare for another try.'}
+        </p>
+        {practice && <p className="text-sm text-muted">Practice battles do not change Gym progress.</p>}
+      </div>
       <div className="flex flex-wrap justify-center gap-3">
         {gymLevel && (
           <Link
             to={`/battle/${gymLevel}${practice ? '?practice=1' : ''}`}
-            className="rounded-xl bg-indigo-600 px-5 py-3 font-bold text-white"
+            className="focu-btn focu-btn--primary"
           >
             Rematch
           </Link>
         )}
-        <Link to="/gyms" className="rounded-xl border px-5 py-3 font-bold">Gym Map</Link>
-        <Link to="/" className="rounded-xl border px-5 py-3 font-bold">Home</Link>
+        <Link to="/gyms" className="focu-btn focu-btn--secondary">Gym Map</Link>
+        <Link to="/" className="focu-btn focu-btn--secondary">Home</Link>
       </div>
     </main>
   );

@@ -31,15 +31,13 @@ export function MoveButton({
       disabled={disabled}
       title={disabledReason}
       onClick={onClick}
-      whileHover={disabled ? undefined : reduceMotion ? { opacity: 0.9 } : { y: -2, boxShadow: '0 8px 18px rgb(31 32 51 / 18%)' }}
-      whileTap={disabled ? undefined : reduceMotion ? { opacity: 0.85 } : { scale: 0.96 }}
+      whileHover={disabled ? undefined : reduceMotion ? { opacity: 0.9 } : { x: -1, y: -2 }}
+      whileTap={disabled ? undefined : reduceMotion ? { opacity: 0.85 } : { x: 2, y: 3 }}
       transition={{ type: 'spring', stiffness: 320, damping: 14 }}
-      className={`min-h-tap rounded-card px-3 py-2 text-left text-ink ${FILL[move.element]} ${
-        disabled ? 'opacity-50' : 'cursor-pointer'
-      }`}
+      className={`move-button min-h-[64px] px-4 py-2 text-left text-ink ${disabled ? '' : `${FILL[move.element]} cursor-pointer`}`}
     >
-      <div className="font-display">{move.name}</div>
-      <div className="text-sm">
+      <div className="font-display text-[18px] font-semibold">{move.name}</div>
+      <div className="text-sm font-extrabold">
         {move.effect === 'heal' ? `HEAL ${move.power}` : `ATK ${move.power}`}
         {usesLeft != null ? ` · ${usesLeft} ${move.effect === 'heal' ? 'uses' : 'left'}` : ''}
       </div>

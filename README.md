@@ -1,41 +1,87 @@
-# Locklings
+# Focu
 
-### Lock in. Level up.
+**Lock in. Level up.**
 
-Locklings turns focused time into power for a squad of collectible elemental creatures. Start an Adventure, block the sites that pull you out of, and earn FocuPoints for staying focused. Spend those points training your Locklings and take on Distraction Gyms, where the bosses are familiar habits like notifications, autoplay, and endless scrolling.
+Focu turns focus time into a creature-collecting game. Choose the sites that distract you, start an Adventure, and Focu blocks those sites while you focus. Finish your Adventure to earn FocuPoints (FP). Spend FP teaching your elemental creatures, the Locklings, new moves, then take your squad into turn-based battles against the Distraction Gyms.
 
-**Build a focus habit. Grow your squad. Take back your attention.**
+**Protect your focus. Power up your Locklings. Take on the feed.**
 
-## The focus-powered game loop
+## One focus session. A whole game loop.
 
-1. **Choose your Companion.** Pick Embrit, Puddlo, or Sproutle as a starter
-2. **Set an Adventure.** Choose how long to focus and which distracting sites to block.
-3. **Stay on the trail.** Locklings blocks selected sites while your timer runs. Finish the Adventure to earn FocuPoints. Leave early if you need to, but the Adventure ends without a reward.
-4. **Power up.** Spend FocuPoints at the Dojo to teach your Locklings new moves, then build and arrange a Squad of up to three.
-5. **Challenge the Gyms.** Use elemental matchups, healing, and smart switches in turn-based battles against five Distraction Gym leaders.
-6. **Claim a Lockbox.** A Gym victory unlocks a choice of reward: a new creature, a Move Scroll, or a Spark Pouch.
+1. **Choose a Companion.** Start with Embrit, Puddlo, or Sproutle.
+2. **Set an Adventure.** Pick a focus duration and the sites you want blocked. Preview your FP before you lock in.
+3. **Stay focused.** A live timer tracks your Adventure while selected sites are blocked. Complete it to earn FP. If you leave early or visit a blocked site, the Adventure ends with 0 FP.
+4. **Train your Locklings.** Spend FP or use Move Scrolls to teach moves at the Dojo. Build a Squad of up to three creatures.
+5. **Battle distractions.** Use Fire, Water, and Grass matchups, healing, and tactical switches to challenge five Distraction Gyms.
+6. **Claim a reward.** Clear a Gym to choose one of three Lockboxes, with a chance to add a creature, learn a move, or earn a Spark Pouch.
 
-## Why Locklings?
+## Focus that feels rewarding
 
-Your real-world focus sessions grow your in-game resources and collection. Locklings uses Chrome's extension platform to block the distracting sites you select during an Adventure. Collect elemental creatures, teach them moves, and make tactical choices in battle. Demo Mode speeds up Adventures so you can explore the loop without waiting through a full focus session.
+- **Real website blocking:** Focu uses Chrome's extension platform to block the sites you choose during an Adventure.
+- **Know your reward up front:** See projected FP before committing. Longer focus tiers and category bonuses can increase your reward.
+- **Progress you can use:** Turn completed focus time into new moves, stronger strategies, and a growing Lockdex.
+- **Try the full loop quickly:** Demo Mode speeds up Adventures so you can explore without waiting through a full-length session.
 
-## Try it out
+## Get started
 
-You can run Locklings as a web app for development and demos, or build and load the Chrome extension to try site blocking.
+Focu runs as a web app for development and demos. For real site blocking, build and load the Chrome extension.
 
-### Chrome extension
+Requirements: Node.js, npm, and Google Chrome for extension use.
+
+### Run the web app
+
+```sh
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite, usually `http://localhost:5173`.
+
+### Load the Chrome extension
 
 ```sh
 npm install
 npm run build
 ```
 
-1. Open `chrome://extensions` in Chrome.
+1. Open `chrome://extensions`.
 2. Turn on **Developer mode**.
-3. Select **Load unpacked** and choose this project's `dist` folder.
-4. Open Locklings from the extension toolbar.
+3. Select **Load unpacked** and choose the generated `dist` folder.
+4. Open Focu from the extension toolbar.
 
-To explore the full loop quickly, enable **Demo Mode** in Settings. The Dev page also provides preset saves for trying different game states.
+Enable **Demo Mode** in Settings to speed up Adventures. The Dev page includes preset saves for exploring different game states.
+
+## Permissions
+
+The extension requests:
+
+| Permission | Purpose |
+|---|---|
+| `storage` | Save your Locklings, FocuPoints, and progress |
+| `declarativeNetRequest` and host access | Block selected sites during an Adventure |
+| `alarms` | End an Adventure on time, including when the game tab is closed |
+| `notifications` | Notify you when an Adventure is complete |
+| `tabs` | Open and update the game and blocked-site page |
+
+## For developers
+
+```sh
+npm run dev
+npm run typecheck
+npm run test
+npm run build
+npm run verify
+```
+
+`npm run verify` runs typecheck, tests, and a production build.
+
+- `src/engine` contains the pure TypeScript game rules.
+- `src/data` contains creatures, moves, gyms, sites, and game configuration.
+- `src/background` manages focus sessions and awards FP.
+- `src/platform` connects the app to browser storage and extension APIs.
+- `src/app` contains the React interface.
+
+See [SPEC.md](./SPEC.md) for the product specification and [docs/](./docs/) for design and development notes.
 
 ## Built with
 

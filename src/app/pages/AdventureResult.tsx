@@ -69,20 +69,22 @@ function Complete({ session }: { session: FocusSession }) {
     <main className="mx-auto max-w-xl space-y-6 p-4 text-center">
       <Confetti fire />
       {lead && <CreatureSprite defId={lead.defId} uid={lead.uid} size={120} state="celebrate" />}
-      <h1 className="font-display text-4xl">Adventure Complete!</h1>
-      <div className="font-display text-6xl text-fp-gold tabular-nums" aria-label={`${session.awardedFp} FP earned`}>
-        +{fp} FP
+      <div className="focu-card space-y-4 p-6">
+        <h1 className="focu-title">Adventure Complete!</h1>
+        <div className="victory-stamp inline-block" aria-label={`${session.awardedFp} FP earned`}>
+          +{fp} FP
+        </div>
+        <dl className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+          <Summary label="Duration" value={`${session.durationMin} min`} />
+          <Summary label="Sites blocked" value={String(sites)} />
+          <Summary label="Multiplier" value={`x${session.multiplier}`} />
+          <Summary label="Tier" value={session.tierName} />
+        </dl>
       </div>
-      <dl className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-        <Summary label="Duration" value={`${session.durationMin} min`} />
-        <Summary label="Sites blocked" value={String(sites)} />
-        <Summary label="Multiplier" value={`x${session.multiplier}`} />
-        <Summary label="Tier" value={session.tierName} />
-      </dl>
       <div className="grid gap-3 sm:grid-cols-3">
-        <Link to="/gyms" className="flex min-h-tap items-center justify-center rounded-card bg-fire p-3 font-display text-white">Let’s Battle!</Link>
-        <Link to="/dojo" className="flex min-h-tap items-center justify-center rounded-card bg-grass p-3 font-display text-white">Visit the Dojo</Link>
-        <Link to="/" className="flex min-h-tap items-center justify-center rounded-card bg-primary p-3 font-display text-white">Back Home</Link>
+        <Link to="/gyms" className="focu-btn !bg-fire">Let’s Battle!</Link>
+        <Link to="/dojo" className="focu-btn focu-btn--confirm">Visit the Dojo</Link>
+        <Link to="/" className="focu-btn focu-btn--primary">Back Home</Link>
       </div>
     </main>
   )
@@ -96,18 +98,20 @@ function Lost({ session }: { session: FocusSession }) {
   return (
     <main className="mx-auto max-w-xl space-y-6 p-4 text-center">
       {lead && <CreatureSprite defId={lead.defId} uid={lead.uid} size={120} state="sleepy" showParticles={false} />}
-      <h1 className="font-display text-3xl text-muted">
-        {lead ? `${CREATURES[lead.defId].name} sat down.` : 'Lost Adventure'}
-      </h1>
-      <p className="text-muted">Lost Adventure. No FP this time, but every Trail is a fresh start.</p>
+      <div className="focu-card space-y-3 p-6">
+        <h1 className="focu-title !text-3xl">
+          {lead ? `${CREATURES[lead.defId].name} sat down.` : 'Lost Adventure'}
+        </h1>
+        <p className="text-soft">Lost Adventure. No FP this time, but every Trail is a fresh start.</p>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <Link
           to={`/adventure/setup?minutes=${shorter}`}
-          className="flex min-h-tap items-center justify-center rounded-card bg-primary p-3 font-display text-white"
+          className="focu-btn focu-btn--primary"
         >
           Try a shorter Trail
         </Link>
-        <Link to="/" className="flex min-h-tap items-center justify-center rounded-card bg-ring-track p-3 font-display">Back Home</Link>
+        <Link to="/" className="focu-btn focu-btn--secondary">Back Home</Link>
       </div>
     </main>
   )
@@ -115,8 +119,8 @@ function Lost({ session }: { session: FocusSession }) {
 
 function Summary({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-card bg-surface p-3 shadow-card">
-      <dd className="font-display text-lg">{value}</dd>
+    <div className="rounded-2xl border-[2.5px] border-ink bg-points p-3">
+      <dd className="font-display text-lg font-semibold">{value}</dd>
       <dt className="text-muted">{label}</dt>
     </div>
   )
