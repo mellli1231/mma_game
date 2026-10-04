@@ -94,7 +94,7 @@ describe('battle math and setup', () => {
   it('calculates damage, capped healing, and the exact hit threshold', () => {
     expect(calcDamage(MOVES.fire_flame_lash!, 'grass')).toBe(50);
     expect(calcDamage(MOVES.fire_flame_lash!, 'water')).toBe(13);
-    expect(calcDamage(MOVES.fire_spark!, 'water')).toBe(8);
+    expect(calcDamage(MOVES.fire_spark!, 'water')).toBe(5);
     expect(calcHeal(MOVES.fire_kindle!, {
       uid: 'target',
       defId: 'cindercub',

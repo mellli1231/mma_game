@@ -28,7 +28,7 @@ export default function Defeat() {
             to={`/battle/${gymLevel}${practice ? '?practice=1' : ''}`}
             className="rounded-xl bg-indigo-600 px-5 py-3 font-bold text-white"
           >
-            Try again
+            Rematch
           </Link>
         )}
         <Link to="/gyms" className="rounded-xl border px-5 py-3 font-bold">Gym Map</Link>

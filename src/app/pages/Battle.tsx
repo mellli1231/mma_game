@@ -221,6 +221,22 @@ export default function Battle() {
     }
   }
 
+  async function winBattleNow() {
+    if (!activeBattle || turnInProgress.current || terminalResultSaved.current) return;
+    turnInProgress.current = true;
+    const winningBattle: BattleState = {
+      ...activeBattle,
+      phase: 'victory',
+      winner: 'player',
+    };
+    dispatch({ type: 'resolve', battle: winningBattle, events: [] });
+    try {
+      await finishBattle(winningBattle);
+    } finally {
+      turnInProgress.current = false;
+    }
+  }
+
   async function playEvents(events: BattleEvent[]) {
     for (const event of events) {
       await delay(600);
@@ -291,7 +307,19 @@ export default function Battle() {
           </p>
           <h1 className="text-2xl font-bold">{gym.name}</h1>
         </div>
-        <Link className="rounded-xl border px-4 py-2 font-semibold" to="/gyms">Leave battle</Link>
+        <div className="flex items-center gap-2">
+          {state.settings.demoMode && !practice && !isTerminal && (
+            <button
+              type="button"
+              onClick={() => void winBattleNow()}
+              disabled={page.playingEvents || page.thinking || turnInProgress.current}
+              className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 disabled:opacity-50"
+            >
+              Dev: win now
+            </button>
+          )}
+          <Link className="rounded-xl border px-4 py-2 font-semibold" to="/gyms">Leave battle</Link>
+        </div>
       </header>
 
       {activeBattle.phase === 'intro' && (

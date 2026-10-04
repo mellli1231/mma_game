@@ -48,7 +48,7 @@ export const GYMS: Record<number, GymDef> = {
     name: 'The Feed Core',
     leader: 'The Algorithm',
     quote: 'I know what you want to watch before you do.',
-    aiBestMoveChance: 0.9,
+    aiBestMoveChance: 1,
     team: [
       { creatureId: 'pyrowl', moveIds: ['fire_blaze_burst', 'fire_phoenix_rest', 'fire_inferno'] },
       { creatureId: 'marinox', moveIds: ['water_riptide', 'water_spring_renewal', 'water_tsunami'] },

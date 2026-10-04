@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { WELCOME_FP } from '../src/data/config';
 import { CREATURES } from '../src/data/creatures';
-import { DEFAULT_STATE } from '../src/dev/stubTypes';
+import { DEFAULT_STATE } from '../src/platform/defaultState';
 import { completeOnboarding } from '../src/engine/onboarding';
 import type { GameState } from '../src/types';
 
