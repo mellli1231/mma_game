@@ -7,6 +7,8 @@ import type { FixtureId } from '@/types'
 import { platform } from '@/platform/platform'
 import { useGameState } from '@/app/store'
 
+const GYM_LEVELS = [1, 2, 3, 4, 5]
+
 export default function Dev() {
   const state = useGameState()
   const [error, setError] = useState<string | null>(null)
@@ -49,32 +51,32 @@ export default function Dev() {
     setNotice(message)
   }
 
-  const btn = 'border border-primary rounded-pill px-4 min-h-tap text-ink bg-surface hover:bg-ring-track'
+  const btn = 'focu-chip'
 
   return (
-    <div className="p-4 space-y-4">
-      <h1>Dev</h1>
-      <p>Developer tools. Every fixture button REPLACES your whole saved game with a preset. Use them to jump to a game state quickly.</p>
+    <div className="mx-auto max-w-4xl space-y-4 p-4">
+      <h1 className="focu-title focu-panel inline-block px-5 py-1">Dev</h1>
+      <p className="focu-card p-4">Developer tools. Every fixture button REPLACES your whole saved game with a preset. Use them to jump to a game state quickly.</p>
 
-      <section className="space-y-2">
+      <section className="focu-card space-y-2 p-5">
         <h2>Presets (replace your save)</h2>
         {/* SET-02: stays visible with Demo Mode off, because loading it is how a fresh save gets Demo Mode on. */}
         <div><button className={btn} onClick={() => load('demoSave')}>Load demo save</button></div>
-        {demoSummary && <p className="text-green-600">{demoSummary}</p>}
+        {demoSummary && <p className="font-bold text-grass-ink">{demoSummary}</p>}
         {(Object.keys(FIXTURES) as FixtureId[]).map(id => (
           <div
             key={id}
-            className={`flex items-center gap-3 rounded-card border p-2 ${loaded === id ? 'border-primary bg-ring-track' : 'border-transparent'}`}
+            className={`flex items-center gap-3 rounded-card border p-2 ${loaded === id ? 'border-primary bg-lavender' : 'border-transparent'}`}
           >
             <button className={btn} onClick={() => load(id)}>{id}</button>
             <span>{DESCRIPTIONS[id]}{loaded === id && ' (Loaded)'}</span>
           </div>
         ))}
-        {loaded && <p className="text-green-600">Loaded fixture: {loaded}</p>}
-        {error && <p role="alert" className="text-red-600">{error}</p>}
+        {loaded && <p className="font-bold text-grass-ink">Loaded fixture: {loaded}</p>}
+        {error && <p role="alert" className="font-bold text-danger">{error}</p>}
       </section>
 
-      <section className="space-y-2">
+      <section className="focu-card space-y-2 p-5">
         <h2>Quick actions (Demo Mode only)</h2>
         {/* SET-02: only the quick actions are gated. Presets above stay open so a fresh save can load one. */}
         {state?.settings.demoMode ? (
@@ -101,16 +103,28 @@ export default function Dev() {
               >Reset all</button>
               <span>Wipes everything back to a brand-new save</span>
             </div>
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-3">
+                {GYM_LEVELS.map(level => (
+                  <button
+                    key={level}
+                    className={btn}
+                    onClick={() => quick(`Gym level set to ${level}`, () => platform.updateState(s => ({ ...s, currentGymLevel: level })))}
+                  >Set gym level {level}</button>
+                ))}
+              </div>
+              <p>Jump to a gym to test its battle background.</p>
+            </div>
           </>
         ) : (
           <p>
             Turn on Demo Mode in <Link to="/settings" className="text-primary underline">Settings</Link> to use the dev panel.
           </p>
         )}
-        {notice && !loaded && <p className="text-green-600">{notice}</p>}
+        {notice && !loaded && <p className="font-bold text-grass-ink">{notice}</p>}
       </section>
 
-      <section className="space-y-2">
+      <section className="focu-card space-y-2 p-5">
         <h2>Current save</h2>
         <p>What is saved right now. It updates live.</p>
         {state ? (

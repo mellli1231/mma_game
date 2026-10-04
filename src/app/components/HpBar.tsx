@@ -17,15 +17,15 @@ export function HpBar({ hp, maxHp = 100, showNumber = true }: HpBarProps) {
     const timeout = window.setTimeout(() => setGhostRatio(ratio), 300)
     return () => window.clearTimeout(timeout)
   }, [ratio, ghostRatio])
-  const tone = hp <= 20 ? 'bg-hp-low' : hp <= 50 ? 'bg-hp-mid' : 'bg-hp-high'
+  const tone = hp <= 20 ? 'hp-bar__front--low' : hp <= 50 ? 'hp-bar__front--mid' : ''
   return (
     <div className="w-full">
-      <div className="relative h-3 overflow-hidden rounded-pill bg-ring-track">
+      <div className="hp-bar relative h-6 overflow-hidden rounded-pill">
         <div className="hp-bar__ghost" style={{ width: `${ghostRatio * 100}%` }} aria-hidden="true" />
         <div className={`hp-bar__front ${tone}`} style={{ width: `${ratio * 100}%` }} />
       </div>
       {showNumber ? (
-        <div className="mt-1 font-display text-sm tabular-nums">
+        <div className="mt-1 font-display text-base font-semibold tabular-nums">
           {hp}/{maxHp}
         </div>
       ) : null}

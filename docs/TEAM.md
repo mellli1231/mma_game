@@ -118,3 +118,6 @@ SYNC 4 (hour 18)
 - Data drift between UI and engine: UI reads only from src/data, which only B edits.
 - Two people append to the same log: PROGRESS.md has one section per person.
 - "Works on my branch": every SYNC checklist runs on main.
+
+## Note: UI skin
+Front-end styling is owned by Person A from branch a/ui-skin (see docs/UI_RUNBOOK.md and docs/DESIGN.md). Styling only, no logic changes.

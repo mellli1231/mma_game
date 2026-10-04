@@ -49,7 +49,7 @@ export default function AdventureActive() {
   // RUN-03: tab title shows the time left.
   useEffect(() => {
     if (endsAt === null) return
-    document.title = `${formatRemaining(remaining)} · Locklings`
+    document.title = `${formatRemaining(remaining)} · Focu`
   }, [endsAt, remaining])
   useEffect(() => {
     const original = document.title
@@ -112,42 +112,44 @@ export default function AdventureActive() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col items-center gap-4 p-4 text-center">
-      <span className="rounded-pill bg-ring-track px-3 py-1 font-display text-primary">
+      <span className="focu-tag bg-lavender">
         {session.tierName} · {session.rate} FP/min
       </span>
-      <p className="text-muted">{name} is exploring...</p>
 
-      <div className="relative">
-        <TimerRing startedAt={session.startedAt} endsAt={session.endsAt} size={320} />
-        {lead && (
-          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2">
-            <CreatureSprite defId={lead.defId} uid={lead.uid} size={72} />
-          </div>
-        )}
+      <div className="focu-card flex flex-col items-center gap-4 p-6 pb-10">
+        <p className="text-soft">{name} is exploring...</p>
+        <div className="relative">
+          <TimerRing startedAt={session.startedAt} endsAt={session.endsAt} size={320} />
+          {lead && (
+            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2">
+              <CreatureSprite defId={lead.defId} uid={lead.uid} size={72} />
+            </div>
+          )}
+        </div>
+
+        <p className="mt-8 min-h-tap" aria-live="polite">{flavor}</p>
+        <div className="flex items-center gap-2">
+          <FpBadge amount={session.projectedFp} />
+          <span className="text-sm text-muted">when you finish</span>
+        </div>
       </div>
 
-      <p className="mt-8 min-h-tap" aria-live="polite">{flavor}</p>
-      <div className="flex items-center gap-2">
-        <FpBadge amount={session.projectedFp} />
-        <span className="text-sm text-muted">when you finish</span>
-      </div>
-
-      <div className="mt-auto w-full space-y-2 pt-6">
+      <div className="focu-card mt-auto w-full space-y-2 p-4">
         <button
           type="button"
           aria-expanded={showSites}
           onClick={() => setShowSites(v => !v)}
-          className="min-h-tap rounded-pill bg-ring-track px-4 text-sm"
+          className="focu-chip text-sm"
         >
           {blockedCount} {blockedCount === 1 ? 'site' : 'sites'} blocked
         </button>
         {showSites && (
           <ul className="flex flex-wrap justify-center gap-2 text-sm">
             {session.siteIds.map(id => (
-              <li key={id} className="rounded-pill bg-surface px-3 py-1 shadow-card">{id}</li>
+              <li key={id} className="focu-pill !min-h-0 !py-0.5 text-sm">{id}</li>
             ))}
             {session.customDomains.map(d => (
-              <li key={d} className="rounded-pill bg-surface px-3 py-1 shadow-card">{d}</li>
+              <li key={d} className="focu-pill !min-h-0 !py-0.5 text-sm">{d}</li>
             ))}
           </ul>
         )}
@@ -164,10 +166,10 @@ export default function AdventureActive() {
         onClose={() => setGiveUpOpen(false)}
         actions={
           <>
-            <button type="button" onClick={() => setGiveUpOpen(false)} className="min-h-tap rounded-card bg-primary px-4 font-display text-white">
+            <button type="button" onClick={() => setGiveUpOpen(false)} className="focu-btn focu-btn--primary">
               Stay locked in
             </button>
-            <button type="button" onClick={giveUp} className="min-h-tap px-4 text-danger underline">
+            <button type="button" onClick={giveUp} className="focu-link-danger min-h-tap px-2">
               Give up
             </button>
           </>

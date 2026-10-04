@@ -1,10 +1,14 @@
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion'
-import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, matchPath, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useGameState } from './store'
+import { useEffect, useState } from 'react'
 import { ease } from './motion'
 import { sessionRedirect } from './sessionRoutes'
 import AppShell from './AppShell'
+import SceneBackground from './SceneBackground'
+import SfxSync from './SfxSync'
+import { getGymBackground } from './gymBackgrounds'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import AdventureSetup from './pages/AdventureSetup'
@@ -39,10 +43,48 @@ function OnboardingGuard({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+// Routes that show the full painting. Everything else uses the dimmed scene.
+const FULL_SCENE_ROUTES = ['/', '/onboarding']
+const TIMER_TICK_MS = 1000
+
+function SceneLayer() {
+  const location = useLocation()
+  const { pathname } = location
+  const state = useGameState()
+  const [now, setNow] = useState(() => Date.now())
+  const session = state?.activeSession ?? null
+  const onTimer = pathname === '/adventure'
+  useEffect(() => {
+    if (!onTimer) return
+    const id = window.setInterval(() => setNow(Date.now()), TIMER_TICK_MS)
+    return () => window.clearInterval(id)
+  }, [onTimer])
+
+  let progress: number | undefined
+  if (onTimer && session) {
+    const total = session.endsAt - session.startedAt
+    progress = total > 0 ? Math.min(1, Math.max(0, 1 - (session.endsAt - now) / total)) : 1
+  }
+  const completed = pathname === '/adventure/result' && state?.sessionHistory.at(-1)?.status === 'completed'
+  const full = FULL_SCENE_ROUTES.includes(pathname) || completed
+
+  // Per-gym painting behind the battle and the screens that follow it. Unknown levels fall back to the meadow.
+  let gymLevel: number | undefined
+  const battleMatch = matchPath('/battle/:level', pathname)
+  if (battleMatch) gymLevel = Number(battleMatch.params.level)
+  else if (pathname === '/defeat') gymLevel = (location.state as { gymLevel?: number } | null)?.gymLevel
+  else if (pathname === '/lockbox') gymLevel = state?.pendingReward?.gymLevel
+  if (gymLevel !== undefined && !getGymBackground(gymLevel)) gymLevel = undefined
+
+  return <SceneBackground tone={full ? 'full' : 'dim'} progress={progress} gymLevel={gymLevel} />
+}
+
 export default function AppRoutes() {
   return (
     <HashRouter>
       <OnboardingGuard>
+        <SfxSync />
+        <SceneLayer />
         <AppShell />
         <AnimatedRoutes />
       </OnboardingGuard>

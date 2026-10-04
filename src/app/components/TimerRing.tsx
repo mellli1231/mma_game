@@ -7,7 +7,13 @@ interface TimerRingProps {
   children?: ReactNode
 }
 
-const RADIUS = 44
+// Drawn on a 170 unit canvas: outer ring r76, inner ring r48, track and progress r62.
+const VIEW = 170
+const CENTER = VIEW / 2
+const RADIUS = 62
+const OUTER_RADIUS = 76
+const INNER_RADIUS = 48
+const FONT_RATIO = 30 / 170
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 
 function formatRemaining(milliseconds: number) {
@@ -36,24 +42,26 @@ export function TimerRing({ startedAt, endsAt, size = 320, children }: TimerRing
   return (
     <div
       className="timer-ring relative grid shrink-0 place-items-center rounded-full"
-      style={{ width: size, height: size, '--timer-font-size': `${Math.max(18, size * 0.28)}px` } as CSSProperties}
+      style={{ width: size, height: size, '--timer-font-size': `${Math.max(16, size * FONT_RATIO)}px` } as CSSProperties}
       role="timer"
       aria-label={`${formatRemaining(remaining)} remaining`}
       aria-live="off"
     >
-      <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
-        <circle className="timer-ring__track" cx="50" cy="50" r={RADIUS} fill="none" />
+      <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox={`0 0 ${VIEW} ${VIEW}`} aria-hidden="true">
+        <circle className="timer-ring__edge" cx={CENTER} cy={CENTER} r={OUTER_RADIUS} fill="none" />
+        <circle className="timer-ring__edge" cx={CENTER} cy={CENTER} r={INNER_RADIUS} fill="none" />
+        <circle className="timer-ring__track" cx={CENTER} cy={CENTER} r={RADIUS} fill="none" />
         <circle
           className="timer-ring__progress"
-          cx="50"
-          cy="50"
+          cx={CENTER}
+          cy={CENTER}
           r={RADIUS}
           fill="none"
           strokeDasharray={CIRCUMFERENCE}
           strokeDashoffset={dashOffset}
         />
       </svg>
-      <div className="relative z-10 font-display tabular-nums text-primary" style={{ fontSize: 'var(--timer-font-size)', lineHeight: 1 }}>
+      <div className="relative z-10 font-display font-bold tabular-nums text-ink" style={{ fontSize: 'var(--timer-font-size)', lineHeight: 1 }}>
         {children ?? formatRemaining(remaining)}
       </div>
     </div>

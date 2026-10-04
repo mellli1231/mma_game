@@ -15,6 +15,7 @@ import {
   VictoryStamp,
 } from '@/app/components';
 import { useGameState } from '@/app/store';
+import { playSfxForEvent } from '@/app/sfx';
 import { applyEnemyTurn, applyForcedSwitch, applyPlayerAction, createBattle } from '@/engine/battle';
 import { defaultRng } from '@/engine/rng';
 import { clearGym, recordBattleLoss } from '@/engine/rewards';
@@ -242,6 +243,7 @@ export default function Battle() {
       await delay(600);
       if (!aliveRun.current) return;
       dispatch({ type: 'show-event', event });
+      playSfxForEvent(event);
     }
     if (aliveRun.current) dispatch({ type: 'events-finished' });
   }
@@ -292,20 +294,20 @@ export default function Battle() {
       </main>
     );
   }
-  if (!activeBattle || !player || !enemy) return <main className="p-6">Preparing your battle...</main>;
+  if (!activeBattle || !player || !enemy) return <main className="focu-card m-6 p-6">Preparing your battle...</main>;
 
   const locked = page.playingEvents || page.thinking || activeBattle.phase !== 'player_turn';
   const isTerminal = activeBattle.phase === 'victory' || activeBattle.phase === 'defeat';
   const activeMove = page.selectingMove ? MOVES[page.selectingMove] : undefined;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-5 p-5 text-slate-900">
+    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-5 p-5 text-ink">
       <header className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <div className="focu-panel px-5 py-2">
+          <p className="text-sm font-extrabold uppercase tracking-wide text-muted">
             {practice ? 'Practice battle' : `Gym ${gymLevel}`}
           </p>
-          <h1 className="text-2xl font-bold">{gym.name}</h1>
+          <h1 className="font-display text-2xl font-bold">{gym.name}</h1>
         </div>
         <div className="flex items-center gap-2">
           {state.settings.demoMode && !practice && !isTerminal && (
@@ -313,22 +315,22 @@ export default function Battle() {
               type="button"
               onClick={() => void winBattleNow()}
               disabled={page.playingEvents || page.thinking || turnInProgress.current}
-              className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 disabled:opacity-50"
+              className="focu-chip text-sm"
             >
               Dev: win now
             </button>
           )}
-          <Link className="rounded-xl border px-4 py-2 font-semibold" to="/gyms">Leave battle</Link>
+          <Link className="focu-pill" to="/gyms">Leave battle</Link>
         </div>
       </header>
 
       {activeBattle.phase === 'intro' && (
-        <section className="rounded-2xl bg-indigo-50 p-5 text-center">
-          <p className="text-lg font-bold">{gym.leader} wants to battle!</p>
+        <section className="focu-card bg-lavender p-5 text-center">
+          <p className="font-display text-lg font-semibold">{gym.leader} wants to battle!</p>
           <button
             type="button"
             onClick={() => dispatch({ type: 'resolve', battle: { ...activeBattle, phase: 'player_turn' }, events: [] })}
-            className="mt-4 rounded-xl bg-indigo-600 px-5 py-3 font-bold text-white"
+            className="focu-btn focu-btn--primary mt-4"
           >
             Send out {player.name}
           </button>
@@ -346,7 +348,7 @@ export default function Battle() {
         <CreaturePanel label="Opponent" creature={enemy} facing="left" event={page.currentEvent} />
       </section>
 
-      <section className="min-h-24 rounded-2xl bg-slate-100 p-4" aria-live="polite" aria-label="Battle log">
+      <section className="focu-card min-h-24 p-5" aria-live="polite" aria-label="Battle log">
         {page.thinking && <p className="font-semibold">The opponent is thinking...</p>}
         {page.logs.length === 0 && !page.thinking && <p>{gym.leader} is ready. Your Squad acts first.</p>}
         <ul className="mt-2 space-y-1">
@@ -355,33 +357,31 @@ export default function Battle() {
       </section>
 
       {activeBattle.phase === 'player_forced_switch' && (
-        <section className="rounded-2xl border border-amber-300 bg-amber-50 p-4">
-          <h2 className="font-bold">Choose your next Lockling</h2>
+        <section className="focu-card bg-points p-5">
+          <h2 className="font-display font-semibold">Choose your next Lockling</h2>
           <p className="text-sm">This forced switch does not use your turn.</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {activeBattle.player.team.map((creature, index) => index !== activeBattle.player.activeIndex && creature.hp > 0 && (
-              <button
+              <SwitchOption
                 key={creature.uid}
-                type="button"
+                creature={creature}
+                enemy={enemy}
                 onClick={() => chooseForcedSwitch(index)}
-                className="rounded-xl border bg-white px-4 py-2 font-semibold"
-              >
-                {creature.name} · {creature.hp} HP
-              </button>
+              />
             ))}
           </div>
         </section>
       )}
 
       {!isTerminal && activeBattle.phase === 'player_turn' && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4">
+        <section className="focu-card p-5">
           {!page.selectingMove && !page.choosingSwitch && (
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"
                 disabled={locked}
                 onClick={() => dispatch({ type: 'select-move', moveId: 'fight' })}
-                className="rounded-xl bg-indigo-600 px-5 py-3 font-bold text-white disabled:opacity-50"
+                className="focu-btn focu-btn--primary"
               >
                 Fight
               </button>
@@ -389,7 +389,7 @@ export default function Battle() {
                 type="button"
                 disabled={locked}
                 onClick={() => dispatch({ type: 'choose-switch', value: true })}
-                className="rounded-xl border px-5 py-3 font-bold disabled:opacity-50"
+                className="focu-btn focu-btn--secondary"
               >
                 Switch
               </button>
@@ -397,7 +397,7 @@ export default function Battle() {
                 type="button"
                 disabled={locked}
                 onClick={() => dispatch({ type: 'confirm-forfeit', value: true })}
-                className="rounded-xl border border-rose-300 px-5 py-3 font-bold text-rose-700 disabled:opacity-50"
+                className="focu-btn focu-btn--danger"
               >
                 Forfeit
               </button>
@@ -407,8 +407,8 @@ export default function Battle() {
           {page.selectingMove && (
             <div>
               <div className="flex items-center justify-between gap-3">
-                <h2 className="text-lg font-bold">Choose a move</h2>
-                <button type="button" onClick={() => dispatch({ type: 'select-move', moveId: null })} className="underline">
+                <h2 className="font-display text-lg font-semibold">Choose a move</h2>
+                <button type="button" onClick={() => dispatch({ type: 'select-move', moveId: null })} className="font-bold text-primary underline">
                   Back
                 </button>
               </div>
@@ -427,7 +427,7 @@ export default function Battle() {
                     ? typeModifier(move.element, enemy.element)
                     : 1;
                   return (
-                    <div key={moveId} className="rounded-xl border p-3">
+                    <div key={moveId} className="rounded-2xl border-2 border-ink/20 p-3">
                       <div className="flex items-center gap-2">
                         <MoveButton
                           move={move}
@@ -444,12 +444,12 @@ export default function Battle() {
                         <ElementBadge element={move.element} size="sm" />
                       </div>
                       {disabled && move.effect === 'heal' && (
-                        <p className="mt-2 text-sm text-slate-500">
+                        <p className="mt-2 text-sm text-muted">
                           {(usesLeft ?? 0) <= 0 ? 'No uses remaining' : 'No injured Squad members'}
                         </p>
                       )}
                       {move.effect === 'heal' && page.selectingMove === moveId && (
-                        <div className="mt-3 border-t pt-3">
+                        <div className="mt-3 border-t-2 border-ink/20 pt-3">
                           <p className="mb-2 text-sm font-semibold">Choose a teammate to heal</p>
                           {activeBattle.player.team.map((creature, index) => (
                             <button
@@ -457,7 +457,7 @@ export default function Battle() {
                               type="button"
                               disabled={creature.hp <= 0 || creature.hp >= MAX_HP || locked || (usesLeft ?? 0) <= 0}
                               onClick={() => void takeAction(playerActionForMove(moveId, index))}
-                              className="mr-2 mt-1 rounded-lg border px-3 py-2 text-sm disabled:opacity-40"
+                              className="focu-chip mr-2 mt-1 text-sm"
                             >
                               {creature.name} · {creature.hp}/{MAX_HP} HP
                             </button>
@@ -474,22 +474,20 @@ export default function Battle() {
           {page.choosingSwitch && (
             <div>
               <div className="flex items-center justify-between gap-3">
-                <h2 className="text-lg font-bold">Choose a Lockling to switch in</h2>
-                <button type="button" onClick={() => dispatch({ type: 'choose-switch', value: false })} className="underline">
+                <h2 className="font-display text-lg font-semibold">Choose a Lockling to switch in</h2>
+                <button type="button" onClick={() => dispatch({ type: 'choose-switch', value: false })} className="font-bold text-primary underline">
                   Back
                 </button>
               </div>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 {activeBattle.player.team.map((creature, index) => index !== activeBattle.player.activeIndex && (
-                  <button
+                  <SwitchOption
                     key={creature.uid}
-                    type="button"
+                    creature={creature}
+                    enemy={enemy}
                     disabled={creature.hp <= 0 || locked}
                     onClick={() => void takeAction({ type: 'switch', toIndex: index })}
-                    className="rounded-xl border px-4 py-3 font-semibold disabled:opacity-40"
-                  >
-                    {creature.name} · {creature.hp}/{MAX_HP} HP
-                  </button>
+                  />
                 ))}
               </div>
             </div>
@@ -498,18 +496,18 @@ export default function Battle() {
       )}
 
       {page.confirmingForfeit && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-slate-950/50 p-4">
-          <section role="dialog" aria-modal="true" aria-labelledby="forfeit-title" className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
-            <h2 id="forfeit-title" className="text-xl font-bold">Forfeit this battle?</h2>
-            <p className="mt-2">This counts as a defeat.</p>
-            <div className="mt-5 flex justify-end gap-3">
-              <button type="button" onClick={() => dispatch({ type: 'confirm-forfeit', value: false })} className="rounded-xl border px-4 py-2">
+        <div className="focu-modal-overlay fixed inset-0 z-10 flex items-center justify-center p-4">
+          <section role="dialog" aria-modal="true" aria-labelledby="forfeit-title" className="focu-modal w-full max-w-md">
+            <h2 id="forfeit-title" className="focu-modal__title">Forfeit this battle?</h2>
+            <p className="mt-2 text-soft">This counts as a defeat.</p>
+            <div className="mt-5 flex flex-wrap items-center justify-end gap-4">
+              <button type="button" onClick={() => dispatch({ type: 'confirm-forfeit', value: false })} className="focu-btn focu-btn--primary">
                 Keep battling
               </button>
               <button type="button" onClick={() => {
                 dispatch({ type: 'confirm-forfeit', value: false });
                 void takeAction({ type: 'forfeit' });
-              }} className="rounded-xl bg-rose-700 px-4 py-2 font-bold text-white">
+              }} className="focu-link-danger min-h-tap px-2">
                 Forfeit
               </button>
             </div>
@@ -517,20 +515,61 @@ export default function Battle() {
         </div>
       )}
 
-      {page.error && <p role="alert" className="rounded-xl bg-rose-50 p-3 text-rose-800">{page.error}</p>}
+      {page.error && <p role="alert" className="focu-card p-3 font-bold text-danger">{page.error}</p>}
 
       {activeBattle.phase === 'victory' && (
-        <section className="rounded-2xl bg-emerald-50 p-5 text-center">
+        <section className="focu-card bg-mint-pale p-6 text-center">
           <Confetti fire />
           <VictoryStamp />
           <p className="mt-2">You beat {gym.leader}.</p>
           {practice && <p className="mt-1 text-sm">Practice battles do not change Gym progress or award Lockboxes.</p>}
-          <Link to="/gyms" className="mt-4 inline-block rounded-xl bg-emerald-700 px-5 py-3 font-bold text-white">
+          <Link to="/gyms" className="focu-btn focu-btn--confirm mt-4">
             Return to the Gym Map
           </Link>
         </section>
       )}
     </main>
+  );
+}
+
+type BattleCreature = NonNullable<BattlePageState['battle']>['player']['team'][number];
+
+/** A switch candidate: the Lockling, its type, its HP and how it matches up against the opponent. */
+function SwitchOption({
+  creature,
+  enemy,
+  disabled = false,
+  onClick,
+}: {
+  creature: BattleCreature;
+  enemy: BattleCreature;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  const modifier = typeModifier(creature.element, enemy.element);
+  const matchup = modifier > 1
+    ? { text: `Strong against ${enemy.name}`, tone: 'bg-grass' }
+    : modifier < 1
+      ? { text: `Weak against ${enemy.name}`, tone: 'bg-fire' }
+      : { text: `Even match with ${enemy.name}`, tone: 'bg-white' };
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      aria-label={`${creature.name}, ${creature.hp} of ${MAX_HP} HP. ${matchup.text}`}
+      className={`focu-card flex items-center gap-3 p-3 text-left ${disabled ? 'opacity-60' : 'cursor-pointer'}`}
+    >
+      <CreatureSprite defId={creature.defId} uid={creature.uid} size={80} state={creature.hp <= 0 ? 'zonedOut' : 'idle'} />
+      <span className="min-w-0 flex-1 space-y-1">
+        <span className="flex flex-wrap items-center gap-2">
+          <span className="font-display text-lg font-bold">{creature.name}</span>
+          <ElementBadge element={creature.element} size="sm" />
+        </span>
+        <HpBar hp={creature.hp} maxHp={MAX_HP} />
+        <span className={`inline-block rounded-full border-2 border-ink px-3 text-sm font-bold ${matchup.tone}`}>{matchup.text}</span>
+      </span>
+    </button>
   );
 }
 
@@ -582,11 +621,11 @@ function CreaturePanel({
               : 'idle';
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <article className="focu-card p-5">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</p>
-          <h2 className="text-xl font-bold">{creature.name}</h2>
+          <p className="text-xs font-extrabold uppercase tracking-wide text-muted">{label}</p>
+          <h2 className="font-display text-xl font-bold">{creature.name}</h2>
           <ElementBadge element={creature.element} size="sm" />
         </div>
         <div className="relative shrink-0">
@@ -613,7 +652,7 @@ function CreaturePanel({
       <div className="mt-4 flex items-center gap-3">
         <HpBar hp={creature.hp} maxHp={MAX_HP} />
       </div>
-      {creature.hp === 0 && <p className="mt-2 text-sm font-bold text-slate-500">Zoned out</p>}
+      {creature.hp === 0 && <p className="mt-2 text-sm font-bold text-muted">Zoned out</p>}
     </article>
   );
 }
