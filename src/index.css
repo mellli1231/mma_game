@@ -108,6 +108,84 @@
 }
 
 @layer components {
+  .lockbox-chest {
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .lockbox-chest__face {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    transform-origin: 50% 100%;
+  }
+
+  .lockbox-chest--closed .lockbox-chest__face {
+    animation: lockbox-wobble 2s ease-in-out infinite;
+  }
+
+  .lockbox-chest--shaking .lockbox-chest__face {
+    animation: lockbox-shake 1s ease-in-out both;
+  }
+
+  .lockbox-chest--open .lockbox-chest__face {
+    animation: lockbox-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .lockbox-chest__rays {
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, transparent 0deg 12deg, rgb(245 183 0 / 28%) 12deg 18deg, transparent 18deg 30deg);
+    opacity: 0;
+    mask-image: radial-gradient(circle, transparent 0 24%, #000 28% 72%, transparent 76%);
+    pointer-events: none;
+  }
+
+  .lockbox-chest__rays--active { opacity: 1; animation: lockbox-rays 12s linear infinite; }
+
+  .reveal-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .reveal-card > * { position: relative; z-index: 1; }
+  .reveal-card--rare {
+    background: #f2f8ff;
+    box-shadow: 0 0 0 1px rgb(59 163 255 / 28%), 0 0 28px rgb(59 163 255 / 38%);
+  }
+  .reveal-card--epic {
+    background: #faf4ff;
+    box-shadow: 0 0 0 1px rgb(145 75 219 / 36%), 0 0 34px rgb(145 75 219 / 48%);
+  }
+  .reveal-card--epic::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: radial-gradient(circle at 12% 20%, #c084fc 0 2px, transparent 3px), radial-gradient(circle at 84% 28%, #a855f7 0 2px, transparent 3px), radial-gradient(circle at 22% 78%, #d8b4fe 0 2px, transparent 3px), radial-gradient(circle at 76% 82%, #9333ea 0 2px, transparent 3px);
+    content: '';
+    animation: reveal-sparkles 2.4s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  .reveal-card__icon { margin-bottom: 0.5rem; font-size: 3rem; line-height: 1; }
+  .reveal-card__rarity--common { background: #f1f2f4; color: #555b66; }
+  .reveal-card__rarity--rare { background: #dbeeff; color: #17639a; }
+  .reveal-card__rarity--epic { background: #f0ddff; color: #7133a3; }
+
+  .victory-stamp {
+    display: inline-block;
+    border: 4px solid currentColor;
+    border-radius: 0.3em;
+    padding: 0.15em 0.35em;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 3px 0 rgb(31 32 51 / 8%);
+    transform-origin: center;
+  }
+
   .hp-bar__ghost,
   .hp-bar__front {
     position: absolute;
@@ -308,6 +386,24 @@
   }
 }
 
+@keyframes lockbox-wobble {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+@keyframes lockbox-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  10%, 30%, 50%, 70% { transform: translateX(-7px) rotate(-6deg); }
+  20%, 40%, 60%, 80% { transform: translateX(7px) rotate(6deg); }
+  90% { transform: translateX(0) rotate(0) scale(1.2); filter: brightness(1.5); }
+}
+@keyframes lockbox-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes lockbox-rays { to { transform: rotate(360deg); } }
+@keyframes reveal-sparkles { from { opacity: 0.35; } to { opacity: 1; } }
+
 .timer-ring__track { stroke: var(--color-ring-track); stroke-width: 8; }
 .timer-ring__progress {
   stroke: var(--color-primary);
@@ -452,6 +548,14 @@
   .creature-sprite__shadow {
     animation: none !important;
   }
+
+  .lockbox-chest__face,
+  .lockbox-chest__rays,
+  .reveal-card--epic::before {
+    animation: none !important;
+  }
+
+  .lockbox-chest--shaking .lockbox-chest__face--reduced { opacity: 0.7; }
 
   button:not(:disabled) {
     transition: none !important;

@@ -4,7 +4,7 @@ import type { LearnableMove, MoveDef } from '@/types'
 import { CREATURES } from '@/data/creatures'
 import { MOVES } from '@/data/moves'
 import { CreatureSprite, ElementBadge, FpBadge, Modal, useToast, ToastHost } from '@/app/components'
-import { learnableMoves, learnMove } from '@/app/c3EngineFallback'
+import { learnableMoves, learnMove } from '@/engine/training'
 import { useGameState } from '@/app/store'
 import { platform } from '@/platform/platform'
 
