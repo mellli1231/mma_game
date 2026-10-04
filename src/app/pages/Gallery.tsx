@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import type { SpriteState } from '@/types'
 import { CREATURE_LIST } from '@/data/creatures'
 import { MOVES } from '@/data/moves'
@@ -17,7 +18,6 @@ import {
   PointsPreview,
   RevealCard,
   TimerRing,
-  ToastHost,
   useToast,
   VictoryStamp,
 } from '@/app/components'
@@ -30,16 +30,16 @@ const BREAKDOWN = {
   tierName: 'Deep Focus',
   rate: 12,
   baseFp: 120,
-  activated: ['No social sites', '60 minute session'],
-  rawMultiplier: 1.5,
-  multiplier: 1.5,
-  capped: false,
-  projectedFp: 180,
+  activated: ['social', 'video'],
+  rawMultiplier: 3.5,
+  multiplier: 2.5,
+  capped: true,
+  projectedFp: 300,
 }
 
 const CREATURE_REWARD = { kind: 'creature' as const, creatureId: 'embrit' }
 
-function Showcase({ title, children }: { title: string; children: React.ReactNode }) {
+function Showcase({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="rounded-card bg-surface p-5 shadow-card">
       <h2 className="mb-4 text-xl">{title}</h2>
@@ -53,7 +53,7 @@ export default function Gallery() {
   const [selectedCreature, setSelectedCreature] = useState('embrit')
   const [modalOpen, setModalOpen] = useState(false)
   const [locked, setLocked] = useState(true)
-  const [confetti, setConfetti] = useState(true)
+  const [confetti, setConfetti] = useState(false)
   const { toast } = useToast()
 
   return (
@@ -63,14 +63,6 @@ export default function Gallery() {
         <h1 className="mt-1 text-4xl">Component Gallery</h1>
         <p className="mt-2 max-w-2xl text-muted">Browse every Lockling and component. Choose a creature state to preview its motion throughout the gallery.</p>
       </header>
-
-      <div className="rounded-card bg-primary p-4 font-display text-white shadow-card" aria-label="Tailwind token smoke check">
-        Tailwind token check: bg-primary · rounded-card
-      </div>
-      <div className="flex flex-wrap gap-2" aria-label="Tailwind utility smoke checks">
-        <span className="inline-flex min-h-tap min-w-tap items-center justify-center rounded-card bg-fire px-3 text-white transition-opacity duration-micro ease-airy">44px · 150ms</span>
-        <span className="inline-flex min-h-tap min-w-tap items-center justify-center rounded-card bg-water px-3 text-white transition-opacity duration-short ease-airy">44px · 300ms</span>
-      </div>
 
       <section className="rounded-card bg-surface p-5 shadow-card" aria-labelledby="sprite-preview-title">
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -140,13 +132,13 @@ export default function Gallery() {
         </Showcase>
         <Showcase title="PointsPreview">
           <div className="w-full max-w-sm"><PointsPreview breakdown={BREAKDOWN} nudges={['Avoid social sites for the full bonus.', 'One more focus session unlocks a streak bonus.']} /></div>
-          <div className="w-full max-w-sm"><PointsPreview breakdown={{ ...BREAKDOWN, projectedFp: 0, tierName: 'Getting Started', rate: 3 }} /></div>
+          <div className="w-full max-w-sm"><PointsPreview breakdown={{ ...BREAKDOWN, baseFp: 30, projectedFp: 0, tierName: 'Getting Started', rate: 3, activated: [], rawMultiplier: 1, multiplier: 1, capped: false }} /></div>
         </Showcase>
         <Showcase title="FloatingNumber">
           <FloatingNumber value="−25" kind="damage" /><FloatingNumber value="+25" kind="heal" /><FloatingNumber value="MISS" kind="miss" />
         </Showcase>
         <Showcase title="LockOverlay">
-          <div className="flex gap-3"><LockOverlay locked={locked} reason="Beat Gym 2"><div className="rounded-card bg-ring-track p-6 font-display">Gym 3</div></LockOverlay><LockOverlay locked={false}><div className="rounded-card bg-grass p-6 font-display text-white">Unlocked</div></LockOverlay></div>
+          <div className="flex gap-3"><LockOverlay locked={locked} reason="Beat Gym 2"><div className="rounded-card bg-ring-track p-6 font-display">Gym 3</div></LockOverlay><LockOverlay locked={false}><div className="rounded-card bg-grass p-6 font-display text-ink">Unlocked</div></LockOverlay></div>
           <button type="button" className="rounded-pill bg-primary px-4 text-white" onClick={() => setLocked((value) => !value)}>Toggle locked state</button>
         </Showcase>
         <Showcase title="LockboxChest">
@@ -172,7 +164,6 @@ export default function Gallery() {
         </Showcase>
         <Showcase title="Toast">
           <button type="button" className="rounded-pill bg-primary px-4 text-white" onClick={() => toast('Your Lockling is ready!')}>Show toast</button>
-          <ToastHost />
         </Showcase>
       </div>
     </main>

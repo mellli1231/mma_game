@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import type { LearnableMove, MoveDef } from '@/types'
 import { CREATURES } from '@/data/creatures'
 import { MOVES } from '@/data/moves'
-import { CreatureSprite, ElementBadge, FpBadge, Modal, useToast, ToastHost } from '@/app/components'
+import { CreatureSprite, ElementBadge, FpBadge, Modal, useToast } from '@/app/components'
 import { learnableMoves, learnMove } from '@/engine/training'
 import { useGameState } from '@/app/store'
 import { platform } from '@/platform/platform'
@@ -68,7 +68,6 @@ export default function Dojo() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-6 p-4 pb-16 sm:p-8">
-      <ToastHost />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm font-bold uppercase tracking-widest text-primary">Training Centre</p>
@@ -140,12 +139,12 @@ export default function Dojo() {
                       return (
                         <article key={item.move.id} className="grid gap-3 rounded-card border border-ring-track p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
                           <div className="min-w-0">
-                            <div className="flex flex-wrap items-center gap-2"><ElementBadge element={item.move.element} size="sm" /><h3 className="font-display text-lg">{item.move.name}</h3>{item.free ? <span className="rounded-pill bg-grass/15 px-2 py-1 text-xs font-bold text-grass">Free (Scroll)</span> : null}</div>
+                            <div className="flex flex-wrap items-center gap-2"><ElementBadge element={item.move.element} size="sm" /><h3 className="font-display text-lg">{item.move.name}</h3>{item.free ? <span className="rounded-pill bg-grass/15 px-2 py-1 text-xs font-bold text-grass-ink">Free (Scroll)</span> : null}</div>
                             <p className="mt-1 text-sm text-muted">{item.move.effect === 'attack' ? 'Attack' : 'Heal'} · Power {item.move.power}{item.move.effect === 'heal' && item.move.usesPerBattle != null ? ` · ${item.move.usesPerBattle} uses per battle` : ''}</p>
                             <p className="mt-1 text-sm">{item.move.description}</p>
                           </div>
                           <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-                            <span className="font-display text-lg text-fp-gold">{item.free ? 'Free' : `${item.price} FP`}</span>
+                            <span className="font-display text-lg text-fp-gold-ink">{item.free ? 'Free' : `${item.price} FP`}</span>
                             {need > 0 && !item.free ? <span className="w-full text-sm font-bold text-danger sm:w-auto">Need {need} more FP</span> : null}
                             {need > 0 && !item.free ? <Link to="/adventure/setup" className="text-sm font-bold text-primary underline">Earn FP on an Adventure</Link> : null}
                             <button type="button" disabled={!item.affordable || saving} onClick={() => void teach(item)} className="min-h-tap rounded-pill bg-primary px-5 font-bold text-white enabled:hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-45">

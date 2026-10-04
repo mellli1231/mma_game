@@ -6,14 +6,16 @@
 @theme {
   --color-primary: #5b4bdb;
   --color-ink: #1f2033;
-  --color-muted: #6b6f8a;
+  --color-muted: #5e6278;
   --color-bg: #fff8ec;
   --color-surface: #ffffff;
   --color-fire: #ff7a45;
   --color-water: #3ba3ff;
   --color-grass: #3fbf7f;
   --color-fp-gold: #f5b700;
-  --color-danger: #e5484d;
+  --color-fp-gold-ink: #8a6200;
+  --color-grass-ink: #18794e;
+  --color-danger: #b4232b;
   --color-hp-high: #3fbf7f;
   --color-hp-mid: #f5b700;
   --color-hp-low: #e5484d;
@@ -84,9 +86,16 @@
 
   button,
   a,
+  input,
+  select,
+  textarea,
   [role='button'] {
     min-height: 44px;
   }
+
+  input,
+  select,
+  textarea { color: var(--color-ink); }
 
   button:not(:disabled) {
     transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 180ms ease;
@@ -102,8 +111,9 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 2px var(--color-surface);
   }
 }
 
@@ -530,7 +540,7 @@
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 200ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 200ms !important;
   }
@@ -540,26 +550,50 @@
   }
 
   .creature-sprite__motion,
+  .creature-sprite__shadow,
   .creature-sprite__body,
   .creature-sprite__state-fx,
+  .creature-sprite__state-fx *,
   .creature-sprite--selected::after {
-    animation-duration: 200ms !important;
+    animation: reduced-opacity 200ms ease both !important;
     animation-delay: 0ms !important;
   }
 
-  .creature-sprite__shadow {
-    animation: none !important;
-  }
+  .creature-sprite__particles { display: none !important; }
 
-  .lockbox-chest__face,
+  .creature-sprite__shadow,
+  .creature-sprite__particles,
   .lockbox-chest__rays,
+  .lockbox-chest--closed .lockbox-chest__face,
   .reveal-card--epic::before {
     animation: none !important;
   }
 
-  .lockbox-chest--shaking .lockbox-chest__face--reduced { opacity: 0.7; }
+  .lockbox-chest--shaking .lockbox-chest__face,
+  .lockbox-chest--open .lockbox-chest__face {
+    animation: reduced-opacity 200ms ease both !important;
+  }
+
+  .hp-bar__ghost,
+  .hp-bar__front { transition-duration: 500ms !important; }
+  .timer-ring__progress { transition-duration: 250ms !important; }
 
   button:not(:disabled) {
     transition: none !important;
   }
+
+  button:not(:disabled):hover,
+  button:not(:disabled):active,
+  a:hover,
+  a:active,
+  [role='button']:hover,
+  [role='button']:active {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@keyframes reduced-opacity {
+  from { opacity: 0.65; }
+  to { opacity: 1; }
 }

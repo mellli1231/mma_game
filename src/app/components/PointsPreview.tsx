@@ -33,7 +33,7 @@ export function PointsPreview({ breakdown, nudges }: PointsPreviewProps) {
         <p className="mb-2 text-xs text-muted">Capped at ×2.5 (before cap: ×{breakdown.rawMultiplier.toFixed(2)})</p>
       ) : null}
       <div className="text-xs font-bold uppercase tracking-wide text-muted">Projected FP</div>
-      <div className="font-display text-3xl text-fp-gold tabular-nums">{breakdown.projectedFp} FP</div>
+      <div className="font-display text-3xl text-fp-gold-ink tabular-nums">{breakdown.projectedFp} FP</div>
       {nudges?.map((nudge) => (
         <p key={nudge} className="mt-1 text-sm text-muted">
           {nudge}
