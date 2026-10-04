@@ -358,16 +358,14 @@ export default function Battle() {
         <section className="focu-card bg-points p-5">
           <h2 className="font-display font-semibold">Choose your next Lockling</h2>
           <p className="text-sm">This forced switch does not use your turn.</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {activeBattle.player.team.map((creature, index) => index !== activeBattle.player.activeIndex && creature.hp > 0 && (
-              <button
+              <SwitchOption
                 key={creature.uid}
-                type="button"
+                creature={creature}
+                enemy={enemy}
                 onClick={() => chooseForcedSwitch(index)}
-                className="focu-chip"
-              >
-                {creature.name} · {creature.hp} HP
-              </button>
+              />
             ))}
           </div>
         </section>
@@ -479,17 +477,15 @@ export default function Battle() {
                   Back
                 </button>
               </div>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 {activeBattle.player.team.map((creature, index) => index !== activeBattle.player.activeIndex && (
-                  <button
+                  <SwitchOption
                     key={creature.uid}
-                    type="button"
+                    creature={creature}
+                    enemy={enemy}
                     disabled={creature.hp <= 0 || locked}
                     onClick={() => void takeAction({ type: 'switch', toIndex: index })}
-                    className="focu-chip"
-                  >
-                    {creature.name} · {creature.hp}/{MAX_HP} HP
-                  </button>
+                  />
                 ))}
               </div>
             </div>
@@ -531,6 +527,47 @@ export default function Battle() {
         </section>
       )}
     </main>
+  );
+}
+
+type BattleCreature = NonNullable<BattlePageState['battle']>['player']['team'][number];
+
+/** A switch candidate: the Lockling, its type, its HP and how it matches up against the opponent. */
+function SwitchOption({
+  creature,
+  enemy,
+  disabled = false,
+  onClick,
+}: {
+  creature: BattleCreature;
+  enemy: BattleCreature;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  const modifier = typeModifier(creature.element, enemy.element);
+  const matchup = modifier > 1
+    ? { text: `Strong against ${enemy.name}`, tone: 'bg-grass' }
+    : modifier < 1
+      ? { text: `Weak against ${enemy.name}`, tone: 'bg-fire' }
+      : { text: `Even match with ${enemy.name}`, tone: 'bg-white' };
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      aria-label={`${creature.name}, ${creature.hp} of ${MAX_HP} HP. ${matchup.text}`}
+      className={`focu-card flex items-center gap-3 p-3 text-left ${disabled ? 'opacity-60' : 'cursor-pointer'}`}
+    >
+      <CreatureSprite defId={creature.defId} uid={creature.uid} size={80} state={creature.hp <= 0 ? 'zonedOut' : 'idle'} />
+      <span className="min-w-0 flex-1 space-y-1">
+        <span className="flex flex-wrap items-center gap-2">
+          <span className="font-display text-lg font-bold">{creature.name}</span>
+          <ElementBadge element={creature.element} size="sm" />
+        </span>
+        <HpBar hp={creature.hp} maxHp={MAX_HP} />
+        <span className={`inline-block rounded-full border-2 border-ink px-3 text-sm font-bold ${matchup.tone}`}>{matchup.text}</span>
+      </span>
+    </button>
   );
 }
 
