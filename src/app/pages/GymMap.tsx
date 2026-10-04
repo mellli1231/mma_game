@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GYMS } from '@/data/gyms';
 import { CREATURES } from '@/data/creatures';
 import { useGameState } from '@/app/store';
+import { CreatureSprite } from '@/app/components';
 import { GYM_BACKGROUNDS } from '@/app/gymBackgrounds';
 
 export default function GymMap() {
@@ -103,11 +104,11 @@ export default function GymMap() {
       {selectedGym && (
         <section className="focu-card p-6 lg:sticky lg:top-16">
           <p className="text-sm font-extrabold text-muted">Gym {selectedGym.level}</p>
-          <h2 className="font-display text-2xl font-bold">{selectedGym.name}</h2>
+          <h2 className="font-display text-4xl font-bold">{selectedGym.name}</h2>
           <p className="mt-1 font-semibold">{selectedGym.leader}</p>
           <p className="mt-3 italic text-soft">{selectedGym.quote}</p>
-          <h3 className="mt-5 font-bold">Enemy team</h3>
-          <ul className="mt-2 flex flex-wrap gap-2">
+          <h3 className="mt-5 font-display text-2xl font-bold">Enemy team</h3>
+          <ul className="mt-2 flex flex-wrap gap-4">
             {selectedGym.team.map((member, index) => {
               const mirror = member.creatureId === 'MIRROR_STARTER_COMMON';
               const defId = mirror && gameState.starterId
@@ -115,8 +116,9 @@ export default function GymMap() {
                 : member.creatureId;
               const creature = CREATURES[defId];
               return (
-                <li key={`${member.creatureId}-${index}`} className="focu-pill">
-                  {creature ? `${creature.emoji} ${creature.name}` : 'Unknown Lockling'}
+                <li key={`${member.creatureId}-${index}`} className="flex flex-col items-center gap-1 rounded-2xl border-[2.5px] border-ink bg-mint-pale px-4 py-2">
+                  {creature && <CreatureSprite defId={defId} uid={`gym-${selectedGym.level}-${index}`} size={112} facing="left" />}
+                  <span className="font-display text-lg font-semibold">{creature ? creature.name : 'Unknown Lockling'}</span>
                 </li>
               );
             })}
