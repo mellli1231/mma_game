@@ -9,7 +9,7 @@
 - [x] 5a Home, Onboarding
 - [x] 5b AdventureSetup, AdventureActive, AdventureResult
 - [x] 5c GymMap, Battle, Defeat, Lockbox
-- [ ] 5d Dojo, Lockdex, Settings
+- [x] 5d Dojo, Lockdex, Settings
 - [ ] 5e Dev, Gallery, TrailClosed
 - [ ] 6 Sweep
 - [ ] 7 Wrap-up

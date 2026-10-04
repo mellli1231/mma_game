@@ -225,7 +225,8 @@
     font: 600 17px Fredoka, ui-rounded, sans-serif;
     cursor: pointer;
   }
-  .focu-chip[aria-pressed='true'] {
+  .focu-chip[aria-pressed='true'],
+  .focu-chip[aria-checked='true'] {
     background: var(--color-lavender);
     border-color: var(--color-focu);
     box-shadow: 2px 3px 0 rgb(91 75 219 / 40%);
