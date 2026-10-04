@@ -40,7 +40,7 @@ export default function GymMap() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-6 p-6 text-ink">
+    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-6 p-6 text-ink">
       <header className="flex items-center justify-between gap-4">
         <div className="focu-panel px-5 py-2">
           <p className="text-sm font-extrabold uppercase tracking-wide text-muted">Distraction Gyms</p>
@@ -56,6 +56,7 @@ export default function GymMap() {
         </section>
       )}
 
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="grid gap-3">
         {gyms.map((gym) => {
           const cleared = gym.level < currentGymLevel || allCleared;
@@ -100,7 +101,7 @@ export default function GymMap() {
       </div>
 
       {selectedGym && (
-        <section className="focu-card p-6">
+        <section className="focu-card p-6 lg:sticky lg:top-16">
           <p className="text-sm font-extrabold text-muted">Gym {selectedGym.level}</p>
           <h2 className="font-display text-2xl font-bold">{selectedGym.name}</h2>
           <p className="mt-1 font-semibold">{selectedGym.leader}</p>
@@ -154,6 +155,7 @@ export default function GymMap() {
           </div>
         </section>
       )}
+      </div>
     </main>
   );
 }
