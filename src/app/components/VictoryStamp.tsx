@@ -1,12 +1,22 @@
+import { motion, useReducedMotion } from 'framer-motion'
+
 interface VictoryStampProps {
   text?: string
   onDone?: () => void
 }
 
 export function VictoryStamp({ text = 'LOCKED IN!', onDone }: VictoryStampProps) {
+  const reduceMotion = useReducedMotion()
   return (
-    <div className="font-display text-4xl text-primary" onAnimationEnd={onDone}>
+    <motion.div
+      className="victory-stamp font-display text-4xl text-primary"
+      role="status"
+      initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.4, rotate: -6 }}
+      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+      transition={reduceMotion ? { duration: 0.2 } : { type: 'spring', stiffness: 320, damping: 14 }}
+      onAnimationComplete={onDone}
+    >
       {text}
-    </div>
+    </motion.div>
   )
 }

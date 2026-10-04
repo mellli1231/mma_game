@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useGameState } from './store'
 import Onboarding from './pages/Onboarding'
@@ -47,10 +47,12 @@ export default function AppRoutes() {
 function AnimatedRoutes() {
   const location = useLocation()
   const reduceMotion = useReducedMotion()
-  const variants = {
+  // Selecting another Lockling changes the URL, but remains within the Dojo screen.
+  const transitionKey = location.pathname.startsWith('/dojo') ? '/dojo' : location.pathname
+  const variants: Variants = {
     initial: { opacity: 0, y: 12 },
-    enter: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } },
-    exit: { opacity: 0, y: 0, transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] } },
+    enter: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] as const } },
+    exit: { opacity: 0, y: 0, transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] as const } },
     reducedInitial: { opacity: 0 },
     reducedEnter: { opacity: 1, transition: { duration: 0.2 } },
     reducedExit: { opacity: 0, transition: { duration: 0.2 } },
@@ -58,7 +60,7 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
-        key={location.pathname}
+        key={transitionKey}
         className="min-h-full"
         variants={variants}
         initial={reduceMotion ? 'reducedInitial' : 'initial'}

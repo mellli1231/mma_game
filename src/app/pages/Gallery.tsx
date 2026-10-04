@@ -161,7 +161,7 @@ export default function Gallery() {
           <VictoryStamp /><VictoryStamp text="NICE WORK!" onDone={() => toast('Victory animation complete')} />
         </Showcase>
         <Showcase title="Confetti">
-          <Confetti fire={confetti} colors={['#ff7a45', '#f5b700', '#3fbf7f']} />
+          <Confetti fire={confetti} colors={['#ff7a45', '#3ba3ff', '#3fbf7f']} />
           <button type="button" className="rounded-pill bg-primary px-4 text-white" onClick={() => setConfetti((value) => !value)}>{confetti ? 'Hide' : 'Show'} confetti</button>
         </Showcase>
         <Showcase title="Modal">
