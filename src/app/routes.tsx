@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useGameState } from './store'
+import { sessionRedirect } from './sessionRoutes'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import AdventureSetup from './pages/AdventureSetup'
@@ -30,10 +31,12 @@ function OnboardingGuard({ children }: { children: ReactNode }) {
     return <Navigate to="/onboarding" replace />
   }
   if (state.onboarded && onOnboarding) return <Navigate to="/" replace />
+  // RUN-06, unseen ended session (DONE-05) and pending Lockbox redirects.
+  const target = sessionRedirect(state, pathname)
+  if (target && target !== pathname) return <Navigate to={target} replace />
   return <>{children}</>
 }
 
-// TODO (A4): remaining guards (RUN-06, locked during Adventure, pendingReward) go here.
 export default function AppRoutes() {
   return (
     <HashRouter>
