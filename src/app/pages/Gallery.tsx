@@ -129,8 +129,8 @@ export default function Gallery() {
           {[0, 180, 1250].map((amount) => <FpBadge key={amount} amount={amount} animate />)}
         </Showcase>
         <Showcase title="TimerRing">
-          <TimerRing startedAt={Date.now()} endsAt={Date.now() + 60_000} size={128}><span className="text-3xl">24:18</span></TimerRing>
-          <TimerRing startedAt={Date.now()} endsAt={Date.now() + 60_000} size={96}><span className="text-2xl">05:00</span></TimerRing>
+          <TimerRing startedAt={Date.now()} endsAt={Date.now() + 60_000} size={128} />
+          <TimerRing startedAt={Date.now()} endsAt={Date.now() + 300_000} size={96} />
         </Showcase>
         <Showcase title="MoveButton">
           <MoveButton move={MOVES.fire_ember_flick} onClick={() => toast('Ember Flick selected')} />
