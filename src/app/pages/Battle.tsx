@@ -156,6 +156,7 @@ export default function Battle() {
       const playerResult = applyPlayerAction(activeBattle, action, defaultRng);
       dispatch({ type: 'resolve', battle: playerResult.battle, events: playerResult.events });
       await playEvents(playerResult.events);
+      if (!aliveRun.current) return;
       if (playerResult.battle.phase === 'victory') {
         await finishBattle(playerResult.battle);
         return;
@@ -173,6 +174,7 @@ export default function Battle() {
       const enemyResult = applyEnemyTurn(playerResult.battle, gym!, defaultRng);
       dispatch({ type: 'resolve', battle: enemyResult.battle, events: enemyResult.events });
       await playEvents(enemyResult.events);
+      if (!aliveRun.current) return;
       if (enemyResult.battle.phase === 'defeat') {
         await finishBattle(enemyResult.battle);
       }
