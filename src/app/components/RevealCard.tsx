@@ -35,7 +35,7 @@ export function RevealCard({ content, onContinue }: RevealCardProps) {
   const details = contentDetails(content)
   return (
     <motion.section
-      className={`reveal-card reveal-card--${details.rarity} rounded-card p-6 text-center shadow-card`}
+      className={`reveal-card focu-card reveal-card--${details.rarity} p-6 text-center`}
       initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={reduceMotion ? { duration: 0.2 } : { type: 'spring', stiffness: 180, damping: 20 }}
@@ -44,11 +44,11 @@ export function RevealCard({ content, onContinue }: RevealCardProps) {
       <div className="reveal-card__icon" aria-hidden="true">{details.icon}</div>
       <p className="font-display text-xl">{details.title}</p>
       <p className="mt-1 text-sm capitalize text-muted">{details.detail}</p>
-      <span className={`mt-3 inline-flex rounded-pill px-3 py-1 text-xs font-bold uppercase tracking-wide reveal-card__rarity reveal-card__rarity--${details.rarity}`}>
+      <span className={`focu-rarity focu-rarity--${details.rarity} mt-3 uppercase`}>
         {details.rarity}
       </span>
       {onContinue ? (
-        <div><button type="button" onClick={onContinue} className="mt-4 min-h-tap rounded-pill bg-primary px-4 text-white">Continue</button></div>
+        <div><button type="button" onClick={onContinue} className="focu-btn focu-btn--primary mt-4">Continue</button></div>
       ) : null}
     </motion.section>
   )

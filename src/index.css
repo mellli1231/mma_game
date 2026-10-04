@@ -446,20 +446,11 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background: #fff;
   }
 
   .reveal-card > * { position: relative; z-index: 1; }
-  .reveal-card--rare {
-    background: #f2f8ff;
-    outline: 2px solid rgb(59 163 255 / 48%);
-    filter: drop-shadow(0 0 10px rgb(59 163 255 / 58%)) drop-shadow(0 0 22px rgb(59 163 255 / 32%));
-  }
-  .reveal-card--epic {
-    background: #faf4ff;
-    outline: 2px solid rgb(145 75 219 / 60%);
-    filter: drop-shadow(0 0 12px rgb(145 75 219 / 68%)) drop-shadow(0 0 26px rgb(145 75 219 / 40%));
-  }
+  .reveal-card--rare { background: #ebe6fc; }
+  .reveal-card--epic { background: #fff1c9; }
   .reveal-card--epic::before {
     position: absolute;
     inset: 0;
@@ -470,19 +461,25 @@
     pointer-events: none;
   }
   .reveal-card__icon { margin-bottom: 0.5rem; font-size: 3rem; line-height: 1; }
-  .reveal-card__rarity--common { background: #f1f2f4; color: #555b66; }
-  .reveal-card__rarity--rare { background: #dbeeff; color: #17639a; }
-  .reveal-card__rarity--epic { background: #f0ddff; color: #7133a3; }
 
   .victory-stamp {
     display: inline-block;
-    border: 4px solid currentColor;
-    border-radius: 0.3em;
-    padding: 0.15em 0.35em;
-    font-weight: 700;
-    line-height: 1;
-    text-shadow: 0 3px 0 rgb(31 32 51 / 8%);
+    color: var(--color-sunshine);
+    font: 700 46px / 1 Fredoka, ui-rounded, sans-serif;
+    text-shadow:
+      -2.5px -2.5px 0 var(--color-ink),
+      2.5px -2.5px 0 var(--color-ink),
+      -2.5px 2.5px 0 var(--color-ink),
+      2.5px 2.5px 0 var(--color-ink),
+      4px 5px 0 var(--color-ink);
+    transform: rotate(-5deg);
     transform-origin: center;
+  }
+
+  .home-bar {
+    background: var(--color-paper);
+    border-bottom: 2.5px solid var(--color-ink);
+    box-shadow: 0 3px 0 rgb(31 32 51 / 18%);
   }
 
   .hp-bar {
@@ -773,10 +770,11 @@
 @keyframes lockbox-rays { to { transform: rotate(360deg); } }
 @keyframes reveal-sparkles { from { opacity: 0.35; } to { opacity: 1; } }
 
-.timer-ring__track { stroke: var(--color-ring-track); stroke-width: 8; }
+.timer-ring__edge { stroke: var(--color-ink); stroke-width: 2.5; }
+.timer-ring__track { stroke: var(--color-mint-pale); stroke-width: 24; }
 .timer-ring__progress {
-  stroke: var(--color-primary);
-  stroke-width: 8;
+  stroke: var(--color-sunshine-deep);
+  stroke-width: 24;
   stroke-linecap: round;
   transition: stroke-dashoffset 250ms linear;
 }

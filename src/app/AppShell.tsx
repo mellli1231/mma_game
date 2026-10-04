@@ -13,11 +13,11 @@ export default function AppShell() {
   const inAdventure = state.activeSession !== null
   const label = inAdventure ? 'Back to Adventure' : 'Back to Home'
   return (
-    <nav className="px-4 pt-2">
+    <nav className="home-bar sticky top-0 z-40 px-4 py-1">
       <Link
         to={inAdventure ? '/adventure' : '/'}
         aria-label={label}
-        className="inline-flex min-h-tap items-center gap-2 text-primary"
+        className="inline-flex min-h-tap items-center gap-2 font-display font-semibold text-ink"
       >
         <img src="/icon128.png" alt="" width={28} height={28} />
         <span aria-hidden="true">←</span>
