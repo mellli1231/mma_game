@@ -1,4 +1,5 @@
 import type { Platform } from './platform'
+import * as session from './session'
 import { createStorage, type KvAdapter } from './storage'
 
 const chromeAdapter: KvAdapter = {
@@ -15,11 +16,12 @@ const chromeAdapter: KvAdapter = {
 
 const storage = createStorage(chromeAdapter)
 
-// TODO (A3): send SESSION_START, SESSION_CHECK and SESSION_ABANDON to the background (SPEC 9.10).
 export const extensionPlatform: Platform = {
   isExtension: true,
   ...storage,
-  startSession: async () => ({ ok: false, error: 'NOT_IMPLEMENTED' }),
-  checkSession: async () => null,
-  abandonSession: async () => {},
+  startSession: input => session.startSession(input),
+  checkSession: async () => (await session.checkSession()).session,
+  abandonSession: async (reason, siteId) => {
+    await session.abandonSession(reason, siteId)
+  },
 }
