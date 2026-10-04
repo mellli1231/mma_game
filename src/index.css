@@ -155,11 +155,13 @@
   .reveal-card > * { position: relative; z-index: 1; }
   .reveal-card--rare {
     background: #f2f8ff;
-    box-shadow: 0 0 0 1px rgb(59 163 255 / 28%), 0 0 28px rgb(59 163 255 / 38%);
+    outline: 2px solid rgb(59 163 255 / 48%);
+    filter: drop-shadow(0 0 10px rgb(59 163 255 / 58%)) drop-shadow(0 0 22px rgb(59 163 255 / 32%));
   }
   .reveal-card--epic {
     background: #faf4ff;
-    box-shadow: 0 0 0 1px rgb(145 75 219 / 36%), 0 0 34px rgb(145 75 219 / 48%);
+    outline: 2px solid rgb(145 75 219 / 60%);
+    filter: drop-shadow(0 0 12px rgb(145 75 219 / 68%)) drop-shadow(0 0 26px rgb(145 75 219 / 40%));
   }
   .reveal-card--epic::before {
     position: absolute;
