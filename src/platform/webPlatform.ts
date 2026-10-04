@@ -1,39 +1,27 @@
-import { DEFAULT_STATE, type GameState } from '@/dev/stubTypes'
 import type { Platform } from './platform'
+import { createStorage, type KvAdapter } from './storage'
 
-// TODO: use CONFIG.STORAGE_KEY once src/data/config.ts lands.
-const STORAGE_KEY = 'locklings:v1'
-
-const listeners = new Set<(s: GameState) => void>()
-
-function read(): GameState {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  return raw ? (JSON.parse(raw) as GameState) : structuredClone(DEFAULT_STATE)
+const localAdapter: KvAdapter = {
+  get: async key => {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : null
+  },
+  set: async (key, value) => localStorage.setItem(key, JSON.stringify(value)),
+  onExternalChange(key, cb) {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === key) cb(e.newValue ? JSON.parse(e.newValue) : null)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  },
 }
 
-function write(s: GameState) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(s))
-  listeners.forEach(cb => cb(s))
-}
+const storage = createStorage(localAdapter)
 
 // TODO (A3): real in-page session logic.
 export const webPlatform: Platform = {
   isExtension: false,
-  loadState: async () => read(),
-  updateState: async mutator => {
-    const next = mutator(read())
-    write(next)
-    return next
-  },
-  subscribe(cb) {
-    listeners.add(cb)
-    const onStorage = (e: StorageEvent) => { if (e.key === STORAGE_KEY) cb(read()) }
-    window.addEventListener('storage', onStorage)
-    return () => {
-      listeners.delete(cb)
-      window.removeEventListener('storage', onStorage)
-    }
-  },
+  ...storage,
   startSession: async () => ({ ok: false, error: 'NOT_IMPLEMENTED' }),
   checkSession: async () => null,
   abandonSession: async () => {},
