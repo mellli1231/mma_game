@@ -7,6 +7,8 @@ import type { FixtureId } from '@/types'
 import { platform } from '@/platform/platform'
 import { useGameState } from '@/app/store'
 
+const GYM_LEVELS = [1, 2, 3, 4, 5]
+
 export default function Dev() {
   const state = useGameState()
   const [error, setError] = useState<string | null>(null)
@@ -100,6 +102,18 @@ export default function Dev() {
                 onClick={() => quick('Reset to a brand-new save', () => platform.updateState(() => structuredClone(DEFAULT_STATE)))}
               >Reset all</button>
               <span>Wipes everything back to a brand-new save</span>
+            </div>
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-3">
+                {GYM_LEVELS.map(level => (
+                  <button
+                    key={level}
+                    className={btn}
+                    onClick={() => quick(`Gym level set to ${level}`, () => platform.updateState(s => ({ ...s, currentGymLevel: level })))}
+                  >Set gym level {level}</button>
+                ))}
+              </div>
+              <p>Jump to a gym to test its battle background.</p>
             </div>
           </>
         ) : (

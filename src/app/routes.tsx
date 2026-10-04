@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion'
-import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, matchPath, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useGameState } from './store'
 import { useEffect, useState } from 'react'
 import { ease } from './motion'
 import { sessionRedirect } from './sessionRoutes'
 import AppShell from './AppShell'
 import SceneBackground from './SceneBackground'
+import { getGymBackground } from './gymBackgrounds'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import AdventureSetup from './pages/AdventureSetup'
@@ -46,7 +47,8 @@ const FULL_SCENE_ROUTES = ['/', '/onboarding']
 const TIMER_TICK_MS = 1000
 
 function SceneLayer() {
-  const { pathname } = useLocation()
+  const location = useLocation()
+  const { pathname } = location
   const state = useGameState()
   const [now, setNow] = useState(() => Date.now())
   const session = state?.activeSession ?? null
@@ -64,7 +66,16 @@ function SceneLayer() {
   }
   const completed = pathname === '/adventure/result' && state?.sessionHistory.at(-1)?.status === 'completed'
   const full = FULL_SCENE_ROUTES.includes(pathname) || completed
-  return <SceneBackground tone={full ? 'full' : 'dim'} progress={progress} />
+
+  // Per-gym painting behind the battle and the screens that follow it. Unknown levels fall back to the meadow.
+  let gymLevel: number | undefined
+  const battleMatch = matchPath('/battle/:level', pathname)
+  if (battleMatch) gymLevel = Number(battleMatch.params.level)
+  else if (pathname === '/defeat') gymLevel = (location.state as { gymLevel?: number } | null)?.gymLevel
+  else if (pathname === '/lockbox') gymLevel = state?.pendingReward?.gymLevel
+  if (gymLevel !== undefined && !getGymBackground(gymLevel)) gymLevel = undefined
+
+  return <SceneBackground tone={full ? 'full' : 'dim'} progress={progress} gymLevel={gymLevel} />
 }
 
 export default function AppRoutes() {

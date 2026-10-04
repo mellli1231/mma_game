@@ -133,8 +133,8 @@ export default function Lockbox() {
                     dimmed={busy && shakingIndex !== index}
                   />
                 </div>
-                <span className="font-semibold">Lockbox {index + 1}</span>
-                {shakingIndex === index && <span className="text-sm">Opening...</span>}
+                <span className="focu-pill !min-h-0 !py-0.5">Lockbox {index + 1}</span>
+                {shakingIndex === index && <span className="focu-pill !min-h-0 !py-0.5 text-sm">Opening...</span>}
               </div>
             ))}
           </fieldset>

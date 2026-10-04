@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import type { SpriteState } from '@/types'
 import { CREATURE_LIST } from '@/data/creatures'
 import { MOVES } from '@/data/moves'
+import { GYM_BACKGROUNDS } from '@/app/gymBackgrounds'
 import {
   Confetti,
   CreatureCard,
@@ -36,6 +37,14 @@ const BREAKDOWN = {
   capped: true,
   projectedFp: 300,
 }
+
+const GYM_BACKGROUND_LABELS = [
+  'Gym 1: Ping Plaza',
+  'Gym 2: Autoplay Alley',
+  'Gym 3: The Endless Feed',
+  'Gym 4: FOMO Fortress',
+  'Gym 5: The Feed Core',
+]
 
 const SWATCHES: Array<[string, string]> = [
   ['cream', '#FFF8EC'], ['paper', '#FFFDF6'], ['ink', '#1F2033'], ['muted', '#4A4D68'], ['soft', '#3A3D58'],
@@ -148,6 +157,28 @@ export default function Gallery() {
           <div className="focu-home-card focu-home-card--battle"><span className="focu-home-card__title">Battle</span><span className="focu-home-card__sub">Challenge a gym</span></div>
           <div className="focu-home-card focu-home-card--training"><span className="focu-home-card__title">Training</span><span className="focu-home-card__sub">Learn new moves</span></div>
         </div>
+      </section>
+
+      <section className="focu-card p-6" aria-labelledby="gym-bg-title">
+        <h2 id="gym-bg-title" className="focu-tag mb-4">Gym backgrounds</h2>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {GYM_BACKGROUND_LABELS.map((label, index) => {
+            const entry = GYM_BACKGROUNDS[index + 1]
+            return (
+              <li key={label}>
+                <div className="aspect-video overflow-hidden rounded-2xl border-[2.5px] border-ink">
+                  <img
+                    src={entry.src}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    style={{ objectPosition: entry.position }}
+                  />
+                </div>
+                <p className="mt-1 font-display font-semibold">{label}</p>
+              </li>
+            )
+          })}
+        </ul>
       </section>
 
       <div className="grid gap-4 md:grid-cols-2">

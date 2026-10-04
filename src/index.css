@@ -413,9 +413,11 @@
     z-index: -1;
     pointer-events: none;
   }
-  .scene-background__img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
+  .scene-background__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
   .scene-background__layer { position: absolute; inset: 0; }
+  .scene-background__fade { transition: opacity 300ms ease; }
   .scene-background__dim { background: rgb(255 248 236 / 55%); }
+  .scene-background__cream { background: rgb(255 248 236); }
   .scene-background__wash { mix-blend-mode: multiply; transition: opacity 2s ease; }
 }
 
@@ -950,6 +952,7 @@
 
   button:not(:disabled),
   .focu-btn,
+  .scene-background__fade,
   .scene-background__wash {
     transition: none !important;
   }
