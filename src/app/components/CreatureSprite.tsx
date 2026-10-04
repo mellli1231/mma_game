@@ -20,6 +20,10 @@ const ELEMENT_COLOR = {
   grass: '#3fbf7f',
 } as const
 
+// PNG assets face right by default; emoji glyphs face left by default.
+const PNG_FLIP = { left: true, right: false } as const
+const EMOJI_FLIP = { left: false, right: true } as const
+
 function hashUid(uid: string): number {
   let hash = 0
   for (let index = 0; index < uid.length; index += 1) {
@@ -60,8 +64,9 @@ export function CreatureSprite({
     '--sprite-size': `${size}px`,
     '--sprite-element': ELEMENT_COLOR[creature?.element ?? 'grass'],
     '--sprite-delay': `${seed}ms`,
-    // Tidepup's visible pixels reach the edge of its 512px canvas; the other art has transparent padding.
-    '--sprite-art-scale': defId === 'tidepup' ? '0.93' : '1',
+    '--dir': facing === 'right' ? 1 : -1,
+    '--sprite-art-dir': PNG_FLIP[facing] ? -1 : 1,
+    '--sprite-emoji-dir': EMOJI_FLIP[facing] ? -1 : 1
   } as CSSProperties
 
   function handleAnimationEnd(event: AnimationEvent<HTMLSpanElement>) {
@@ -85,7 +90,7 @@ export function CreatureSprite({
       aria-label={creature?.name ?? defId}
     >
       {showShadow ? <span className="creature-sprite__shadow" aria-hidden="true" /> : null}
-      <span className={`creature-sprite__facing creature-sprite__facing--${facing}`}>
+      <span className="creature-sprite__facing">
         <span className="creature-sprite__motion" onAnimationEnd={handleAnimationEnd}>
           <span className="creature-sprite__body" aria-hidden="true">
             <CreatureArt key={defId} defId={defId} emoji={creature?.emoji ?? '✨'} />

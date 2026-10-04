@@ -273,8 +273,6 @@
     transform: translate(-50%, -50%);
   }
 
-  .creature-sprite__facing--left { transform: scaleX(-1); }
-
   .creature-sprite__motion {
     position: relative;
     z-index: 1;
@@ -300,12 +298,15 @@
     height: 100%;
     object-fit: contain;
     object-position: center;
-    transform: scale(var(--sprite-art-scale, 1));
+    transform: scaleX(var(--sprite-art-dir, 1)) scale(var(--sprite-art-scale, 1));
     pointer-events: none;
     user-select: none;
   }
 
-  .creature-sprite__emoji { display: block; }
+  .creature-sprite__emoji {
+    display: block;
+    transform: scaleX(var(--sprite-emoji-dir, 1));
+  }
 
   .creature-sprite__particles {
     position: absolute;
@@ -482,9 +483,9 @@
 }
 @keyframes sprite-attack {
   0% { transform: translateX(0) scale(1); }
-  20% { transform: translateX(-8px) scale(0.94, 1.06); }
-  50% { transform: translateX(32px) scale(1.14, 0.9); }
-  78% { transform: translateX(-3px) scale(0.97, 1.03); }
+  20% { transform: translateX(calc(var(--dir) * -8px)) scale(0.94, 1.06); }
+  50% { transform: translateX(calc(var(--dir) * 32px)) scale(1.14, 0.9); }
+  78% { transform: translateX(calc(var(--dir) * -3px)) scale(0.97, 1.03); }
   100% { transform: translateX(0) scale(1); }
 }
 @keyframes sprite-hit {
@@ -498,8 +499,8 @@
 }
 @keyframes sprite-miss {
   0%, 100% { transform: translate(0, 0); }
-  40% { transform: translateX(16px) translateY(-4px); }
-  72% { transform: translateX(8px) translateY(-2px); }
+  40% { transform: translateX(calc(var(--dir) * 16px)) translateY(-4px); }
+  72% { transform: translateX(calc(var(--dir) * 8px)) translateY(-2px); }
 }
 @keyframes sprite-heal {
   0%, 100% { transform: scale(1); }
