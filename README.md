@@ -2,101 +2,87 @@
 
 **Lock in. Level up.**
 
-Focu is a Chrome extension that turns focus time into a small creature-collecting game. You pick the sites that distract you, go on an Adventure, and while the timer runs those sites are blocked. Finish the Adventure and you earn FocuPoints (FP). Spend FP on moves for your creatures, called Locklings, then use them to battle the Distraction Gyms.
+Focu turns focus time into a creature-collecting game. Choose the sites that distract you, start an Adventure, and Focu blocks those sites while you focus. Finish your Adventure to earn FocuPoints (FP). Spend FP teaching your elemental creatures, the Locklings, new moves, then take your squad into turn-based battles against the Distraction Gyms.
 
-Give up early, or visit a blocked site, and the Adventure ends with 0 FP. Finishing is the only way to earn.
+**Protect your focus. Power up your Locklings. Take on the feed.**
 
-## What you can do
+## One focus session. A whole game loop.
 
-- **Go on an Adventure.** Choose a length (5 to 180 minutes) and the sites to block. A live preview shows how much FP you will earn. A timer ring counts down while your Lockling explores, and the background shifts from cool to warm as you get closer to the end.
-- **Earn FP.** Longer Adventures pay a higher rate per minute, and blocking whole categories of sites adds a bonus.
-- **Collect Locklings.** There are nine, in three types: Fire, Water and Grass. You start with one of Embrit, Puddlo or Sproutle. Build a Squad of up to three in the Lockdex and put your lead first.
-- **Teach moves at the dojo.** Spend FP (or a Move Scroll) to teach a Lockling new moves. Each can know up to four, and moves are locked to its type.
-- **Battle the five Distraction Gyms.** Each gym has its own leader, team and painted arena. Beat a gym to unlock the next and win a Lockbox. Cleared gyms can be replayed as Practice.
-- **Open Lockboxes.** Pick one of three boxes to reveal a new Lockling, a Move Scroll or a pouch of FP.
+1. **Choose a Companion.** Start with Embrit, Puddlo, or Sproutle.
+2. **Set an Adventure.** Pick a focus duration and the sites you want blocked. Preview your FP before you lock in.
+3. **Stay focused.** A live timer tracks your Adventure while selected sites are blocked. Complete it to earn FP. If you leave early or visit a blocked site, the Adventure ends with 0 FP.
+4. **Train your Locklings.** Spend FP or use Move Scrolls to teach moves at the Dojo. Build a Squad of up to three creatures.
+5. **Battle distractions.** Use Fire, Water, and Grass matchups, healing, and tactical switches to challenge five Distraction Gyms.
+6. **Claim a reward.** Clear a Gym to choose one of three Lockboxes, with a chance to add a creature, learn a move, or earn a Spark Pouch.
 
-## How earning FP works
+## Focus that feels rewarding
 
+- **Real website blocking:** Focu uses Chrome's extension platform to block the sites you choose during an Adventure.
+- **Know your reward up front:** See projected FP before committing. Longer focus tiers and category bonuses can increase your reward.
+- **Progress you can use:** Turn completed focus time into new moves, stronger strategies, and a growing Lockdex.
+- **Try the full loop quickly:** Demo Mode speeds up Adventures so you can explore without waiting through a full-length session.
+
+## Get started
+
+Focu runs as a web app for development and demos. For real site blocking, build and load the Chrome extension.
+
+Requirements: Node.js, npm, and Google Chrome for extension use.
+
+### Run the web app
+
+```sh
+npm install
+npm run dev
 ```
-FP = floor(minutes x tier rate x multiplier)
-```
 
-| Tier | Length | Rate |
-|---|---|---|
-| Trail | up to 60 min | 10 FP per minute |
-| Expedition | up to 120 min | 15 FP per minute |
-| Odyssey | up to 180 min | 20 FP per minute |
+Open the local URL printed by Vite, usually `http://localhost:5173`.
 
-- The sites are grouped into six categories: Social Media, Video and Streaming, Gaming, Messaging, News and Gossip, and Shopping.
-- A category bonus only activates when you block **three or more** sites from it.
-- Bonuses stack, but the total multiplier is capped at **x2.5**.
-- Custom sites you add (up to 10) are blocked too, but never count toward a bonus.
-- A new player starts with 300 FP.
+### Load the Chrome extension
 
-## How battles work
-
-- Every Lockling has 100 HP. There are no other stats.
-- Fire beats Grass, Grass beats Water, Water beats Fire. A strong hit does double damage, a weak one half.
-- Damage is the move's power times the type bonus, rounded.
-- Every move, attack or heal, misses 30% of the time. A missed heal still uses up one of its uses.
-- You act first each round. You can attack, heal, switch Locklings or forfeit. When you switch, each choice shows the Lockling, its type, its health and whether it is strong or weak against the opponent.
-- The enemy never switches on its own.
-
-## Try it
-
-You need a Chrome based browser and Node.js.
-
-```bash
+```sh
 npm install
 npm run build
 ```
 
-Then load the extension:
-
 1. Open `chrome://extensions`.
-2. Turn on **Developer mode** (top right).
-3. Click **Load unpacked** and choose the `dist` folder.
-4. Click the Focu icon in the toolbar to open the game.
+2. Turn on **Developer mode**.
+3. Select **Load unpacked** and choose the generated `dist` folder.
+4. Open Focu from the extension toolbar.
 
-After changing code, run `npm run build` again and click the reload icon on the extension card. If something breaks, the card's **Errors** button shows why.
+Enable **Demo Mode** in Settings to speed up Adventures. The Dev page includes preset saves for exploring different game states.
 
-### See the whole game in a few minutes
+## Permissions
 
-A real Adventure takes at least five minutes. To try everything quickly:
+The extension requests:
 
-1. Open **Settings** and switch on **Demo Mode**. Adventures then run 60 times faster and can be as short as one minute.
-2. Open the dev panel from Settings (or go to `index.html#/dev` in the extension). It can load preset saves, add 1000 FP, finish the current Adventure, and jump to any gym from 1 to 5.
-3. The component gallery at `index.html#/gallery` shows every piece of the interface, the five gym backgrounds and the sound effects.
-
-### Settings
-
-- **Demo Mode:** fast Adventures for trying things out. It cannot be changed during an Adventure.
-- **Sound effects:** on by default. Attacks, misses, heals and victory have sounds. Turn them off or play a test sound here.
-- **Reset:** erases all progress and starts over.
-
-## What the extension asks for
-
-| Permission | Why |
+| Permission | Purpose |
 |---|---|
-| `storage` | Saves your Locklings, FP and history |
-| `declarativeNetRequest`, host access | Blocks your chosen sites during an Adventure and shows the Trail Closed page instead |
-| `alarms` | Ends the Adventure on time, even if the game tab is closed |
-| `notifications` | Tells you when an Adventure is complete |
-| `tabs` | Opens and updates the game and the blocked page |
+| `storage` | Save your Locklings, FocuPoints, and progress |
+| `declarativeNetRequest` and host access | Block selected sites during an Adventure |
+| `alarms` | End an Adventure on time, including when the game tab is closed |
+| `notifications` | Notify you when an Adventure is complete |
+| `tabs` | Open and update the game and blocked-site page |
 
 ## For developers
 
-```bash
-npm run dev         # Vite dev server
-npm run typecheck   # TypeScript only
-npm run test        # unit tests (Vitest)
-npm run verify      # typecheck, tests and build: the gate before every commit
+```sh
+npm run dev
+npm run typecheck
+npm run test
+npm run build
+npm run verify
 ```
 
-- `src/engine` is pure TypeScript with no browser APIs, so battles and points are easy to test.
-- `src/data` holds all content and tunable numbers (creatures, moves, gyms, sites, `config.ts`).
-- `src/background` is the service worker. It is the only thing that starts and ends Adventures and awards FP.
-- `src/platform` is the only place the interface talks to the browser.
-- `src/app` is the React interface. The visual style is described in `docs/DESIGN.md`.
-- `SPEC.md` is the full product specification, and `docs/` has the team notes and interface contracts.
+`npm run verify` runs typecheck, tests, and a production build.
 
+- `src/engine` contains the pure TypeScript game rules.
+- `src/data` contains creatures, moves, gyms, sites, and game configuration.
+- `src/background` manages focus sessions and awards FP.
+- `src/platform` connects the app to browser storage and extension APIs.
+- `src/app` contains the React interface.
+
+See [SPEC.md](./SPEC.md) for the product specification and [docs/](./docs/) for design and development notes.
+
+## Built with
+
+React, TypeScript, Vite, Tailwind CSS, and Chrome Manifest V3.
