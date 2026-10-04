@@ -212,6 +212,41 @@ describe('player battle actions', () => {
     expect(switched.battle.phase).toBe('enemy_turn');
   });
 
+  it('does not allow a third healing move after the two per-battle uses are spent', () => {
+    const state = battleState();
+    const owned = state.creatures[0]!;
+    const withHeal: GameState = {
+      ...state,
+      creatures: [{ ...owned, moveIds: [...owned.moveIds, 'fire_kindle'] }],
+    };
+    const created = createBattle(withHeal, 1, false);
+    const battle = putPlayerTurn({
+      ...created,
+      player: {
+        ...created.player,
+        team: [{
+          ...created.player.team[0]!,
+          hp: 50,
+          healUsesLeft: { fire_kindle: 2 },
+        }],
+      },
+    });
+
+    const firstUse = applyPlayerAction(battle, { type: 'move', moveId: 'fire_kindle' }, () => 0.29);
+    expect(firstUse.battle.player.team[0]?.healUsesLeft.fire_kindle).toBe(1);
+    const secondUse = applyPlayerAction(
+      putPlayerTurn(firstUse.battle),
+      { type: 'move', moveId: 'fire_kindle' },
+      () => 0.29,
+    );
+    expect(secondUse.battle.player.team[0]?.healUsesLeft.fire_kindle).toBe(0);
+    expect(() => applyPlayerAction(
+      putPlayerTurn(secondUse.battle),
+      { type: 'move', moveId: 'fire_kindle' },
+      () => 0.3,
+    )).toThrow('no uses of Kindle left');
+  });
+
   it('forfeits immediately and rejects actions in the wrong phase', () => {
     const battle = putPlayerTurn(createBattle(battleState(), 1, false));
     expect(applyPlayerAction(battle, { type: 'forfeit' }, () => 0.3).battle)
