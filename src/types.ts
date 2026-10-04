@@ -99,6 +99,8 @@ export interface OwnedCreature {
   obtainedAt: number;
 }
 
+export type SessionStatus = 'active' | 'completed' | 'abandoned';
+
 export interface FocusSession {
   id: string;
   startedAt: number;
@@ -106,37 +108,50 @@ export interface FocusSession {
   durationMin: number;
   siteIds: string[];
   customDomains: string[];
+  tierName: string;
+  rate: number;
+  baseFp: number;
+  activatedCategoryIds: string[];
+  multiplier: number;
   projectedFp: number;
+  status: SessionStatus;
+  awardedFp: number;
+  endedAt: number | null;
+  abandonReason?: 'gave_up' | 'visited_blocked';
+  abandonedSiteId?: string;
   isDemo: boolean;
-  completed: boolean;
 }
 
-export interface SessionHistoryEntry extends FocusSession {
-  awardedFp: number;
-  reason?: 'gave_up' | 'visited_blocked';
-  abandoned: boolean;
-}
+export type SessionHistoryEntry = FocusSession;
 
 export interface GameState {
-  version: number;
+  version: 1;
   trainerName: string;
   onboarded: boolean;
   starterId: string | null;
   fp: number;
+  lifetimeFp: number;
   creatures: OwnedCreature[];
   squad: string[];
+  moveScrolls: string[];
   currentGymLevel: number;
+  pendingReward: PendingReward | null;
+  activeSession: FocusSession | null;
+  sessionHistory: SessionHistoryEntry[];
+  lastSeenSessionId: string | null;
   lastAdventureSetup: {
     durationMin: number;
     siteIds: string[];
     customDomains: string[];
   } | null;
-  activeSession: FocusSession | null;
-  sessionHistory: SessionHistoryEntry[];
-  pendingReward: PendingReward | null;
+  settings: {
+    demoMode: boolean;
+    sound: boolean;
+  };
   stats: {
-    focusMinutes: number;
+    totalFocusMin: number;
     adventuresCompleted: number;
+    adventuresAbandoned: number;
     battlesWon: number;
     battlesLost: number;
   };

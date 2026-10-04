@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
+import { STORAGE_KEY } from '../src/data/config';
 import { CREATURES } from '../src/data/creatures';
 import { GYMS } from '../src/data/gyms';
 import { MOVES } from '../src/data/moves';
 import { SITE_CATEGORIES, SITES } from '../src/data/sites';
 
 describe('engine data catalog', () => {
+  it('uses the versioned local storage key from the spec', () => {
+    expect(STORAGE_KEY).toBe('locklings:v1');
+  });
+
   it('defines the full hard-coded game catalog', () => {
     expect(Object.keys(MOVES)).toHaveLength(21);
     expect(Object.values(MOVES).filter((move) => move.price !== null)).toHaveLength(18);

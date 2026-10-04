@@ -1,5 +1,6 @@
 import type { CategoryId, ElementType } from '../types';
 
+export const STORAGE_KEY = 'locklings:v1';
 export const MAX_HP = 100;
 export const MISS_CHANCE = 0.3;
 export const TYPE_STRONG = 2;
