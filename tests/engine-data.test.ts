@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { STORAGE_KEY } from '../src/data/config';
+import { STORAGE_KEY, TRAINER_NAME_MAX } from '../src/data/config';
 import { CREATURES } from '../src/data/creatures';
 import { GYMS } from '../src/data/gyms';
 import { MOVES } from '../src/data/moves';
@@ -11,6 +11,10 @@ describe('engine data catalog', () => {
     expect(STORAGE_KEY).toBe('locklings:v1');
   });
 
+  it('sets the shared trainer name limit to the onboarding requirement', () => {
+    expect(TRAINER_NAME_MAX).toBe(16);
+  });
+
   it('defines the full hard-coded game catalog', () => {
     expect(Object.keys(MOVES)).toHaveLength(21);
     expect(Object.values(MOVES).filter((move) => move.price !== null)).toHaveLength(18);
@@ -19,6 +23,11 @@ describe('engine data catalog', () => {
     expect(Object.keys(GYMS)).toHaveLength(5);
     expect(SITE_CATEGORIES).toHaveLength(6);
     expect(Object.keys(SITES)).toHaveLength(37);
+  });
+
+  it('excludes AWS only from Amazon site blocking', () => {
+    expect(SITES.steam.excludedDomains).toBeUndefined();
+    expect(SITES.amazon.excludedDomains).toEqual(['aws.amazon.com']);
   });
 
   it('keeps every creature default move on the same element', () => {

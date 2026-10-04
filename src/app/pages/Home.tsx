@@ -106,7 +106,7 @@ function ActionCard(props: { to: string; title: string; subtitle: string; classN
   return (
     <Link
       to={props.to}
-      className={`min-h-tap rounded-card p-5 text-white shadow-card transition-transform duration-micro ease-airy hover:-translate-y-0.5 motion-reduce:transition-none ${props.className}`}
+      className={`min-h-tap rounded-card p-5 text-ink shadow-card transition-transform duration-micro ease-airy hover:-translate-y-0.5 motion-reduce:transition-none ${props.className}`}
     >
       <div className="font-display text-xl">{props.title}</div>
       <div className="text-sm opacity-90">{props.subtitle}</div>

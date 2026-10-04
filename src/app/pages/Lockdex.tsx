@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { CREATURE_LIST, CREATURES } from '@/data/creatures'
 import { MOVES } from '@/data/moves'
-import { CreatureSprite, ElementBadge, ToastHost, useToast } from '@/app/components'
+import { CreatureSprite, ElementBadge, useToast } from '@/app/components'
 import { moveSquadMember, toggleSquadMember } from '@/engine/squad'
 import { useGameState } from '@/app/store'
 import { platform } from '@/platform/platform'
@@ -44,7 +44,6 @@ export default function Lockdex() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-8 p-4 pb-16 sm:p-8">
-      <ToastHost />
       <header>
         <p className="text-sm font-bold uppercase tracking-widest text-primary">Collection & team</p>
         <h1 className="text-4xl">Lockdex & Squad</h1>

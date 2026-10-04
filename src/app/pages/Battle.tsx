@@ -5,18 +5,28 @@ import { GYMS } from '@/data/gyms';
 import { CREATURES } from '@/data/creatures';
 import { MOVES } from '@/data/moves';
 import { MAX_HP } from '@/data/config';
+import {
+  Confetti,
+  CreatureSprite,
+  ElementBadge,
+  FloatingNumber,
+  HpBar,
+  MoveButton,
+  VictoryStamp,
+} from '@/app/components';
 import { useGameState } from '@/app/store';
 import { applyEnemyTurn, applyForcedSwitch, applyPlayerAction, createBattle } from '@/engine/battle';
 import { defaultRng } from '@/engine/rng';
 import { clearGym, recordBattleLoss } from '@/engine/rewards';
 import { platform } from '@/platform/platform';
 import { typeModifier } from '@/engine/typeChart';
-import type { BattleEvent, BattleState, PlayerAction } from '@/types';
+import type { BattleEvent, BattleState, PlayerAction, SpriteState } from '@/types';
 
 interface BattlePageState {
   battle: BattleState | null;
   logs: string[];
   events: BattleEvent[];
+  currentEvent: BattleEvent | null;
   playingEvents: boolean;
   thinking: boolean;
   selectingMove: string | null;
@@ -40,6 +50,7 @@ const initialPageState: BattlePageState = {
   battle: null,
   logs: [],
   events: [],
+  currentEvent: null,
   playingEvents: false,
   thinking: false,
   selectingMove: null,
@@ -57,6 +68,7 @@ function pageReducer(state: BattlePageState, action: BattlePageAction): BattlePa
         ...state,
         battle: action.battle,
         events: action.events,
+        currentEvent: null,
         playingEvents: action.events.length > 0,
         thinking: false,
         selectingMove: null,
@@ -67,10 +79,11 @@ function pageReducer(state: BattlePageState, action: BattlePageAction): BattlePa
       return {
         ...state,
         events: state.events.slice(1),
+        currentEvent: action.event,
         logs: [...state.logs, action.event.message].slice(-4),
       };
     case 'events-finished':
-      return { ...state, events: [], playingEvents: false };
+      return { ...state, events: [], currentEvent: null, playingEvents: false };
     case 'thinking':
       return { ...state, thinking: action.value };
     case 'select-move':
@@ -84,19 +97,14 @@ function pageReducer(state: BattlePageState, action: BattlePageAction): BattlePa
   }
 }
 
-function HpMeter({ hp }: { hp: number }) {
-  const percent = Math.max(0, Math.min(100, (hp / MAX_HP) * 100));
-  return (
-    <div className="h-3 overflow-hidden rounded-full bg-slate-200" aria-label={`${hp} HP`}>
-      <div className="h-full rounded-full bg-emerald-500 transition-[width]" style={{ width: `${percent}%` }} />
-    </div>
-  );
-}
-
 function playerActionForMove(moveId: string, targetIndex?: number): PlayerAction {
   return targetIndex === undefined
     ? { type: 'move', moveId }
     : { type: 'move', moveId, targetIndex };
+}
+
+export function isMissEventForCreature(event: BattleEvent | null, creatureName: string): boolean {
+  return event?.type === 'MISSED' && event.message.startsWith(`${creatureName} `);
 }
 
 export default function Battle() {
@@ -300,8 +308,14 @@ export default function Battle() {
       )}
 
       <section className="grid gap-4 md:grid-cols-2" aria-label="Battle teams">
-        <CreaturePanel label="Opponent" creature={enemy} />
-        <CreaturePanel label="Your active Lockling" creature={player} />
+        <CreaturePanel label="Opponent" creature={enemy} facing="left" event={page.currentEvent} />
+        <CreaturePanel
+          label="Your active Lockling"
+          creature={player}
+          facing="right"
+          event={page.currentEvent}
+          celebrating={activeBattle.phase === 'victory'}
+        />
       </section>
 
       <section className="min-h-24 rounded-2xl bg-slate-100 p-4" aria-live="polite" aria-label="Battle log">
@@ -386,30 +400,26 @@ export default function Battle() {
                     : 1;
                   return (
                     <div key={moveId} className="rounded-xl border p-3">
-                      <button
-                        type="button"
-                        disabled={disabled || locked}
-                        onClick={() => move.effect === 'attack'
-                          ? void takeAction(playerActionForMove(moveId))
-                          : dispatch({ type: 'select-move', moveId })}
-                        className="w-full text-left disabled:opacity-50"
-                      >
-                        <span className="block font-bold">{move.name}</span>
-                        <span className="block text-sm">
-                          {move.effect === 'attack' ? 'Attack' : 'Heal'} · Power {move.power}
-                          {move.effect === 'heal' && ` · ${usesLeft ?? 0} uses left`}
-                        </span>
-                        {move.effect === 'attack' && effectiveness !== 1 && (
-                          <span className="block text-sm font-semibold text-indigo-700">
-                            {effectiveness === 2 ? 'Super effective' : 'Not very effective'}
-                          </span>
-                        )}
-                        {disabled && move.effect === 'heal' && (
-                          <span className="block text-sm text-slate-500">
-                            {(usesLeft ?? 0) <= 0 ? 'No uses remaining' : 'No injured Squad members'}
-                          </span>
-                        )}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <MoveButton
+                          move={move}
+                          usesLeft={move.effect === 'heal' ? usesLeft ?? 0 : undefined}
+                          effectiveness={effectiveness === 2 ? 'super' : effectiveness === 0.5 ? 'weak' : null}
+                          disabled={disabled || locked}
+                          disabledReason={disabled
+                            ? (usesLeft ?? 0) <= 0 ? 'No uses remaining' : 'Everyone is at full HP'
+                            : undefined}
+                          onClick={() => move.effect === 'attack'
+                            ? void takeAction(playerActionForMove(moveId))
+                            : dispatch({ type: 'select-move', moveId })}
+                        />
+                        <ElementBadge element={move.element} size="sm" />
+                      </div>
+                      {disabled && move.effect === 'heal' && (
+                        <p className="mt-2 text-sm text-slate-500">
+                          {(usesLeft ?? 0) <= 0 ? 'No uses remaining' : 'No injured Squad members'}
+                        </p>
+                      )}
                       {move.effect === 'heal' && page.selectingMove === moveId && (
                         <div className="mt-3 border-t pt-3">
                           <p className="mb-2 text-sm font-semibold">Choose a teammate to heal</p>
@@ -483,7 +493,8 @@ export default function Battle() {
 
       {activeBattle.phase === 'victory' && (
         <section className="rounded-2xl bg-emerald-50 p-5 text-center">
-          <h2 className="text-3xl font-black text-emerald-800">LOCKED IN!</h2>
+          <Confetti fire />
+          <VictoryStamp />
           <p className="mt-2">You beat {gym.leader}.</p>
           {practice && <p className="mt-1 text-sm">Practice battles do not change Gym progress or award Lockboxes.</p>}
           <Link to="/gyms" className="mt-4 inline-block rounded-xl bg-emerald-700 px-5 py-3 font-bold text-white">
@@ -498,25 +509,81 @@ export default function Battle() {
 function CreaturePanel({
   label,
   creature,
+  facing,
+  event,
+  celebrating = false,
 }: {
   label: string;
   creature: NonNullable<BattlePageState['battle']>['player']['team'][number];
+  facing: 'left' | 'right';
+  event: BattleEvent | null;
+  celebrating?: boolean;
 }) {
+  const damage = event?.type === 'DAMAGE'
+    ? Number(event.message.match(/^(.+) took (\d+) damage\.$/)?.[2])
+    : 0;
+  const healed = event?.type === 'HEALED'
+    ? Number(event.message.match(/^(.+) recovered (\d+) HP!$/)?.[2])
+    : 0;
+  const isTarget = event?.type === 'DAMAGE' || event?.type === 'HEALED'
+    ? event.message.startsWith(`${creature.name} `)
+    : false;
+  const missed = isMissEventForCreature(event, creature.name);
+  const sentOut = event?.type === 'SENT_OUT'
+    ? event.message.includes(creature.name)
+    : event?.type === 'SWITCHED' && event.message.endsWith(`Go, ${creature.name}!`);
+  const moveName = event?.type === 'MOVE_USED'
+    ? event.message.match(/^.+ used (.+)!$/)?.[1]
+    : undefined;
+  const move = moveName ? Object.values(MOVES).find((candidate) => candidate.name === moveName) : undefined;
+  const acting = event?.type === 'MOVE_USED' && event.message.startsWith(`${creature.name} `);
+  const spriteState: SpriteState = celebrating
+    ? 'celebrate'
+    : creature.hp <= 0 || event?.type === 'ZONED_OUT' && event.message.startsWith(`${creature.name} `)
+    ? 'zonedOut'
+    : sentOut
+      ? 'sentOut'
+      : isTarget && event?.type === 'DAMAGE'
+        ? 'hit'
+        : isTarget && event?.type === 'HEALED'
+          ? 'heal'
+          : missed
+            ? 'miss'
+            : acting
+              ? move?.effect === 'heal' ? 'heal' : 'attack'
+              : 'idle';
+
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
           <p className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</p>
           <h2 className="text-xl font-bold">{creature.name}</h2>
-          <p className="text-sm capitalize text-slate-600">{creature.element}</p>
+          <ElementBadge element={creature.element} size="sm" />
         </div>
-        <span className="text-4xl" aria-hidden="true">
-          {CREATURES[creature.defId]?.emoji ?? ({ fire: '🔥', water: '💧', grass: '🌿' } as const)[creature.element]}
-        </span>
+        <div className="relative shrink-0">
+          <CreatureSprite
+            defId={creature.defId}
+            uid={creature.uid}
+            size={96}
+            state={spriteState}
+            facing={facing}
+            showParticles
+          />
+          {isTarget && event?.type === 'DAMAGE' && damage > 0 && (
+            <span key={`${event.message}-${creature.uid}`} className="absolute inset-x-0 top-0 text-center">
+              <FloatingNumber value={`-${damage}`} kind="damage" />
+            </span>
+          )}
+          {isTarget && event?.type === 'HEALED' && healed > 0 && (
+            <span key={`${event.message}-${creature.uid}`} className="absolute inset-x-0 top-0 text-center">
+              <FloatingNumber value={`+${healed}`} kind="heal" />
+            </span>
+          )}
+        </div>
       </div>
       <div className="mt-4 flex items-center gap-3">
-        <HpMeter hp={creature.hp} />
-        <span className="min-w-20 text-right text-sm font-bold">{creature.hp}/{MAX_HP} HP</span>
+        <HpBar hp={creature.hp} maxHp={MAX_HP} />
       </div>
       {creature.hp === 0 && <p className="mt-2 text-sm font-bold text-slate-500">Zoned out</p>}
     </article>
