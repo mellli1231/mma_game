@@ -15,6 +15,7 @@ export const MAX_SQUAD_SIZE = 3;
 export const LOCKBOX_COUNT = 3;
 export const MAX_CUSTOM_DOMAINS = 10;
 export const LOCKBOX_CREATURE_CHANCE = 1 / 3;
+export const TRAINER_NAME_MAX = 16;
 
 export const CATEGORY_IDS: CategoryId[] = ['social', 'video', 'gaming', 'messaging', 'news', 'shopping'];
 

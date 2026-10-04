@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CREATURES } from '@/data/creatures';
 import { MOVES } from '@/data/moves';
 import { MAX_SQUAD_SIZE } from '@/data/config';
+import { CreatureSprite, ElementBadge, LockboxChest, RevealCard } from '@/app/components';
 import { useGameState } from '@/app/store';
 import { dismissReward, chooseLockbox } from '@/engine/rewards';
 import { teachFromScroll } from '@/engine/training';
@@ -122,35 +123,36 @@ export default function Lockbox() {
       {chosenIndex === null ? (
         <>
           <p>Choose one box to reveal its reward. It will be applied once when revealed.</p>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <fieldset disabled={busy} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {activeReward.boxes.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                disabled={busy}
-                onClick={() => void openBox(index)}
-                className={`flex min-h-40 flex-col items-center justify-center rounded-3xl border-2 border-indigo-200 bg-indigo-50 p-5 text-xl font-bold disabled:opacity-60 ${
-                  shakingIndex === index ? 'animate-pulse' : ''
-                }`}
-              >
-                <span className="text-5xl" aria-hidden="true">{shakingIndex === index ? '✨' : '📦'}</span>
-                <span className="mt-2">Lockbox {index + 1}</span>
+              <div key={index} className="flex flex-col items-center gap-2">
+                <div className={shakingIndex === index ? 'animate-pulse motion-reduce:animate-none' : ''}>
+                  <LockboxChest
+                    state={shakingIndex === index ? 'shaking' : 'closed'}
+                    onClick={() => void openBox(index)}
+                    dimmed={busy && shakingIndex !== index}
+                  />
+                </div>
+                <span className="font-semibold">Lockbox {index + 1}</span>
                 {shakingIndex === index && <span className="text-sm">Opening...</span>}
-              </button>
+              </div>
             ))}
-          </div>
+          </fieldset>
         </>
       ) : (
         <section className="space-y-5 rounded-3xl border border-amber-200 bg-amber-50 p-6" aria-live="polite">
-          <div className="flex items-center gap-4">
-            <span className="text-5xl" aria-hidden="true">{rewardIcon(reward)}</span>
-            <div>
-              <p className="text-sm font-bold uppercase tracking-wide text-amber-800">
-                Lockbox {chosenIndex + 1} revealed
-              </p>
-              {reward && <RewardHeading content={reward} />}
-            </div>
-          </div>
+          <fieldset disabled className="grid grid-cols-3 gap-4">
+            {activeReward.boxes.map((content, index) => (
+              <div key={index} className="flex flex-col items-center gap-2">
+                <LockboxChest state="open" />
+                {index === chosenIndex
+                  ? <span className="text-center text-sm font-semibold">Lockbox {index + 1} chosen</span>
+                  : <RewardSummary content={content} />}
+              </div>
+            ))}
+          </fieldset>
+
+          {reward?.kind === 'fp' && <RevealCard content={reward} />}
 
           {reward?.kind === 'creature' && (
             <CreatureReward creatureId={reward.creatureId} />
@@ -158,6 +160,7 @@ export default function Lockbox() {
 
           {reward?.kind === 'move' && move && (
             <div className="space-y-4">
+              <h2 className="text-2xl font-bold">{move.name}</h2>
               <p>
                 {move.name} is now in your Move Scroll inventory. Teach it now or save it for later.
               </p>
@@ -230,9 +233,6 @@ export default function Lockbox() {
             </div>
           )}
 
-          {activeReward.boxes.map((content, index) => index !== chosenIndex && (
-            <p key={index} className="text-sm text-slate-600">Lockbox {index + 1} remains unopened.</p>
-          ))}
           {message && <p role="status" className="font-semibold text-indigo-800">{message}</p>}
           <button
             type="button"
@@ -251,36 +251,32 @@ export default function Lockbox() {
   );
 }
 
-function rewardIcon(content: LockboxContent | undefined): string {
-  if (content?.kind === 'creature') return CREATURES[content.creatureId]?.emoji ?? '✨';
-  if (content?.kind === 'move') return '📜';
-  if (content?.kind === 'fp') return '🪙';
-  return '✨';
-}
-
-function RewardHeading({ content }: { content: LockboxContent }) {
-  if (content.kind === 'creature') {
-    return <h2 className="text-2xl font-bold">A wild {CREATURES[content.creatureId]?.name ?? 'Lockling'} joined your Lockdex!</h2>;
-  }
-  if (content.kind === 'move') {
-    return <h2 className="text-2xl font-bold">{MOVES[content.moveId]?.name ?? 'Move Scroll'}</h2>;
-  }
-  return <h2 className="text-2xl font-bold">+{content.amount} FP</h2>;
-}
-
 function CreatureReward({ creatureId }: { creatureId: string }) {
   const creature = CREATURES[creatureId];
   if (!creature) return <p role="alert">This reward references an unknown Lockling.</p>;
   return (
-    <div className="rounded-2xl bg-white p-4">
-      <p className="text-lg font-bold">
-        {creature.emoji} {creature.name} · {creature.element} · {creature.rarity}
-      </p>
-      <p className="mt-2">{creature.description}</p>
-      <p className="mt-2 text-sm text-slate-600">
-        Default moves: {creature.defaultMoveIds.map((id) => MOVES[id]?.name ?? id).join(', ')}
-      </p>
-      <p className="mt-2 text-sm text-slate-600">Your Squad can hold up to {MAX_SQUAD_SIZE} Locklings.</p>
+    <div className="flex items-center gap-4 rounded-2xl bg-white p-4">
+      <CreatureSprite defId={creatureId} state="celebrate" showParticles />
+      <div>
+        <p className="text-lg font-bold">{creature.name} joined your Lockdex!</p>
+        <ElementBadge element={creature.element} size="sm" />
+        <p className="mt-1 text-sm capitalize text-slate-600">{creature.rarity}</p>
+        <p className="mt-2">{creature.description}</p>
+        <p className="mt-2 text-sm text-slate-600">
+          Default moves: {creature.defaultMoveIds.map((id) => MOVES[id]?.name ?? id).join(', ')}
+        </p>
+        <p className="mt-2 text-sm text-slate-600">Your Squad can hold up to {MAX_SQUAD_SIZE} Locklings.</p>
+      </div>
     </div>
   );
+}
+
+function RewardSummary({ content }: { content: LockboxContent }) {
+  if (content.kind === 'creature') {
+    return <span className="text-center text-sm">{CREATURES[content.creatureId]?.name ?? 'Unknown Lockling'}</span>;
+  }
+  if (content.kind === 'move') {
+    return <span className="text-center text-sm">{MOVES[content.moveId]?.name ?? 'Unknown Move Scroll'}</span>;
+  }
+  return <span className="text-center text-sm">Spark Pouch: {content.amount} FP</span>;
 }
