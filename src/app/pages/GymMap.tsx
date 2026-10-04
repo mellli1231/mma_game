@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GYMS } from '@/data/gyms';
 import { CREATURES } from '@/data/creatures';
 import { useGameState } from '@/app/store';
+import { GYM_BACKGROUNDS } from '@/app/gymBackgrounds';
 
 export default function GymMap() {
   const state = useGameState();
@@ -76,9 +77,19 @@ export default function GymMap() {
                   : `focu-card ${selectedLevel === gym.level ? 'creature-card--selected bg-lavender' : cleared ? 'bg-mint-pale' : 'bg-sunshine'}`
               }`}
             >
-              <span>
-                <span className="block text-xs font-extrabold uppercase tracking-wide text-muted">Gym {gym.level}</span>
-                <span className="block font-display text-lg font-bold">{gym.name}</span>
+              <span className="flex items-center gap-4">
+                {GYM_BACKGROUNDS[gym.level] && (
+                  <img
+                    src={GYM_BACKGROUNDS[gym.level].src}
+                    alt=""
+                    className={`aspect-video w-28 shrink-0 rounded-xl border-[2.5px] border-ink object-cover ${locked ? 'opacity-50 grayscale' : ''}`}
+                    style={{ objectPosition: GYM_BACKGROUNDS[gym.level].position }}
+                  />
+                )}
+                <span>
+                  <span className="block text-xs font-extrabold uppercase tracking-wide text-muted">Gym {gym.level}</span>
+                  <span className="block font-display text-lg font-bold">{gym.name}</span>
+                </span>
               </span>
               <span aria-label={locked ? 'Locked' : cleared ? 'Cleared' : 'Current gym'}>
                 {locked ? '🔒' : cleared ? '✓' : '★'}
