@@ -146,13 +146,19 @@ export default function Dojo() {
                             <p className="mt-1 text-sm text-muted">{item.move.effect === 'attack' ? 'Attack' : 'Heal'} · Power {item.move.power}{item.move.effect === 'heal' && item.move.usesPerBattle != null ? ` · ${item.move.usesPerBattle} uses per battle` : ''}</p>
                             <p className="mt-1 text-sm">{item.move.description}</p>
                           </div>
-                          <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-                            <span className="font-display text-lg text-fp-gold-ink">{item.free ? 'Free' : `${item.price} FP`}</span>
-                            {need > 0 && !item.free ? <span className="w-full text-sm font-bold text-danger sm:w-auto">Need {need} more FP</span> : null}
-                            {need > 0 && !item.free ? <Link to="/adventure/setup" className="text-sm font-bold text-primary underline">Earn FP on an Adventure</Link> : null}
-                            <button type="button" disabled={!item.affordable || saving} onClick={() => void teach(item)} className="focu-btn focu-btn--primary !min-h-[44px] !px-5 !text-lg">
-                              {item.free ? 'Teach free' : 'Teach'}
-                            </button>
+                          <div className="flex flex-col items-start gap-2 sm:items-end">
+                            <div className="flex items-center gap-3">
+                              <span className="font-display text-lg text-fp-gold-ink">{item.free ? 'Free' : `${item.price} FP`}</span>
+                              <button type="button" disabled={!item.affordable || saving} onClick={() => void teach(item)} className="focu-btn focu-btn--primary !min-h-[44px] !px-5 !text-lg">
+                                {item.free ? 'Teach free' : 'Teach'}
+                              </button>
+                            </div>
+                            {need > 0 && !item.free ? (
+                              <>
+                                <span className="text-sm font-bold text-danger">Need {need} more FP</span>
+                                <Link to="/adventure/setup" className="inline-flex min-h-[40px] items-center rounded-full border-2 border-ink/30 bg-white/60 px-4 text-sm font-bold text-soft hover:border-ink/60 hover:bg-white">Earn FP on an Adventure</Link>
+                              </>
+                            ) : null}
                           </div>
                         </article>
                       )
