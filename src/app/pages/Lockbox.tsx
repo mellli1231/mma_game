@@ -28,14 +28,14 @@ export default function Lockbox() {
     };
   }, []);
 
-  if (!state) return <main className="p-6">Loading your Lockbox...</main>;
+  if (!state) return <main className="focu-card m-6 p-6">Loading your Lockbox...</main>;
   const pending = state.pendingReward;
 
   if (!pending) {
     return (
-      <main className="mx-auto max-w-2xl space-y-4 p-6">
-        <h1 className="text-2xl font-bold">No Lockbox waiting</h1>
-        <Link className="underline" to="/gyms">Return to the Gym Map</Link>
+      <main className="focu-card mx-auto my-6 max-w-2xl space-y-4 p-6">
+        <h1 className="focu-title !text-3xl">No Lockbox waiting</h1>
+        <Link className="font-bold text-primary underline" to="/gyms">Return to the Gym Map</Link>
       </main>
     );
   }
@@ -112,17 +112,17 @@ export default function Lockbox() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-6 p-6 text-slate-900">
+    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-6 p-6 text-ink">
       <header className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">Gym {activeReward.gymLevel} cleared</p>
-          <h1 className="text-3xl font-bold">Choose a Lockbox</h1>
+        <div className="focu-panel px-5 py-2">
+          <p className="text-sm font-extrabold uppercase tracking-wide text-muted">Gym {activeReward.gymLevel} cleared</p>
+          <h1 className="focu-title">Choose a Lockbox</h1>
         </div>
       </header>
 
       {chosenIndex === null ? (
         <>
-          <p>Choose one box to reveal its reward. It will be applied once when revealed.</p>
+          <p className="focu-card p-4">Choose one box to reveal its reward. It will be applied once when revealed.</p>
           <fieldset disabled={busy} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {activeReward.boxes.map((_, index) => (
               <div key={index} className="flex flex-col items-center gap-2">
@@ -140,7 +140,7 @@ export default function Lockbox() {
           </fieldset>
         </>
       ) : (
-        <section className="space-y-5 rounded-3xl border border-amber-200 bg-amber-50 p-6" aria-live="polite">
+        <section className="focu-card space-y-5 bg-points p-6" aria-live="polite">
           <fieldset disabled className="grid grid-cols-3 gap-4">
             {activeReward.boxes.map((content, index) => (
               <div key={index} className="flex flex-col items-center gap-2">
@@ -167,7 +167,7 @@ export default function Lockbox() {
               {state.creatures.length === 0 ? (
                 <p>No owned Lockling can learn this move yet. The Scroll is saved for later.</p>
               ) : (
-                <div className="grid gap-4 rounded-2xl bg-white p-4 md:grid-cols-2">
+                <div className="grid gap-4 rounded-2xl border-[2.5px] border-ink bg-paper p-4 md:grid-cols-2">
                   <label className="space-y-1">
                     <span className="block font-semibold">Teach to</span>
                     <select
@@ -177,7 +177,7 @@ export default function Lockbox() {
                         setSelectedUid(event.target.value);
                         setForgetMoveId('');
                       }}
-                      className="w-full rounded-lg border px-3 py-2"
+                      className="focu-input w-full"
                     >
                       <option value="">Choose a Lockling</option>
                       {state.creatures.filter((creature) =>
@@ -197,7 +197,7 @@ export default function Lockbox() {
                         value={forgetMoveId}
                         disabled={busy}
                         onChange={(event) => setForgetMoveId(event.target.value)}
-                        className="w-full rounded-lg border px-3 py-2"
+                        className="focu-input w-full"
                       >
                         <option value="">Choose a move</option>
                         {forgetOptions.map((moveId) => (
@@ -217,7 +217,7 @@ export default function Lockbox() {
                     || (selectedCreature.moveIds.length === 4 && !forgetMoveId)
                   }
                   onClick={() => void teachMoveNow()}
-                  className="rounded-xl bg-indigo-600 px-5 py-3 font-bold text-white disabled:opacity-40"
+                  className="focu-btn focu-btn--primary"
                 >
                   Teach now
                 </button>
@@ -225,7 +225,7 @@ export default function Lockbox() {
                   type="button"
                   disabled={busy}
                   onClick={() => void saveMoveForLater()}
-                  className="rounded-xl border bg-white px-5 py-3 font-bold disabled:opacity-40"
+                  className="focu-btn focu-btn--secondary"
                 >
                   Save for later
                 </button>
@@ -233,19 +233,19 @@ export default function Lockbox() {
             </div>
           )}
 
-          {message && <p role="status" className="font-semibold text-indigo-800">{message}</p>}
+          {message && <p role="status" className="font-semibold text-primary">{message}</p>}
           <button
             type="button"
             disabled={busy || !activeReward.applied}
             onClick={() => void continueAfterReward()}
-            className="rounded-xl bg-amber-700 px-5 py-3 font-bold text-white disabled:opacity-40"
+            className="focu-btn focu-btn--primary"
           >
             Continue
           </button>
         </section>
       )}
       {message && chosenIndex === null && (
-        <p role="alert" className="rounded-xl bg-rose-50 p-3 text-rose-800">{message}</p>
+        <p role="alert" className="focu-card p-3 font-bold text-danger">{message}</p>
       )}
     </main>
   );
@@ -255,17 +255,17 @@ function CreatureReward({ creatureId }: { creatureId: string }) {
   const creature = CREATURES[creatureId];
   if (!creature) return <p role="alert">This reward references an unknown Lockling.</p>;
   return (
-    <div className="flex items-center gap-4 rounded-2xl bg-white p-4">
+    <div className="flex items-center gap-4 rounded-2xl border-[2.5px] border-ink bg-paper p-4">
       <CreatureSprite defId={creatureId} state="celebrate" showParticles />
       <div>
         <p className="text-lg font-bold">{creature.name} joined your Lockdex!</p>
         <ElementBadge element={creature.element} size="sm" />
-        <p className="mt-1 text-sm capitalize text-slate-600">{creature.rarity}</p>
+        <p className="mt-1 text-sm capitalize text-soft">{creature.rarity}</p>
         <p className="mt-2">{creature.description}</p>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-soft">
           Default moves: {creature.defaultMoveIds.map((id) => MOVES[id]?.name ?? id).join(', ')}
         </p>
-        <p className="mt-2 text-sm text-slate-600">Your Squad can hold up to {MAX_SQUAD_SIZE} Locklings.</p>
+        <p className="mt-2 text-sm text-soft">Your Squad can hold up to {MAX_SQUAD_SIZE} Locklings.</p>
       </div>
     </div>
   );
