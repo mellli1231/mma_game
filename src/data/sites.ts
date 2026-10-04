@@ -33,7 +33,7 @@ export const SITES: Record<string, SiteDef> = {
   disneyplus: { id: 'disneyplus', name: 'Disney+', categoryId: 'video', domains: ['disneyplus.com'], emoji: '✨' },
   primevideo: { id: 'primevideo', name: 'Prime Video', categoryId: 'video', domains: ['primevideo.com'], emoji: '📺' },
   crunchyroll: { id: 'crunchyroll', name: 'Crunchyroll', categoryId: 'video', domains: ['crunchyroll.com'], emoji: '🍙' },
-  steam: { id: 'steam', name: 'Steam', categoryId: 'gaming', domains: ['steampowered.com', 'steamcommunity.com'], excludedDomains: ['aws.amazon.com'], emoji: '🎮' },
+  steam: { id: 'steam', name: 'Steam', categoryId: 'gaming', domains: ['steampowered.com', 'steamcommunity.com'], emoji: '🎮' },
   roblox: { id: 'roblox', name: 'Roblox', categoryId: 'gaming', domains: ['roblox.com'], emoji: '🧱' },
   chess: { id: 'chess', name: 'Chess.com', categoryId: 'gaming', domains: ['chess.com'], emoji: '♟️' },
   lichess: { id: 'lichess', name: 'Lichess', categoryId: 'gaming', domains: ['lichess.org'], emoji: '♞' },
