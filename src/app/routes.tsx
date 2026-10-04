@@ -1,4 +1,6 @@
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { useGameState } from './store'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import AdventureSetup from './pages/AdventureSetup'
@@ -14,10 +16,27 @@ import Settings from './pages/Settings'
 import Dev from './pages/Dev'
 import Gallery from './pages/Gallery'
 
-// TODO (A4): route guards (ONB-01, RUN-06, locked during Adventure, pendingReward) go here.
+// Dev tools stay reachable before onboarding so a fixture can be loaded from a fresh save.
+const ONBOARDING_EXEMPT = ['/dev', '/gallery']
+
+/** ONB-01. Only rendered once state has loaded (App shows a loading view until then). */
+function OnboardingGuard({ children }: { children: ReactNode }) {
+  const state = useGameState()
+  const { pathname } = useLocation()
+  if (!state) return null
+  const onOnboarding = pathname === '/onboarding'
+  if (!state.onboarded && !onOnboarding && !ONBOARDING_EXEMPT.includes(pathname)) {
+    return <Navigate to="/onboarding" replace />
+  }
+  if (state.onboarded && onOnboarding) return <Navigate to="/" replace />
+  return <>{children}</>
+}
+
+// TODO (A4): remaining guards (RUN-06, locked during Adventure, pendingReward) go here.
 export default function AppRoutes() {
   return (
     <HashRouter>
+      <OnboardingGuard>
       <Routes>
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/" element={<Home />} />
@@ -35,6 +54,7 @@ export default function AppRoutes() {
         <Route path="/dev" element={<Dev />} />
         <Route path="/gallery" element={<Gallery />} />
       </Routes>
+      </OnboardingGuard>
     </HashRouter>
   )
 }

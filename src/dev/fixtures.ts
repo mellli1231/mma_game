@@ -1,10 +1,9 @@
-import {
-  CREATURE_DEFAULT_MOVES, DEFAULT_STATE,
-  type FixtureId, type GameState, type OwnedCreature,
-} from './stubTypes'
+import { CREATURES } from '@/data/creatures'
+import { DEFAULT_STATE } from '@/platform/defaultState'
+import type { FixtureId, GameState, OwnedCreature } from '@/types'
 
 const creature = (defId: string): OwnedCreature => ({
-  uid: `u_${defId}`, defId, moveIds: [...CREATURE_DEFAULT_MOVES[defId]], obtainedAt: 0,
+  uid: `u_${defId}`, defId, moveIds: [...CREATURES[defId].defaultMoveIds], obtainedAt: 0,
 })
 
 function base(defIds: string[], squad: string[], fp: number, gym: number, demoMode: boolean): GameState {
@@ -26,7 +25,7 @@ export const FIXTURES: Record<FixtureId, () => GameState> = {
   fresh: () => structuredClone(DEFAULT_STATE),
   mid,
   rich: () => ({
-    ...base(Object.keys(CREATURE_DEFAULT_MOVES), ['embrit', 'puddlo', 'sproutle'], 5000, 3, true),
+    ...base(Object.keys(CREATURES), ['embrit', 'puddlo', 'sproutle'], 5000, 3, true),
     moveScrolls: ['fire_blaze_burst'],
   }),
   battleReady: () => base(['embrit', 'tidepup', 'mossling'], ['embrit', 'tidepup', 'mossling'], 600, 1, true),

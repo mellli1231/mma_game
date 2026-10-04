@@ -1,4 +1,5 @@
-import type { FocusSession, GameState } from '@/dev/stubTypes'
+import type { FocusSession, GameState } from '@/types'
+import { extensionPlatform } from './extensionPlatform'
 import { webPlatform } from './webPlatform'
 
 export interface StartSessionInput { durationMin: number; siteIds: string[]; customDomains: string[] }
@@ -16,5 +17,4 @@ export interface Platform {
 
 export const isExtensionContext = typeof chrome !== 'undefined' && !!chrome.runtime?.id
 
-// TODO (A2): pick extensionPlatform when isExtensionContext. Until then both use webPlatform.
-export const platform: Platform = webPlatform
+export const platform: Platform = isExtensionContext ? extensionPlatform : webPlatform
