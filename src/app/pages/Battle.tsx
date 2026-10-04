@@ -336,14 +336,14 @@ export default function Battle() {
       )}
 
       <section className="grid gap-4 md:grid-cols-2" aria-label="Battle teams">
-        <CreaturePanel label="Opponent" creature={enemy} facing="left" event={page.currentEvent} />
         <CreaturePanel
           label="Your active Lockling"
           creature={player}
-          facing="right"
+          facing="left"
           event={page.currentEvent}
           celebrating={activeBattle.phase === 'victory'}
         />
+        <CreaturePanel label="Opponent" creature={enemy} facing="right" event={page.currentEvent} />
       </section>
 
       <section className="min-h-24 rounded-2xl bg-slate-100 p-4" aria-live="polite" aria-label="Battle log">
