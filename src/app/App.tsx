@@ -1,3 +1,8 @@
+import AppRoutes from './routes'
+import { useGameState } from './store'
+
 export default function App() {
-  return <h1>Locklings</h1>
+  const state = useGameState()
+  if (!state) return null
+  return <AppRoutes />
 }
