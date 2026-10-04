@@ -52,21 +52,27 @@ function putPlayerTurn(battle: BattleState): BattleState {
 }
 
 describe('battle math and setup', () => {
-  it('creates a battle from the squad and resolves the Gym 1 starter mirror', () => {
-    const battle = createBattle(battleState('puddlo'), 1, false);
-    expect(battle.phase).toBe('intro');
-    expect(battle.player.team).toHaveLength(1);
-    expect(battle.player.team[0]).toMatchObject({
-      defId: 'puddlo',
-      hp: 100,
-      moveIds: CREATURES.puddlo.defaultMoveIds,
-    });
-    expect(battle.enemy.team[0]).toMatchObject({
-      defId: 'tidepup',
-      element: 'water',
-      moveIds: ['water_drip'],
-    });
-  });
+  it.each([
+    ['embrit', 'cindercub', 'fire_spark'],
+    ['puddlo', 'tidepup', 'water_drip'],
+    ['sproutle', 'mossling', 'grass_seed_toss'],
+  ] as const)(
+    'creates the Gym 1 mirror for starter %s',
+    (starterId, enemyDefId, enemyMoveId) => {
+      const battle = createBattle(battleState(starterId), 1, false);
+      expect(battle.phase).toBe('intro');
+      expect(battle.player.team).toHaveLength(1);
+      expect(battle.player.team[0]).toMatchObject({
+        defId: starterId,
+        hp: 100,
+        moveIds: CREATURES[starterId].defaultMoveIds,
+      });
+      expect(battle.enemy.team[0]).toMatchObject({
+        defId: enemyDefId,
+        moveIds: [enemyMoveId],
+      });
+    },
+  );
 
   it('sets heal uses for each heal move and validates battle setup', () => {
     const state = battleState('embrit');
@@ -142,6 +148,7 @@ describe('player battle actions', () => {
     };
     const victory = applyPlayerAction(almostWon, { type: 'move', moveId: 'fire_flame_lash' }, () => 0.3);
     expect(victory.battle).toMatchObject({ phase: 'victory', winner: 'player' });
+    expect(victory.battle.enemy.team[0]?.hp).toBe(0);
   });
 
   it('uses heal uses even when the heal misses and supports voluntary switching', () => {
