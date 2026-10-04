@@ -1,4 +1,4 @@
-import type { ElementType } from './stubTypes'
+import type { ElementType } from '@/types'
 
 const LABEL: Record<ElementType, { icon: string; text: string; className: string }> = {
   fire: { icon: '🔥', text: 'Fire', className: 'bg-fire text-white' },

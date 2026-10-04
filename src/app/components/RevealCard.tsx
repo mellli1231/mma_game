@@ -1,4 +1,4 @@
-import type { LockboxContent } from './stubTypes'
+import type { LockboxContent } from '@/types'
 
 interface RevealCardProps {
   content: LockboxContent

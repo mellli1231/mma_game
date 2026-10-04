@@ -1,4 +1,4 @@
-import type { MoveDef } from './stubTypes'
+import type { MoveDef } from '@/types'
 
 interface MoveButtonProps {
   move: MoveDef

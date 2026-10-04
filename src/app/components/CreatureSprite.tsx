@@ -1,4 +1,4 @@
-import type { SpriteState } from './stubTypes'
+import type { SpriteState } from '@/types'
 
 interface CreatureSpriteProps {
   defId: string

@@ -1,4 +1,4 @@
-import type { FpBreakdown } from './stubTypes'
+import type { FpBreakdown } from '@/types'
 
 interface PointsPreviewProps {
   breakdown: FpBreakdown
