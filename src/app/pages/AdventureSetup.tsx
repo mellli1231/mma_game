@@ -114,15 +114,15 @@ export default function AdventureSetup() {
 
   return (
     <main className="mx-auto max-w-5xl p-4 pb-80 lg:pb-4">
-      <header className="mb-4 flex items-center justify-between">
-        <h1 className="font-display text-3xl">Plan your Adventure</h1>
-        <Link to="/" className="flex min-h-tap items-center text-primary underline">Back</Link>
+      <header className="mb-4 flex items-center justify-between gap-3">
+        <h1 className="focu-title focu-panel px-5 py-1">Plan your Adventure</h1>
+        <Link to="/" className="focu-pill text-primary underline">Back</Link>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="space-y-6">
-          <section className="rounded-card bg-surface p-4 shadow-card">
-            <h2 className="mb-3 font-display text-xl">How long?</h2>
+          <section className="focu-card p-5">
+            <h2 className="focu-tag mb-3 bg-lavender">How long?</h2>
             <div className="flex flex-wrap gap-2">
               {PRESETS.map(p => (
                 <button
@@ -130,7 +130,7 @@ export default function AdventureSetup() {
                   type="button"
                   aria-pressed={minutes === p}
                   onClick={() => setMinutes(p)}
-                  className={`min-h-tap rounded-pill px-4 font-display ${minutes === p ? 'bg-primary text-white' : 'bg-ring-track text-ink'}`}
+                  className="focu-chip"
                 >
                   {p} min
                 </button>
@@ -149,29 +149,29 @@ export default function AdventureSetup() {
               value={minutes}
               onChange={e => setMinutes(Number(e.target.value))}
             />
-            <span className="mt-2 inline-block rounded-pill bg-ring-track px-3 py-1 font-display text-primary">
+            <span className="focu-badge focu-badge--grass mt-2">
               {tier} · {breakdown.rate} FP/min
             </span>
           </section>
 
           <section className="space-y-3">
-            <h2 className="font-display text-xl">What to block?</h2>
+            <h2 className="focu-tag bg-fire">What to block?</h2>
             {SITE_CATEGORIES.map((category, index) => {
               const sites = Object.values(SITES).filter(s => s.categoryId === category.id)
               const count = sites.filter(s => siteIds.includes(s.id)).length
               const active = count >= category.threshold
               const fill = Math.min(1, count / category.threshold)
               return (
-                <details key={category.id} open={index === 0} className="rounded-card bg-surface p-4 shadow-card">
+                <details key={category.id} open={index === 0} className="focu-card p-5">
                   <summary className="flex min-h-tap cursor-pointer flex-wrap items-center gap-2">
                     <span aria-hidden="true">{category.icon}</span>
-                    <span className="font-display">{category.name}</span>
+                    <span className="font-display font-semibold">{category.name}</span>
                     <span className="text-sm text-muted">
                       {formatMultiplier(category.multiplier)} · {count}/{category.threshold} selected
                     </span>
-                    <span className="h-2 w-20 overflow-hidden rounded-pill bg-ring-track" aria-hidden="true">
+                    <span className="h-3 w-20 overflow-hidden rounded-pill border-2 border-ink bg-mint-pale" aria-hidden="true">
                       <span
-                        className={`block h-full origin-left rounded-pill transition-transform duration-short ease-airy motion-reduce:transition-none ${active ? 'bg-fp-gold' : 'bg-primary'}`}
+                        className={`block h-full origin-left rounded-pill transition-transform duration-short ease-airy motion-reduce:transition-none ${active ? 'bg-sunshine-deep' : 'bg-primary'}`}
                         style={{ transform: `scaleX(${fill})`, width: '100%' }}
                       />
                     </span>
@@ -185,7 +185,7 @@ export default function AdventureSetup() {
                           type="button"
                           aria-pressed={on}
                           onClick={() => toggleSite(site.id)}
-                          className={`min-h-tap rounded-pill px-3 ${on ? 'bg-primary text-white' : 'bg-ring-track text-ink'}`}
+                          className="focu-chip"
                         >
                           {site.emoji} {site.name}
                         </button>
@@ -204,8 +204,8 @@ export default function AdventureSetup() {
             })}
           </section>
 
-          <section className="rounded-card bg-surface p-4 shadow-card">
-            <h2 className="mb-1 font-display text-xl">Other sites</h2>
+          <section className="focu-card p-5">
+            <h2 className="focu-tag mb-2 bg-water">Other sites</h2>
             <p className="mb-3 text-sm text-muted">
               Custom sites are blocked too, but never count toward a bonus. Up to {MAX_CUSTOM_DOMAINS}.
             </p>
@@ -221,9 +221,9 @@ export default function AdventureSetup() {
                 onChange={e => setDomainInput(e.target.value)}
                 placeholder="example.com"
                 aria-label="Custom site"
-                className="min-h-tap flex-1 rounded-card border border-ink/20 px-3"
+                className="focu-input flex-1"
               />
-              <button type="submit" className="min-h-tap rounded-card bg-primary px-4 font-display text-white">Add</button>
+              <button type="submit" className="focu-btn focu-btn--primary !min-h-[44px] !px-5 !text-lg">Add</button>
             </form>
             {domainError && <p role="alert" className="mt-2 text-sm text-danger">{domainError}</p>}
             {customDomains.length > 0 && (
@@ -234,7 +234,7 @@ export default function AdventureSetup() {
                       type="button"
                       aria-label={`Remove ${d}`}
                       onClick={() => setCustomDomains(list => list.filter(x => x !== d))}
-                      className="min-h-tap rounded-pill bg-primary px-3 text-white"
+                      className="focu-chip"
                     >
                       {d} ✕
                     </button>
@@ -245,14 +245,14 @@ export default function AdventureSetup() {
           </section>
         </div>
 
-        <aside className="fixed inset-x-0 bottom-0 z-10 max-h-[45vh] space-y-3 overflow-y-auto bg-bg p-3 shadow-card lg:sticky lg:top-4 lg:max-h-none lg:self-start lg:overflow-visible lg:bg-transparent lg:p-0 lg:shadow-none">
+        <aside className="fixed inset-x-0 bottom-0 z-10 max-h-[45vh] space-y-3 overflow-y-auto border-t-[2.5px] border-ink bg-paper p-3 lg:sticky lg:top-4 lg:max-h-none lg:self-start lg:overflow-visible lg:border-t-0 lg:bg-transparent lg:p-0">
           <PointsPreview breakdown={breakdown} nudges={nudges} />
           {startError && <p role="alert" className="text-sm text-danger">{startError}</p>}
           <button
             type="button"
             disabled={!canStart}
             onClick={() => setConfirmOpen(true)}
-            className="min-h-tap w-full rounded-card bg-primary px-4 py-3 font-display text-xl text-white disabled:opacity-50"
+            className="focu-btn focu-btn--primary w-full"
           >
             Start Adventure
           </button>
@@ -265,10 +265,10 @@ export default function AdventureSetup() {
         onClose={() => setConfirmOpen(false)}
         actions={
           <>
-            <button type="button" disabled={busy} onClick={() => setConfirmOpen(false)} className="min-h-tap px-4 text-primary underline">
+            <button type="button" disabled={busy} onClick={() => setConfirmOpen(false)} className="min-h-tap px-4 font-display font-semibold text-primary underline">
               Back
             </button>
-            <button type="button" disabled={busy} onClick={lockIn} className="min-h-tap rounded-card bg-primary px-5 font-display text-white">
+            <button type="button" disabled={busy} onClick={lockIn} className="focu-btn focu-btn--primary">
               Lock in!
             </button>
           </>
@@ -277,7 +277,7 @@ export default function AdventureSetup() {
         <p>
           {minutes} min · {blockedCount} {blockedCount === 1 ? 'site' : 'sites'} blocked
         </p>
-        <p className="my-2 font-display text-2xl text-fp-gold">{breakdown.projectedFp} FP</p>
+        <p className="my-2 font-display text-2xl font-bold text-ink">{breakdown.projectedFp} FP</p>
         <p className="text-sm text-muted">Leaving the trail early forfeits this Adventure’s FP.</p>
       </Modal>
     </main>
