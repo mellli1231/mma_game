@@ -51,6 +51,30 @@ describe('Lockbox rolling', () => {
         : reward.kind === 'move' ? `move:${reward.moveId}`
           : 'fp');
     expect(new Set(identities).size).toBe(3);
+    expect(rewards.every((reward) => reward.kind === 'creature')).toBe(true);
+    expect(rewards).not.toContainEqual({ kind: 'creature', creatureId: 'embrit' });
+  });
+
+  it('excludes owned moves, held scrolls, and elements with no owned creature', () => {
+    const base = completeOnboarding(freshState(), 'Trainer', 'embrit');
+    const state: GameState = {
+      ...base,
+      creatures: [{
+        ...base.creatures[0]!,
+        moveIds: [...base.creatures[0]!.moveIds, 'fire_blaze_burst'],
+      }],
+      moveScrolls: ['fire_kindle'],
+    };
+
+    const rewards = rollLockboxes(state, rngValues(0.99, 0, 0.99, 0, 0.99));
+
+    expect(rewards).toEqual([
+      { kind: 'move', moveId: 'fire_phoenix_rest' },
+      { kind: 'move', moveId: 'fire_inferno' },
+      { kind: 'fp', amount: 250 },
+    ]);
+    expect(rewards.filter((reward) => reward.kind === 'move')
+      .every((reward) => reward.moveId.startsWith('fire_'))).toBe(true);
   });
 
   it('falls back to a Spark Pouch when the requested pool is empty', () => {

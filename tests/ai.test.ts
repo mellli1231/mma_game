@@ -107,6 +107,39 @@ describe('enemy AI', () => {
     });
   });
 
+  it.each([
+    { hp: 35, expectedMoveId: 'fire_phoenix_rest', expectedTargetIndex: 1 },
+    { hp: 36, expectedMoveId: 'fire_blaze_burst', expectedTargetIndex: 0 },
+  ])('uses the healing threshold at $hp HP when a heal use remains', ({
+    hp,
+    expectedMoveId,
+    expectedTargetIndex,
+  }) => {
+    const battle = createBattle(stateFor('embrit'), 5, false);
+    const enemy = battle.enemy.team[0]!;
+    const configured: BattleState = {
+      ...battle,
+      enemy: {
+        ...battle.enemy,
+        team: [
+          {
+            ...enemy,
+            moveIds: ['fire_blaze_burst', 'fire_phoenix_rest'],
+            healUsesLeft: { fire_phoenix_rest: 2 },
+          },
+          { ...battle.enemy.team[1]!, hp },
+          battle.enemy.team[2]!,
+        ],
+      },
+    };
+
+    expect(chooseEnemyAction(configured, GYMS[5]!, () => 0.99)).toEqual({
+      kind: 'move',
+      moveId: expectedMoveId,
+      targetIndex: expectedTargetIndex,
+    });
+  });
+
   it('does not heal above the threshold or when the heal has no uses left', () => {
     const battle = createBattle(stateFor('embrit'), 5, false);
     const enemy = battle.enemy.team[0]!;
