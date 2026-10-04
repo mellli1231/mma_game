@@ -4,6 +4,7 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import { useGameState } from './store'
 import { ease } from './motion'
 import { sessionRedirect } from './sessionRoutes'
+import AppShell from './AppShell'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import AdventureSetup from './pages/AdventureSetup'
@@ -42,6 +43,7 @@ export default function AppRoutes() {
   return (
     <HashRouter>
       <OnboardingGuard>
+        <AppShell />
         <AnimatedRoutes />
       </OnboardingGuard>
     </HashRouter>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BrandLockup from '@/app/BrandLockup'
 import { CreatureSprite, ElementBadge, useToast } from '@/app/components'
 import { STARTER_IDS, WELCOME_FP } from '@/data/config'
 import { CREATURES } from '@/data/creatures'
@@ -35,8 +36,7 @@ export default function Onboarding() {
   if (step === 'welcome') {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
-        <h1 className="font-display text-5xl text-primary">Locklings</h1>
-        <p className="text-lg text-muted">Lock in. Level up.</p>
+        <BrandLockup size="lg" />
         <div className="flex gap-4 text-5xl" aria-hidden="true">
           {STARTER_IDS.map(id => <span key={id}>{CREATURES[id].emoji}</span>)}
         </div>
