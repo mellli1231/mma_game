@@ -10,6 +10,8 @@ Entry format: `- [hour] Task card | what was built | requirement IDs | left to d
 
 ## Person B (Engine and Battle)
 
+- [h0] B1 | Created the frozen game type model and the initial engine data catalog: `src/types.ts`, `src/data/config.ts`, `src/data/moves.ts`, `src/data/creatures.ts`, `src/data/gyms.ts`, and `src/data/sites.ts`; added `tests/engine-data.test.ts` to lock the move, creature, gym, and category counts and confirm default moves match each creature's element | M1 | Continue with `points.ts`, `typeChart.ts`, and the first battle tests | Decisions: B is implementing the fixed catalog directly from SPEC Sections 7 and 8, with no UI assumptions and no magic-number leakage into components.
+
 ## Person C (Design and Collection)
 
 ## Sync log (merge captain only)
