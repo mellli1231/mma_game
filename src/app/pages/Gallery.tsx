@@ -4,6 +4,7 @@ import type { SpriteState } from '@/types'
 import { CREATURE_LIST } from '@/data/creatures'
 import { MOVES } from '@/data/moves'
 import { GYM_BACKGROUNDS } from '@/app/gymBackgrounds'
+import { playSfx, type SfxName } from '@/app/sfx'
 import {
   Confetti,
   CreatureCard,
@@ -37,6 +38,13 @@ const BREAKDOWN = {
   capped: true,
   projectedFp: 300,
 }
+
+const SFX_BUTTONS: Array<[SfxName, string]> = [
+  ['attack', 'Attack'],
+  ['healing', 'Healing'],
+  ['miss', 'Miss'],
+  ['win', 'Win'],
+]
 
 const GYM_BACKGROUND_LABELS = [
   'Gym 1: Ping Plaza',
@@ -156,6 +164,15 @@ export default function Gallery() {
           <div className="focu-home-card focu-home-card--adventure"><span className="focu-home-card__title">Adventure</span><span className="focu-home-card__sub">Focus to earn FP</span></div>
           <div className="focu-home-card focu-home-card--battle"><span className="focu-home-card__title">Battle</span><span className="focu-home-card__sub">Challenge a gym</span></div>
           <div className="focu-home-card focu-home-card--training"><span className="focu-home-card__title">Training</span><span className="focu-home-card__sub">Learn new moves</span></div>
+        </div>
+      </section>
+
+      <section className="focu-card p-6" aria-labelledby="sfx-title">
+        <h2 id="sfx-title" className="focu-tag mb-4">Sound effects</h2>
+        <div className="flex flex-wrap gap-3">
+          {SFX_BUTTONS.map(([name, label]) => (
+            <button key={name} type="button" className="focu-chip" onClick={() => playSfx(name)}>{label}</button>
+          ))}
         </div>
       </section>
 

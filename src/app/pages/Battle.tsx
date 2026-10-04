@@ -15,6 +15,7 @@ import {
   VictoryStamp,
 } from '@/app/components';
 import { useGameState } from '@/app/store';
+import { playSfxForEvent } from '@/app/sfx';
 import { applyEnemyTurn, applyForcedSwitch, applyPlayerAction, createBattle } from '@/engine/battle';
 import { defaultRng } from '@/engine/rng';
 import { clearGym, recordBattleLoss } from '@/engine/rewards';
@@ -242,6 +243,7 @@ export default function Battle() {
       await delay(600);
       if (!aliveRun.current) return;
       dispatch({ type: 'show-event', event });
+      playSfxForEvent(event);
     }
     if (aliveRun.current) dispatch({ type: 'events-finished' });
   }

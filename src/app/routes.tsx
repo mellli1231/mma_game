@@ -7,6 +7,7 @@ import { ease } from './motion'
 import { sessionRedirect } from './sessionRoutes'
 import AppShell from './AppShell'
 import SceneBackground from './SceneBackground'
+import SfxSync from './SfxSync'
 import { getGymBackground } from './gymBackgrounds'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
@@ -82,6 +83,7 @@ export default function AppRoutes() {
   return (
     <HashRouter>
       <OnboardingGuard>
+        <SfxSync />
         <SceneLayer />
         <AppShell />
         <AnimatedRoutes />

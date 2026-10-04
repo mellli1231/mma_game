@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Modal } from '@/app/components'
 import { useGameState } from '@/app/store'
+import { playSfx } from '@/app/sfx'
 import { DEFAULT_STATE } from '@/platform/defaultState'
 import { platform } from '@/platform/platform'
 
@@ -19,6 +20,11 @@ export default function Settings() {
   // SET-01 / E21: Demo Mode cannot change during an Adventure.
   const toggleDemo = () =>
     platform.updateState(s => (s.activeSession ? s : { ...s, settings: { ...s.settings, demoMode: !s.settings.demoMode } }))
+
+  // A missing value counts as on, same as SfxSync.
+  const soundOn = state.settings.sound !== false
+  const toggleSound = () =>
+    platform.updateState(s => ({ ...s, settings: { ...s.settings, sound: s.settings.sound === false } }))
 
   // SET-03: end any session first (the background clears block rules), then wipe the save.
   // The onboarding guard then sends the player back to the welcome screen.
@@ -61,6 +67,30 @@ export default function Settings() {
             <Link to="/dev" className="text-primary underline">Open the dev panel</Link>
           </p>
         )}
+      </section>
+
+      <section className="focu-card p-5">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h2 className="font-display text-xl">Sound effects</h2>
+            <p className="text-sm text-muted">Hear attacks, heals and victory jingles in battle.</p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={soundOn}
+            aria-label="Sound effects"
+            onClick={toggleSound}
+            className="focu-chip min-h-[44px] min-w-[44px]"
+          >
+            {soundOn ? 'On' : 'Off'}
+          </button>
+        </div>
+        <div className="mt-3">
+          <button type="button" disabled={!soundOn} onClick={() => playSfx('healing')} className="focu-chip">
+            Play test sound
+          </button>
+        </div>
       </section>
 
       <section className="focu-card p-5">
