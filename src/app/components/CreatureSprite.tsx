@@ -1,4 +1,5 @@
 import type { AnimationEvent, CSSProperties } from 'react'
+import { useReducedMotion } from 'framer-motion'
 import type { SpriteState } from '@/types'
 import { CREATURES } from '@/data/creatures'
 
@@ -37,6 +38,7 @@ export function CreatureSprite({
   showParticles = false,
   onAnimationEnd,
 }: CreatureSpriteProps) {
+  const reduceMotion = useReducedMotion()
   const creature = CREATURES[defId]
   const seed = uid ? hashUid(uid) : hashUid(defId)
   const particleGlyph = creature?.element === 'water' ? '◦' : creature?.element === 'grass' ? '🍃' : '✦'
@@ -52,7 +54,9 @@ export function CreatureSprite({
       attack: 'sprite-attack', hit: 'sprite-hit', miss: 'sprite-miss',
       heal: 'sprite-heal', zonedOut: 'sprite-zoned-out', celebrate: 'sprite-celebrate',
     }
-    if (expected[state] === event.animationName) onAnimationEnd?.()
+    if (expected[state] === event.animationName || (reduceMotion && expected[state] && event.animationName === 'reduced-opacity')) {
+      onAnimationEnd?.()
+    }
   }
 
   return (

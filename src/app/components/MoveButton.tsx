@@ -34,7 +34,7 @@ export function MoveButton({
       whileHover={disabled ? undefined : reduceMotion ? { opacity: 0.9 } : { y: -2, boxShadow: '0 8px 18px rgb(31 32 51 / 18%)' }}
       whileTap={disabled ? undefined : reduceMotion ? { opacity: 0.85 } : { scale: 0.96 }}
       transition={{ type: 'spring', stiffness: 320, damping: 14 }}
-      className={`min-h-tap rounded-card px-3 py-2 text-left text-white ${FILL[move.element]} ${
+      className={`min-h-tap rounded-card px-3 py-2 text-left text-ink ${FILL[move.element]} ${
         disabled ? 'opacity-50' : 'cursor-pointer'
       }`}
     >

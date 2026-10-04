@@ -1,9 +1,9 @@
 import type { ElementType } from '@/types'
 
 const LABEL: Record<ElementType, { icon: string; text: string; className: string }> = {
-  fire: { icon: '🔥', text: 'Fire', className: 'bg-fire text-white' },
-  water: { icon: '💧', text: 'Water', className: 'bg-water text-white' },
-  grass: { icon: '🌿', text: 'Grass', className: 'bg-grass text-white' },
+  fire: { icon: '🔥', text: 'Fire', className: 'bg-fire text-ink' },
+  water: { icon: '💧', text: 'Water', className: 'bg-water text-ink' },
+  grass: { icon: '🌿', text: 'Grass', className: 'bg-grass text-ink' },
 }
 
 interface ElementBadgeProps {
