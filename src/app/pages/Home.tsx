@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
-import { CreatureSprite, ElementBadge, FpBadge } from '@/app/components'
+import { CreatureSprite, ElementBadge, FpBadge, LockOverlay, TimerRing } from '@/app/components'
 import { useGameState } from '@/app/store'
 import { CREATURES } from '@/data/creatures'
 import { GYMS } from '@/data/gyms'
 
 // Demo Mode runs sessions at 60x (SPEC 6.12).
 const DEMO_BADGE = 'DEMO 60x'
+const LOCKED_TOOLTIP = 'Locked while you’re on an Adventure'
 
 export default function Home() {
   const state = useGameState()
@@ -57,13 +58,31 @@ export default function Home() {
       )}
 
       {session ? (
-        // TODO (A4): live countdown and locked Battle and Dojo cards (HOME-04).
-        <Link
-          to="/adventure"
-          className="block min-h-tap rounded-card bg-primary p-4 text-center font-display text-white shadow-card"
-        >
-          Adventure in progress. View Adventure
-        </Link>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-4 rounded-card bg-primary p-4 text-white shadow-card">
+            <div>
+              <div className="font-display text-xl">Adventure in progress</div>
+              <Link to="/adventure" className="flex min-h-tap items-center underline">View Adventure</Link>
+            </div>
+            <div className="rounded-full bg-surface">
+              <TimerRing startedAt={session.startedAt} endsAt={session.endsAt} size={96} />
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <LockOverlay locked reason={LOCKED_TOOLTIP}>
+              <div className="min-h-tap rounded-card bg-fire p-5 text-white shadow-card" title={LOCKED_TOOLTIP}>
+                <div className="font-display text-xl">Let’s Battle!</div>
+                <div className="text-sm opacity-90">{nextGym}</div>
+              </div>
+            </LockOverlay>
+            <LockOverlay locked reason={LOCKED_TOOLTIP}>
+              <div className="min-h-tap rounded-card bg-grass p-5 text-white shadow-card" title={LOCKED_TOOLTIP}>
+                <div className="font-display text-xl">Training Centre</div>
+                <div className="text-sm opacity-90">Teach new moves with FP</div>
+              </div>
+            </LockOverlay>
+          </div>
+        </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-3">
           <ActionCard to="/adventure/setup" title="Go on an Adventure!" subtitle="Block distractions, earn FP" className="bg-primary" />
