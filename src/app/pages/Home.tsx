@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-4">
-      <header className="flex flex-col items-end gap-3">
+      <header className="flex flex-wrap items-start justify-between gap-3">
         <BrandLockup size="sm" />
         <div className="flex flex-wrap items-center justify-end gap-3">
           {state.settings.demoMode && (
