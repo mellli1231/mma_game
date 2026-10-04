@@ -36,6 +36,30 @@
   --duration-long: 900ms;
 }
 
+@utility min-h-tap {
+  min-height: 44px;
+}
+
+@utility min-w-tap {
+  min-width: 44px;
+}
+
+@utility duration-micro {
+  transition-duration: 150ms;
+}
+
+@utility duration-short {
+  transition-duration: 300ms;
+}
+
+@utility duration-medium {
+  transition-duration: 500ms;
+}
+
+@utility duration-long {
+  transition-duration: 900ms;
+}
+
 @layer base {
   html,
   body,

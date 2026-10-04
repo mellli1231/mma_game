@@ -64,6 +64,14 @@ export default function Gallery() {
         <p className="mt-2 max-w-2xl text-muted">Browse every Lockling and component. Choose a creature state to preview its motion throughout the gallery.</p>
       </header>
 
+      <div className="rounded-card bg-primary p-4 font-display text-white shadow-card" aria-label="Tailwind token smoke check">
+        Tailwind token check: bg-primary · rounded-card
+      </div>
+      <div className="flex flex-wrap gap-2" aria-label="Tailwind utility smoke checks">
+        <span className="inline-flex min-h-tap min-w-tap items-center justify-center rounded-card bg-fire px-3 text-white transition-opacity duration-micro ease-airy">44px · 150ms</span>
+        <span className="inline-flex min-h-tap min-w-tap items-center justify-center rounded-card bg-water px-3 text-white transition-opacity duration-short ease-airy">44px · 300ms</span>
+      </div>
+
       <section className="rounded-card bg-surface p-5 shadow-card" aria-labelledby="sprite-preview-title">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
