@@ -1,3 +1,5 @@
+import { motion, useReducedMotion } from 'framer-motion'
+
 interface FloatingNumberProps {
   value: string
   kind: 'damage' | 'heal' | 'miss'
@@ -11,9 +13,16 @@ const KIND_CLASS = {
 }
 
 export function FloatingNumber({ value, kind, onDone }: FloatingNumberProps) {
+  const reduceMotion = useReducedMotion()
   return (
-    <span className={`font-display text-xl ${KIND_CLASS[kind]}`} onAnimationEnd={onDone}>
+    <motion.span
+      className={`pointer-events-none inline-block font-display text-xl ${KIND_CLASS[kind]}`}
+      initial={{ opacity: 0, y: 0, scale: 0.9 }}
+      animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: -24, scale: 1 }}
+      transition={{ duration: reduceMotion ? 0.2 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+      onAnimationComplete={onDone}
+    >
       {kind === 'miss' ? 'MISS' : value}
-    </span>
+    </motion.span>
   )
 }
