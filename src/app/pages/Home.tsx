@@ -80,8 +80,8 @@ export default function Home() {
             <LockOverlay locked reason={LOCKED_TOOLTIP}>
               <div className="focu-home-card focu-home-card--training" title={LOCKED_TOOLTIP}>
                 <span className="focu-home-card__icon" aria-hidden="true">🥋</span>
-                <span className="focu-home-card__title">Training Centre</span>
-                <span className="focu-home-card__sub">Teach new moves with FP</span>
+                <span className="focu-home-card__title">Let’s Train!</span>
+                <span className="focu-home-card__sub">Teach new moves at the dojo with FP</span>
               </div>
             </LockOverlay>
           </div>
@@ -90,7 +90,7 @@ export default function Home() {
         <div className="grid gap-4 sm:grid-cols-3">
           <ActionCard to="/adventure/setup" title="Go on an Adventure!" subtitle="Block distractions, earn FP" icon="🧭" className="focu-home-card--adventure" />
           <ActionCard to="/gyms" title="Let’s Battle!" subtitle={nextGym} icon="⚔️" className="focu-home-card--battle" />
-          <ActionCard to="/dojo" title="Training Centre" subtitle="Teach new moves with FP" icon="🥋" className="focu-home-card--training" />
+          <ActionCard to="/dojo" title="Let’s Train!" subtitle="Teach new moves at the dojo with FP" icon="🥋" className="focu-home-card--training" />
         </div>
       )}
 
