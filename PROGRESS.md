@@ -22,7 +22,9 @@ Entry format: `- [hour] Task card | what was built | requirement IDs | left to d
 
 ## Person C (Design and Collection)
 
-- [hour 1] Task C1 | Tailwind tokens (SPEC 10.2 colours plus ring-track), bundled Fredoka/Nunito in index.css, motion.ts (ease/spring/dur/stagger), stubs of every CONTRACTS component exported from components/index.ts | 10.1, 10.2, 10.8.2 | Real CreatureSprite and Gallery are C2 | Stubs use local stubTypes.ts until B's types.ts is on main. Duration tokens stored in seconds for Framer Motion.
+- [hour 1] Task C1 | Tailwind tokens (SPEC 10.2 colours plus ring-track), bundled Fredoka/Nunito in index.css, motion.ts (ease/spring/dur/stagger), stubs of every CONTRACTS component exported from components/index.ts | 10.1, 10.2, 10.8.2 | C2 completed below | Stubs use local stubTypes.ts until B's types.ts is on main. Duration tokens stored in seconds for Framer Motion.
 - [hour 1] Task C1 follow-up | Component stubs now import ElementType, SpriteState, MoveDef, FpBreakdown, LockboxContent from src/types.ts; removed src/app/components/stubTypes.ts | CONTRACTS component props | C2 | Switched as soon as B's types.ts landed.
+- [hour 2] Task C2 | Real emoji CreatureSprite with element circle, shadow, UID idle delay, facing, particles, and idle/hop/sentOut/selected motion; Gallery includes all components, all 9 Locklings, and a state switcher | 8.2, 10.8.3 | Remaining sprite states are C4 | `npm run typecheck` and `npm run build` pass.
+- [hour 4] Task C3 | Dojo roster/detail, FP and scroll lessons, shortage prompts, four-move replacement modal protecting the final attack; Lockdex 3×3 elemental grid with silhouettes, squad add/remove/reorder, Move Scroll inventory | DOJO-01–09, DEX-01–04, S11/S12 | Swap `c3EngineFallback.ts` functions for B's engine exports when merged | Uses A's rich/mid fixture data through the existing Dev fixture loader; local functions preserve B's documented signatures until merge.
 
 ## Sync log (merge captain only)
